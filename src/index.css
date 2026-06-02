@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-accent: "Cinzel", serif;
+
+  --color-brand-emerald-50: #f4f8f6;
+  --color-brand-emerald-100: #e4efe9;
+  --color-brand-emerald-200: #cbdfd5;
+  --color-brand-emerald-500: #0b3b24;
+  --color-brand-emerald-600: #082d1b;
+  --color-brand-emerald-700: #062114;
+  --color-brand-emerald-800: #04150d;
+  --color-brand-emerald-900: #030d08;
+  --color-brand-emerald-950: #010604;
+
+  --color-brand-gold-50: #FAF7F2;
+  --color-brand-gold-100: #F3EAD7;
+  --color-brand-gold-200: #E6D4AF;
+  --color-brand-gold-500: #c5a880;
+  --color-brand-gold-600: #b5956a;
+  --color-brand-gold-700: #9e7f55;
+  --color-brand-gold-800: #7b6241;
+}
+
+@layer utilities {
+  .glass-card-light {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(11, 59, 36, 0.04);
+  }
+
+  .glass-card-dark {
+    background: rgba(12, 30, 22, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .text-glow-gold {
+    text-shadow: 0 0 12px rgba(197, 168, 128, 0.4);
+  }
+
+  .gold-border-gradient {
+    border-image: linear-gradient(to right, #FAF7F2, #c5a880, #FAF7F2) 1;
+  }
+  
+  .dark .gold-border-gradient {
+    border-image: linear-gradient(to right, #07140e, #c5a880, #07140e) 1;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f8f6;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #07140e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c5a880;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b5956a;
+}
+
+/* Luxury Islamic Geometric Background Overlay */
+.islamic-pattern {
+  background-image: radial-gradient(circle at 1px 1px, rgba(197, 168, 128, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.dark .islamic-pattern {
+  background-image: radial-gradient(circle at 1px 1px, rgba(197, 168, 128, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Ambient glow lights */
+.ambient-glow {
+  filter: blur(120px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.dark .ambient-glow {
+  opacity: 0.25;
+}
