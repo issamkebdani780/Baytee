@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Compass, Sparkles, Send } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function FinalCTA() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -44,10 +46,10 @@ export default function FinalCTA() {
 
           {/* Headlines */}
           <h2 className="font-accent text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
-            Travel With Confidence
+            {t('cta.heading')}
           </h2>
           <p className="max-w-2xl mx-auto text-base sm:text-lg text-brand-emerald-100/80 mb-10 leading-relaxed">
-            Discover hotels, villas, and resorts that match your Islamic lifestyle. Try our AI-powered travel assistant today and unlock a worry-free vacation.
+            {t('cta.subtext')}
           </p>
 
           {/* Subscription or Start Exploring CTA */}
@@ -58,14 +60,14 @@ export default function FinalCTA() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="p-4 rounded-2xl border border-brand-gold-500/30 bg-brand-gold-500/10 text-brand-gold-300 font-semibold text-sm"
               >
-                Jazakallahu Khayran! You have been subscribed for exclusive early access and travel discounts.
+                {t('cta.successMsg')}
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
                   required
-                  placeholder="Enter your email address"
+                  placeholder={t('cta.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="flex-grow px-5 py-4 rounded-full border border-brand-emerald-700/50 bg-brand-emerald-900/40 text-white placeholder-brand-emerald-200/50 focus:outline-none focus:border-brand-gold-500 text-sm"
@@ -74,13 +76,13 @@ export default function FinalCTA() {
                   type="submit"
                   className="px-6 py-4 rounded-full bg-brand-gold-500 hover:bg-brand-gold-600 text-brand-emerald-950 font-bold text-sm shadow-md hover:shadow-lg transition duration-300 flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  Join Exclusive Beta
+                  {t('cta.joinBeta')}
                   <Send className="w-4 h-4" />
                 </button>
               </form>
             )}
             <p className="text-[10px] text-brand-emerald-200/40 mt-4">
-              No spam. Unsubscribe anytime. By signing up, you agree to our Terms and Shariah Compliance policies.
+              {t('cta.disclaimer')}
             </p>
           </div>
         </motion.div>

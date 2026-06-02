@@ -1,70 +1,73 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Sparkles, User, Bot, Star, MapPin, Search, Calendar } from 'lucide-react';
+import { Send, Sparkles, User, Bot, Star, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const PRESET_PROMPTS = [
-  {
-    id: 1,
-    title: 'Private Pool in Antalya',
-    text: 'Recommend a luxury family resort in Antalya with a private pool, ladies-only beach, and 100% halal food.',
-    response: {
-      text: "As-salamu alaykum! Based on your preference for privacy and luxury, I highly recommend the **Adenya Hotel & Resort** in Antalya. It offers outstanding private amenities tailored for Muslim families.",
-      hotels: [
-        {
-          name: 'Adenya Hotel & Resort',
-          location: 'Antalya, Turkey',
-          rating: 4.7,
-          price: 280,
-          image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
-          features: ['Women-Only Private Beach', '100% Halal Dining', 'Alcohol-Free Premises'],
-        }
-      ]
-    }
-  },
-  {
-    id: 2,
-    title: 'Haram View in Makkah',
-    text: 'Suggest premium accommodation in Makkah with direct Kaaba views, prayer facilities, and easy access for elderly parents.',
-    response: {
-      text: "Certainly. For direct Haram convenience and premium support, the **Conrad Makkah Jabal Omar** is an exceptional choice, located right next to the gates with direct courtyard access.",
-      hotels: [
-        {
-          name: 'Conrad Makkah Jabal Omar',
-          location: 'Makkah, Saudi Arabia',
-          rating: 4.8,
-          price: 450,
-          image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80',
-          features: ['Kaaba Views', 'Wheelchair Accessible', 'In-room Haram Audio Feed'],
-        }
-      ]
-    }
-  },
-  {
-    id: 3,
-    title: 'Alcohol-Free Istanbul Stay',
-    text: 'Find a boutique, alcohol-free hotel in Istanbul close to Blue Mosque with authentic Islamic history.',
-    response: {
-      text: "For an authentic spiritual and historical experience in Istanbul, **Ajwa Hotel Sultanahmet** is a masterpiece. It features traditional Ottoman architecture, custom prayer rooms, and is fully alcohol-free.",
-      hotels: [
-        {
-          name: 'Ajwa Hotel Sultanahmet',
-          location: 'Istanbul, Turkey',
-          rating: 4.9,
-          price: 320,
-          image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80',
-          features: ['No Alcohol Onsite', 'Ottoman-style Hammam', 'Halal Verified Kitchen'],
-        }
-      ]
-    }
-  }
-];
+import { useTranslation } from 'react-i18next';
 
 export default function AIAssistant() {
+  const { t } = useTranslation();
+
+  const PRESET_PROMPTS = [
+    {
+      id: 1,
+      title: t('ai.preset1'),
+      text: 'Recommend a luxury family resort in Antalya with a private pool, ladies-only beach, and 100% halal food.',
+      response: {
+        text: "As-salamu alaykum! Based on your preference for privacy and luxury, I highly recommend the **Adenya Hotel & Resort** in Antalya. It offers outstanding private amenities tailored for Muslim families.",
+        hotels: [
+          {
+            name: 'Adenya Hotel & Resort',
+            location: 'Antalya, Turkey',
+            rating: 4.7,
+            price: 280,
+            image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
+            features: ['Women-Only Private Beach', '100% Halal Dining', 'Alcohol-Free Premises'],
+          }
+        ]
+      }
+    },
+    {
+      id: 2,
+      title: t('ai.preset2'),
+      text: 'Suggest premium accommodation in Makkah with direct Kaaba views, prayer facilities, and easy access for elderly parents.',
+      response: {
+        text: "Certainly. For direct Haram convenience and premium support, the **Conrad Makkah Jabal Omar** is an exceptional choice, located right next to the gates with direct courtyard access.",
+        hotels: [
+          {
+            name: 'Conrad Makkah Jabal Omar',
+            location: 'Makkah, Saudi Arabia',
+            rating: 4.8,
+            price: 450,
+            image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80',
+            features: ['Kaaba Views', 'Wheelchair Accessible', 'In-room Haram Audio Feed'],
+          }
+        ]
+      }
+    },
+    {
+      id: 3,
+      title: t('ai.preset3'),
+      text: 'Find a boutique, alcohol-free hotel in Istanbul close to Blue Mosque with authentic Islamic history.',
+      response: {
+        text: "For an authentic spiritual and historical experience in Istanbul, **Ajwa Hotel Sultanahmet** is a masterpiece. It features traditional Ottoman architecture, custom prayer rooms, and is fully alcohol-free.",
+        hotels: [
+          {
+            name: 'Ajwa Hotel Sultanahmet',
+            location: 'Istanbul, Turkey',
+            rating: 4.9,
+            price: 320,
+            image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80',
+            features: ['No Alcohol Onsite', 'Ottoman-style Hammam', 'Halal Verified Kitchen'],
+          }
+        ]
+      }
+    }
+  ];
+
   const [messages, setMessages] = useState([
     {
       id: 0,
       sender: 'bot',
-      text: "As-salamu alaykum! I am your AI Muslim Travel Companion. Tell me where you want to travel and your halal preferences (like private pools, alcohol-free, or proximity to masjids), and I will create the perfect itinerary.",
+      text: t('ai.greeting'),
     }
   ]);
   const [inputText, setInputText] = useState('');
@@ -148,23 +151,23 @@ export default function AIAssistant() {
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-gold-500/30 bg-brand-gold-50 dark:bg-brand-emerald-950/50 backdrop-blur-sm mb-6">
               <Sparkles className="w-4 h-4 text-brand-gold-600 dark:text-brand-gold-500 animate-spin-slow" />
               <span className="text-xs font-bold uppercase tracking-wider text-brand-emerald-800 dark:text-brand-gold-300 font-sans">
-                Next-Gen Travel AI
+                {t('ai.sectionLabel')}
               </span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-emerald-950 dark:text-white leading-tight font-sans mb-6">
-              Your AI Muslim <br />
+              {t('ai.heading1')} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-emerald-700 to-brand-gold-600 dark:from-brand-gold-200 dark:to-brand-gold-500 font-serif italic font-normal">
-                Travel Companion
+                {t('ai.heading2')}
               </span>
             </h2>
             <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-              Skip hours of research. Our advanced AI model matches hotels, flights, and restaurants against rigorous Islamic guidelines to build tailored, worry-free itineraries.
+              {t('ai.subtext')}
             </p>
 
             {/* Prompt presets trigger buttons */}
             <div className="space-y-3">
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-4">
-                Try asking the companion:
+                {t('ai.tryAsking')}
               </p>
               {PRESET_PROMPTS.map((preset) => (
                 <button
@@ -196,10 +199,10 @@ export default function AIAssistant() {
                   </div>
                   <div className="text-left">
                     <h4 className="text-sm font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
-                      HalalAI Companion
+                      {t('ai.chatTitle')}
                     </h4>
                     <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                      Active Guide • Shariah Verified
+                      {t('ai.chatStatus')}
                     </span>
                   </div>
                 </div>
@@ -285,13 +288,13 @@ export default function AIAssistant() {
                                 </div>
                                 <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 dark:border-brand-emerald-900/30">
                                   <span className="text-xs font-bold text-slate-900 dark:text-slate-250">
-                                    ${hotel.price} <span className="text-[10px] font-normal text-slate-400">/night</span>
+                                    ${hotel.price} <span className="text-[10px] font-normal text-slate-400">{t('ai.perNight')}</span>
                                   </span>
                                   <button
                                     type="button"
                                     className="px-3 py-1.5 rounded-lg bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 text-[10px] font-bold transition cursor-pointer"
                                   >
-                                    View Details
+                                    {t('ai.viewDetails')}
                                   </button>
                                 </div>
                               </div>
@@ -332,7 +335,7 @@ export default function AIAssistant() {
                     type="text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    placeholder="Ask about hotels, locations, halal restrictions..."
+                    placeholder={t('ai.placeholder')}
                     className="w-full py-3.5 pl-5 pr-14 rounded-2xl border border-slate-250 dark:border-brand-emerald-800/65 bg-white dark:bg-brand-emerald-900/25 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-gold-500 focus:ring-1 focus:ring-brand-gold-500/20 text-sm"
                   />
                   <button

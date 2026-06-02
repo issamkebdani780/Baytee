@@ -100,3 +100,33 @@
 .dark .ambient-glow {
   opacity: 0.25;
 }
+
+/* ============ RTL (Arabic) Support ============ */
+[dir="rtl"] {
+  font-family: "Noto Sans Arabic", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Smooth direction transition */
+html {
+  transition: none;
+}
+
+/* Fix for RTL flex row reversal in language switcher dropdown */
+[dir="rtl"] .group-hover\:translate-x-1 {
+  --tw-translate-x: -0.25rem;
+}
+
+/* Ensure Lucide icons don't flip in RTL */
+[dir="rtl"] svg {
+  /* icons are directionally neutral, no transform needed */
+}
+
+/* Animate spin slow for Sparkles */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 6s linear infinite;
+}

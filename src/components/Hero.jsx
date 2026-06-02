@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Search, Calendar, Users, SlidersHorizontal, Check, Star, MapPin, Sparkles, Play, ShieldAlert, ArrowRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 // Mock hotel database
 const MOCK_HOTELS = [
@@ -75,6 +76,7 @@ const MOCK_HOTELS = [
 const DESTINATION_SUGGESTIONS = ['Makkah', 'Madinah', 'Istanbul', 'Antalya', 'Dubai', 'Kuala Lumpur'];
 
 export default function Hero() {
+  const { t } = useTranslation();
   const [destination, setDestination] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [checkIn, setCheckIn] = useState('');
@@ -138,6 +140,14 @@ export default function Hero() {
     }, 800);
   };
 
+  const filtersList = [
+    { key: 'halalFood', label: t('hero.halalFoodVerified'), desc: t('hero.halalFoodDesc') },
+    { key: 'womenOnlyPool', label: t('hero.womenOnlyPool'), desc: t('hero.womenOnlyPoolDesc') },
+    { key: 'privateVilla', label: t('hero.privateVilla'), desc: t('hero.privateVillaDesc') },
+    { key: 'alcoholFree', label: t('hero.alcoholFree'), desc: t('hero.alcoholFreeDesc') },
+    { key: 'prayerFacilities', label: t('hero.prayerFacilities'), desc: t('hero.prayerFacilitiesDesc') },
+  ];
+
   return (
     <section className="relative min-h-screen pt-32 pb-24 overflow-hidden islamic-pattern flex flex-col items-center justify-center">
       {/* Decorative Blur Backgrounds */}
@@ -154,7 +164,7 @@ export default function Hero() {
         >
           <Sparkles className="w-4 h-4 text-brand-gold-600 dark:text-brand-gold-500" />
           <span className="text-xs font-semibold uppercase tracking-widest text-brand-emerald-800 dark:text-brand-gold-200 font-sans">
-            AI-POWERED HALAL HOLIDAYS
+            {t('hero.badge')}
           </span>
         </motion.div>
 
@@ -165,11 +175,11 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-emerald-950 dark:text-white leading-[1.1] mb-6"
         >
-          Find Halal-Friendly Hotels <br />
+          {t('hero.heading1')} <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-emerald-600 via-brand-gold-600 to-brand-emerald-800 dark:from-brand-gold-200 dark:via-brand-gold-500 dark:to-brand-gold-200 font-serif italic font-normal">
-            Anywhere
+            {t('hero.heading2')}
           </span>{' '}
-          in the World
+          {t('hero.heading3')}
         </motion.h1>
 
         <motion.p
@@ -178,7 +188,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed font-sans"
         >
-          Discover hotels, villas, and resorts that match your Islamic lifestyle with AI-powered recommendations.
+          {t('hero.subtext')}
         </motion.p>
 
         {/* Call to Actions */}
@@ -192,7 +202,7 @@ export default function Hero() {
             href="#explore"
             className="w-full sm:w-auto px-8 py-4 rounded-full bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 font-bold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
           >
-            Start Exploring
+            {t('hero.startExploring')}
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </a>
           <button
@@ -200,7 +210,7 @@ export default function Hero() {
             className="w-full sm:w-auto px-8 py-4 rounded-full border border-slate-200 dark:border-brand-emerald-800/80 bg-white/70 dark:bg-brand-emerald-950/40 backdrop-blur-md text-slate-700 dark:text-brand-gold-200 hover:text-brand-emerald-600 dark:hover:text-brand-gold-500 font-semibold transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md"
           >
             <Play className="w-4 h-4 fill-current text-brand-gold-500" />
-            Watch Demo
+            {t('hero.watchDemo')}
           </button>
         </motion.div>
 
@@ -216,11 +226,11 @@ export default function Hero() {
             {/* Destination Input */}
             <div className="relative md:col-span-4 p-3 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-brand-emerald-900/30 transition duration-200 cursor-pointer">
               <label className="block text-xs font-semibold text-brand-gold-600 dark:text-brand-gold-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5" /> Destination
+                <MapPin className="w-3.5 h-3.5" /> {t('hero.destinationLabel')}
               </label>
               <input
                 type="text"
-                placeholder="Where are you going?"
+                placeholder={t('hero.destinationPlaceholder')}
                 value={destination}
                 onChange={(e) => {
                   setDestination(e.target.value);
@@ -239,7 +249,7 @@ export default function Hero() {
                     className="absolute left-0 right-0 mt-3 bg-white dark:bg-brand-emerald-900 border border-slate-200 dark:border-brand-emerald-800 rounded-2xl shadow-xl overflow-hidden z-20"
                   >
                     <div className="p-2">
-                      <p className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 px-3 py-1">Popular Islamic Destinations</p>
+                      <p className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 px-3 py-1">{t('hero.popularDestinations')}</p>
                       {DESTINATION_SUGGESTIONS.map((city) => (
                         <button
                           key={city}
@@ -272,7 +282,7 @@ export default function Hero() {
             {/* Check-In Date */}
             <div className="md:col-span-2 p-3 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-brand-emerald-900/30 transition duration-200 cursor-pointer">
               <label className="block text-xs font-semibold text-brand-gold-600 dark:text-brand-gold-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5" /> Check-in
+                <Calendar className="w-3.5 h-3.5" /> {t('hero.checkIn')}
               </label>
               <input
                 type="date"
@@ -285,7 +295,7 @@ export default function Hero() {
             {/* Check-Out Date */}
             <div className="md:col-span-2 p-3 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-brand-emerald-900/30 transition duration-200 cursor-pointer">
               <label className="block text-xs font-semibold text-brand-gold-600 dark:text-brand-gold-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5" /> Check-out
+                <Calendar className="w-3.5 h-3.5" /> {t('hero.checkOut')}
               </label>
               <input
                 type="date"
@@ -299,10 +309,10 @@ export default function Hero() {
             <div className="relative md:col-span-2 p-3 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-brand-emerald-900/30 transition duration-200 cursor-pointer">
               <div onClick={() => setShowGuestDropdown(!showGuestDropdown)}>
                 <label className="block text-xs font-semibold text-brand-gold-600 dark:text-brand-gold-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5" /> Guests
+                  <Users className="w-3.5 h-3.5" /> {t('hero.guests')}
                 </label>
                 <div className="text-slate-900 dark:text-white font-medium text-sm">
-                  {guests} {guests === 1 ? 'Guest' : 'Guests'}
+                  {guests} {guests === 1 ? t('hero.guest') : t('hero.guests')}
                 </div>
               </div>
 
@@ -316,7 +326,7 @@ export default function Hero() {
                     className="absolute right-0 mt-3 p-4 bg-white dark:bg-brand-emerald-900 border border-slate-200 dark:border-brand-emerald-800 rounded-2xl shadow-xl w-48 z-20"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Guests</span>
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t('hero.guests')}</span>
                       <div className="flex items-center gap-3">
                         <button
                           type="button"
@@ -341,7 +351,7 @@ export default function Hero() {
                       onClick={() => setShowGuestDropdown(false)}
                       className="mt-3 w-full py-1.5 text-center text-xs font-semibold bg-brand-emerald-500 text-white rounded-lg hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:text-brand-emerald-950"
                     >
-                      Done
+                      {t('hero.done')}
                     </button>
                   </motion.div>
                 )}
@@ -362,7 +372,7 @@ export default function Hero() {
                 ) : (
                   <>
                     <Search className="w-4 h-4" />
-                    <span>Search</span>
+                    <span>{t('hero.search')}</span>
                   </>
                 )}
               </motion.button>
@@ -377,16 +387,16 @@ export default function Hero() {
               className="flex items-center gap-2 text-xs font-bold text-brand-emerald-700 dark:text-brand-gold-500 hover:opacity-85 transition cursor-pointer"
             >
               <SlidersHorizontal className="w-4 h-4" />
-              {showFilters ? 'Hide Halal Filters' : 'Show Halal Filters'}
+              {showFilters ? t('hero.hideHalalFilters') : t('hero.showHalalFilters')}
               {Object.values(filters).filter(Boolean).length > 0 && (
                 <span className="ml-1 bg-brand-emerald-100 dark:bg-brand-emerald-800 text-brand-emerald-800 dark:text-brand-gold-100 text-[10px] px-1.5 py-0.5 rounded-full">
-                  {Object.values(filters).filter(Boolean).length} Active
+                  {Object.values(filters).filter(Boolean).length} {t('hero.active')}
                 </span>
               )}
             </button>
             <div className="flex items-center gap-1.5 text-xs text-slate-450 dark:text-slate-400">
               <Check className="w-3.5 h-3.5 text-brand-gold-500" />
-              100% Shariah Compliant Bookings
+              {t('hero.shariah')}
             </div>
           </div>
 
@@ -400,13 +410,7 @@ export default function Hero() {
                 className="overflow-hidden"
               >
                 <div className="pt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                  {[
-                    { key: 'halalFood', label: 'Halal Food Verified', desc: 'Strictly halal ingredients' },
-                    { key: 'womenOnlyPool', label: 'Women-Only Pools', desc: '100% privacy guaranteed' },
-                    { key: 'privateVilla', label: 'Private Villas', desc: 'No overlooking neighbors' },
-                    { key: 'alcoholFree', label: 'Alcohol-Free Hotel', desc: 'Family-friendly environment' },
-                    { key: 'prayerFacilities', label: 'Prayer Facilities', desc: 'Prayer rug & Qibla signs' },
-                  ].map((filter) => (
+                  {filtersList.map((filter) => (
                     <button
                       key={filter.key}
                       type="button"
@@ -444,10 +448,10 @@ export default function Hero() {
                 <div className="flex items-center justify-between mb-8 border-b border-slate-200/50 dark:border-brand-emerald-800/20 pb-4">
                   <div>
                     <h3 className="text-2xl font-bold font-serif text-brand-emerald-950 dark:text-white">
-                      Available Halal Stays
+                      {t('hero.availableStays')}
                     </h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                      Showing {searchResults.length} properties matching your Islamic criteria
+                      {t('hero.showingProperties', { count: searchResults.length })}
                     </p>
                   </div>
                   <button
@@ -458,7 +462,7 @@ export default function Hero() {
                     }}
                     className="text-xs font-semibold text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-350 cursor-pointer"
                   >
-                    Clear Search
+                    {t('hero.clearSearch')}
                   </button>
                 </div>
 
@@ -509,17 +513,17 @@ export default function Hero() {
                             </div>
                             <div className="flex items-center justify-between border-t border-slate-100 dark:border-brand-emerald-900/30 pt-3">
                               <div>
-                                <span className="text-xs text-slate-400 dark:text-slate-500">from </span>
+                                <span className="text-xs text-slate-400 dark:text-slate-500">{t('hero.from')} </span>
                                 <span className="text-lg font-extrabold text-brand-emerald-950 dark:text-white">
                                   ${hotel.price}
                                 </span>
-                                <span className="text-xs text-slate-400 dark:text-slate-500">/night</span>
+                                <span className="text-xs text-slate-400 dark:text-slate-500">{t('hero.perNight')}</span>
                               </div>
                               <button
                                 type="button"
                                 className="px-4 py-2 rounded-xl bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 text-xs font-bold shadow-sm transition cursor-pointer"
                               >
-                                Book Now
+                                {t('hero.bookNow')}
                               </button>
                             </div>
                           </div>
@@ -531,10 +535,10 @@ export default function Hero() {
                   <div className="p-12 text-center rounded-3xl border border-dashed border-slate-200 dark:border-brand-emerald-800/40 bg-white/40 dark:bg-brand-emerald-950/10 flex flex-col items-center">
                     <ShieldAlert className="w-12 h-12 text-brand-gold-500 mb-4" />
                     <h4 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-1">
-                      No Exact Matches Found
+                      {t('hero.noMatches')}
                     </h4>
                     <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">
-                      Try relaxing your halal filters or search for popular cities like "Istanbul" or "Makkah" to find properties.
+                      {t('hero.noMatchesDesc')}
                     </p>
                     <button
                       type="button"
@@ -550,7 +554,7 @@ export default function Hero() {
                       }}
                       className="px-5 py-2.5 rounded-xl bg-brand-emerald-500 text-white text-xs font-semibold hover:bg-brand-emerald-600 cursor-pointer"
                     >
-                      Reset Filters & Search Again
+                      {t('hero.resetFilters')}
                     </button>
                   </div>
                 )}
@@ -595,10 +599,10 @@ export default function Hero() {
                     Discover Muslim<span className="text-brand-gold-500 font-serif italic">Stay</span>
                   </h4>
                   <p className="text-sm text-slate-300 max-w-md mx-auto mb-6">
-                    A walkthrough of the AI Muslim Travel Companion and how we verify ladies-only pools, verified halal dining, and private villas.
+                    {t('hero.videoDemoDesc')}
                   </p>
                   <span className="text-xs font-semibold px-3 py-1 rounded-full border border-brand-gold-500/30 text-brand-gold-300 uppercase tracking-widest bg-brand-gold-500/10">
-                    Video Demo Simulation
+                    {t('hero.videoDemo')}
                   </span>
                 </div>
               </div>

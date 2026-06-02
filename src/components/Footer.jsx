@@ -1,11 +1,13 @@
 import { Compass, Heart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   const columns = [
     {
-      title: 'Destinations',
+      title: t('footer.colDestinations'),
       links: [
         { name: 'Makkah', href: '#destinations' },
         { name: 'Madinah', href: '#destinations' },
@@ -16,36 +18,36 @@ export default function Footer() {
       ],
     },
     {
-      title: 'Halal Filters',
+      title: t('footer.colHalalFilters'),
       links: [
-        { name: 'Halal Food Verified', href: '#features' },
-        { name: 'Women-Only Pools', href: '#features' },
-        { name: 'Private Villas', href: '#features' },
-        { name: 'Alcohol-Free Hotels', href: '#features' },
-        { name: 'Prayer Facilities', href: '#features' },
-        { name: 'Umrah Friendly Stays', href: '#features' },
+        { name: t('footer.halalFood'), href: '#features' },
+        { name: t('footer.womenPools'), href: '#features' },
+        { name: t('footer.privateVillas'), href: '#features' },
+        { name: t('footer.alcoholFreeHotels'), href: '#features' },
+        { name: t('footer.prayerFacilities'), href: '#features' },
+        { name: t('footer.umrahFriendly'), href: '#features' },
       ],
     },
     {
-      title: 'Company',
+      title: t('footer.colCompany'),
       links: [
-        { name: 'About MuslimStay', href: '#' },
-        { name: 'Our Shariah Council', href: '#' },
-        { name: 'AI Companion Technology', href: '#ai-assistant' },
-        { name: 'Partner With Us', href: '#' },
-        { name: 'Careers (YC W26)', href: '#' },
-        { name: 'Press & Media', href: '#' },
+        { name: t('footer.aboutUs'), href: '#' },
+        { name: t('footer.shariahCouncil'), href: '#' },
+        { name: t('footer.aiTech'), href: '#ai-assistant' },
+        { name: t('footer.partner'), href: '#' },
+        { name: t('footer.careers'), href: '#' },
+        { name: t('footer.press'), href: '#' },
       ],
     },
     {
-      title: 'Legal & Help',
+      title: t('footer.colLegal'),
       links: [
-        { name: 'Privacy Policy', href: '#' },
-        { name: 'Terms & Conditions', href: '#' },
-        { name: 'Compliance Audits', href: '#' },
-        { name: 'Help Center', href: '#' },
-        { name: 'Contact Support', href: '#' },
-        { name: 'Sitemap', href: '#' },
+        { name: t('footer.privacy'), href: '#' },
+        { name: t('footer.terms'), href: '#' },
+        { name: t('footer.compliance'), href: '#' },
+        { name: t('footer.help'), href: '#' },
+        { name: t('footer.contact'), href: '#' },
+        { name: t('footer.sitemap'), href: '#' },
       ],
     },
   ];
@@ -71,7 +73,7 @@ export default function Footer() {
               </span>
             </a>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              Find halal-friendly hotels anywhere in the world. Fully verified ladies-only pools, verified dining, and private villas.
+              {t('footer.tagline')}
             </p>
             {/* Social Icons */}
             <div className="flex items-center gap-3 mt-2">
@@ -153,10 +155,10 @@ export default function Footer() {
         {/* Bottom copyright details */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-400 dark:text-slate-500">
-            &copy; {currentYear} MuslimStay Inc. All rights reserved.
+            {t('footer.copyright', { year: currentYear })}
           </p>
           <p className="text-xs text-slate-450 dark:text-slate-500 flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 text-red-500 fill-current" /> for the Global Muslim Ummah.
+            {t('footer.madeWith')} <Heart className="w-3 h-3 text-red-500 fill-current" /> {t('footer.forUmmah')}
           </p>
         </div>
 

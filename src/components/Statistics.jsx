@@ -1,28 +1,31 @@
 import { motion } from 'framer-motion';
 import { Globe, Hotel, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Statistics() {
+  const { t } = useTranslation();
+
   const stats = [
     {
       id: 1,
       icon: <Hotel className="w-8 h-8 text-brand-gold-500 mb-4 mx-auto" />,
-      number: '500K+',
-      label: 'Halal-Friendly Hotels',
-      desc: 'Rigorous filter matching from a vast inventory of luxury stays worldwide.',
+      number: t('stats.hotelsNumber'),
+      label: t('stats.hotelsLabel'),
+      desc: t('stats.hotelsDesc'),
     },
     {
       id: 2,
       icon: <Globe className="w-8 h-8 text-brand-gold-500 mb-4 mx-auto" />,
-      number: '100+',
-      label: 'Countries Covered',
-      desc: 'Seamless bookings from Turkey to Malaysia, and everywhere in between.',
+      number: t('stats.countriesNumber'),
+      label: t('stats.countriesLabel'),
+      desc: t('stats.countriesDesc'),
     },
     {
       id: 3,
       icon: <Users className="w-8 h-8 text-brand-gold-500 mb-4 mx-auto" />,
-      number: '1M+',
-      label: 'Happy Travelers',
-      desc: 'Helping the global Ummah travel with safety, privacy, and confidence.',
+      number: t('stats.travelersNumber'),
+      label: t('stats.travelersLabel'),
+      desc: t('stats.travelersDesc'),
     },
   ];
 

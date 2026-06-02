@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const TESTIMONIALS = [
   {
@@ -50,6 +51,7 @@ const slideVariants = {
 };
 
 export default function Testimonials() {
+  const { t } = useTranslation();
   const [[page, direction], setPage] = useState([0, 0]);
 
   // Wrap index
@@ -69,10 +71,10 @@ export default function Testimonials() {
         
         {/* Header */}
         <span className="text-xs font-bold uppercase tracking-widest text-brand-gold-600 dark:text-brand-gold-500 font-sans block mb-3">
-          Traveler Stories
+          {t('testimonials.sectionLabel')}
         </span>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-emerald-950 dark:text-white leading-tight font-sans mb-16">
-          Loved by Travelers Worldwide
+          {t('testimonials.heading')}
         </h2>
 
         {/* Carousel Container */}
@@ -134,7 +136,7 @@ export default function Testimonials() {
           <button
             onClick={() => paginate(-1)}
             className="absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 p-3 rounded-full border border-slate-200 dark:border-brand-emerald-800 bg-white/80 dark:bg-brand-emerald-950/80 text-slate-700 dark:text-brand-gold-450 hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900 transition-all shadow-md z-10 cursor-pointer"
-            aria-label="Previous slide"
+            aria-label={t('testimonials.prevSlide')}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -143,7 +145,7 @@ export default function Testimonials() {
           <button
             onClick={() => paginate(1)}
             className="absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 p-3 rounded-full border border-slate-200 dark:border-brand-emerald-800 bg-white/80 dark:bg-brand-emerald-950/80 text-slate-700 dark:text-brand-gold-450 hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900 transition-all shadow-md z-10 cursor-pointer"
-            aria-label="Next slide"
+            aria-label={t('testimonials.nextSlide')}
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -151,9 +153,9 @@ export default function Testimonials() {
 
         {/* Bullet Indicators */}
         <div className="flex justify-center items-center gap-2 mt-8">
-          {TESTIMONIALS.map((t, idx) => (
+          {TESTIMONIALS.map((testimonial, idx) => (
             <button
-              key={t.id}
+              key={testimonial.id}
               onClick={() => {
                 const diff = idx - currentIndex;
                 if (diff !== 0) {

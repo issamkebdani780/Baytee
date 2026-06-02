@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import { ArrowUpRight, MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Destinations() {
+  const { t } = useTranslation();
+
   const destinationList = [
     {
       name: 'Makkah',
@@ -82,13 +85,13 @@ export default function Destinations() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-left">
           <div className="max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-widest text-brand-gold-600 dark:text-brand-gold-500 font-sans block mb-3">
-              Explore The World
+              {t('destinations.sectionLabel')}
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-emerald-950 dark:text-white leading-tight font-sans">
-              Trending Halal Destinations
+              {t('destinations.heading')}
             </h2>
             <p className="mt-4 text-base text-slate-500 dark:text-slate-400">
-              Handpicked locales combining rich heritage, breathtaking natural landscapes, and fully verified halal accommodations.
+              {t('destinations.subtext')}
             </p>
           </div>
           <div>
@@ -96,7 +99,7 @@ export default function Destinations() {
               href="#explore"
               className="inline-flex items-center gap-2 text-sm font-bold text-brand-emerald-700 dark:text-brand-gold-500 hover:opacity-80 border-b-2 border-brand-gold-500 pb-1 cursor-pointer transition-all"
             >
-              View All Locations
+              {t('destinations.viewAll')}
               <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
@@ -151,7 +154,7 @@ export default function Destinations() {
                   <div className="h-0 opacity-0 group-hover:h-8 group-hover:opacity-100 group-hover:mt-4 transition-all duration-300 flex items-center justify-between border-t border-white/20 pt-4">
                     <span className="text-xs text-slate-300 font-semibold">{dest.properties}</span>
                     <span className="text-xs font-bold text-brand-gold-400 flex items-center gap-1">
-                      Discover Stays &rarr;
+                      {t('destinations.discoverStays')} &rarr;
                     </span>
                   </div>
                 </div>

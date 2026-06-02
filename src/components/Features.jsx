@@ -1,43 +1,46 @@
 import { Utensils, Waves, Home, Shield, Compass, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 export default function Features() {
+  const { t } = useTranslation();
+
   const featuresList = [
     {
       icon: <Utensils className="w-6 h-6 text-brand-gold-500" />,
-      title: 'Halal Food Verified',
-      description: '100% halal culinary options certified by international authorities, with zero cross-contamination risk.',
-      badge: 'Certified',
+      title: t('features.halalFoodTitle'),
+      description: t('features.halalFoodDesc'),
+      badge: t('features.halalFoodBadge'),
     },
     {
       icon: <Waves className="w-6 h-6 text-brand-gold-500" />,
-      title: 'Women-Only Pools',
-      description: 'Fully secluded, high-walled pool and spa zones offering absolute privacy and peace of mind for women.',
-      badge: 'Private',
+      title: t('features.womenPoolTitle'),
+      description: t('features.womenPoolDesc'),
+      badge: t('features.womenPoolBadge'),
     },
     {
       icon: <Home className="w-6 h-6 text-brand-gold-500" />,
-      title: 'Private Villas',
-      description: 'Luxury villas designed with privacy-first architecture, featuring completely unexposed outdoor pools.',
-      badge: 'Luxury',
+      title: t('features.villaTitle'),
+      description: t('features.villaDesc'),
+      badge: t('features.villaBadge'),
     },
     {
       icon: <Shield className="w-6 h-6 text-brand-gold-500" />,
-      title: 'Alcohol-Free Hotels',
-      description: 'A pure family-friendly atmosphere with zero alcohol served or allowed on the premises of selected properties.',
-      badge: 'Family First',
+      title: t('features.alcoholTitle'),
+      description: t('features.alcoholDesc'),
+      badge: t('features.alcoholBadge'),
     },
     {
       icon: <Compass className="w-6 h-6 text-brand-gold-500" />,
-      title: 'Prayer Facilities',
-      description: 'Rooms equipped with Qibla direction indicators, high-quality prayer rugs, and copies of the Holy Quran.',
-      badge: 'Equipped',
+      title: t('features.prayerTitle'),
+      description: t('features.prayerDesc'),
+      badge: t('features.prayerBadge'),
     },
     {
       icon: <BookOpen className="w-6 h-6 text-brand-gold-500" />,
-      title: 'Umrah Hotels',
-      description: 'Curated premium stays in Makkah and Madinah with direct access, Haram views, and spiritual support guides.',
-      badge: 'Spiritual',
+      title: t('features.umrahTitle'),
+      description: t('features.umrahDesc'),
+      badge: t('features.umrahBadge'),
     },
   ];
 
@@ -74,13 +77,13 @@ export default function Features() {
         {/* Header Text */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <span className="text-xs font-bold uppercase tracking-widest text-brand-gold-600 dark:text-brand-gold-500 font-sans block mb-3">
-            Tailored Experiences
+            {t('features.sectionLabel')}
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-emerald-950 dark:text-white leading-tight font-sans">
-            Travel Without Compromise
+            {t('features.heading')}
           </h2>
           <p className="mt-4 text-base md:text-lg text-slate-500 dark:text-slate-400">
-            Enjoy world-class luxury stays curated specifically for your Islamic values, verified by our rigorous compliance system.
+            {t('features.subtext')}
           </p>
         </div>
 

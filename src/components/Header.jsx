@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Compass, Globe } from 'lucide-react';
+import { Menu, X, Compass } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import ThemeToggle from './ThemeToggle';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -16,10 +19,10 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: 'Features', href: '#features' },
-    { name: 'AI Companion', href: '#ai-assistant' },
-    { name: 'Destinations', href: '#destinations' },
-    { name: 'Pricing', href: '#pricing' },
+    { name: t('nav.features'), href: '#features' },
+    { name: t('nav.aiCompanion'), href: '#ai-assistant' },
+    { name: t('nav.destinations'), href: '#destinations' },
+    { name: t('nav.pricing'), href: '#pricing' },
   ];
 
   return (
@@ -58,18 +61,20 @@ export default function Header() {
         </nav>
 
         {/* Action Controls & Theme Toggle */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
+          <LanguageSwitcher />
           <ThemeToggle />
           <a
             href="#explore"
             className="px-5 py-2.5 rounded-full bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 font-semibold text-sm shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
           >
-            Start Exploring
+            {t('nav.startExploring')}
           </a>
         </div>
 
         {/* Mobile Toggle Button */}
-        <div className="flex md:hidden items-center gap-3">
+        <div className="flex md:hidden items-center gap-2">
+          <LanguageSwitcher />
           <ThemeToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -108,7 +113,7 @@ export default function Header() {
                 onClick={() => setIsOpen(false)}
                 className="w-full py-3 rounded-full text-center bg-brand-emerald-500 dark:bg-brand-gold-500 text-white dark:text-brand-emerald-950 font-semibold shadow-sm"
               >
-                Start Exploring
+                {t('nav.startExploring')}
               </a>
             </div>
           </motion.div>

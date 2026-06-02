@@ -1,52 +1,54 @@
 import { useState } from 'react';
-import { Check, HelpCircle, Star } from 'lucide-react';
+import { Check, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 export default function Pricing() {
+  const { t } = useTranslation();
   const [billingCycle, setBillingCycle] = useState('annual'); // 'monthly' or 'annual'
 
   const plans = [
     {
-      name: 'Free',
-      tagline: 'Essential searches for the solo explorer.',
+      name: t('pricing.freeName'),
+      tagline: t('pricing.freeTagline'),
       price: { monthly: 0, annual: 0 },
       features: [
-        'Search verified halal-friendly stays',
-        'Basic halal filters (verified dining)',
-        'Standard booking confirmation',
-        'Standard customer support',
+        t('pricing.freeF1'),
+        t('pricing.freeF2'),
+        t('pricing.freeF3'),
+        t('pricing.freeF4'),
       ],
-      cta: 'Get Started',
+      cta: t('pricing.freeCta'),
       popular: false,
     },
     {
-      name: 'Premium Stay',
-      tagline: 'AI trip planning and exclusive privacy filters.',
+      name: t('pricing.premiumName'),
+      tagline: t('pricing.premiumTagline'),
       price: { monthly: 19, annual: 15 },
       features: [
-        'Advanced AI Travel Companion chat',
-        'Women-only pool & beach filters',
-        'Strictly alcohol-free hotel collections',
-        'Priority Shariah compliance audits',
-        '24/7 concierge & prayer time updates',
-        'Premium room upgrades when available',
+        t('pricing.premiumF1'),
+        t('pricing.premiumF2'),
+        t('pricing.premiumF3'),
+        t('pricing.premiumF4'),
+        t('pricing.premiumF5'),
+        t('pricing.premiumF6'),
       ],
-      cta: 'Start Premium Trial',
+      cta: t('pricing.premiumCta'),
       popular: true,
     },
     {
-      name: 'Family Gold',
-      tagline: 'Worry-free multi-guest planning for families.',
+      name: t('pricing.familyName'),
+      tagline: t('pricing.familyTagline'),
       price: { monthly: 39, annual: 31 },
       features: [
-        'All Premium Stay benefits included',
-        'Up to 5 family profile accounts',
-        'Collaborative group AI travel builder',
-        'Privacy-first luxury villa requests',
-        'Custom kid-friendly activity filters',
-        'Complimentary private airport transfers',
+        t('pricing.familyF1'),
+        t('pricing.familyF2'),
+        t('pricing.familyF3'),
+        t('pricing.familyF4'),
+        t('pricing.familyF5'),
+        t('pricing.familyF6'),
       ],
-      cta: 'Upgrade to Family',
+      cta: t('pricing.familyCta'),
       popular: false,
     },
   ];
@@ -61,19 +63,19 @@ export default function Pricing() {
         
         {/* Header */}
         <span className="text-xs font-bold uppercase tracking-widest text-brand-gold-600 dark:text-brand-gold-500 font-sans block mb-3">
-          Transparent Pricing
+          {t('pricing.sectionLabel')}
         </span>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-emerald-950 dark:text-white leading-tight font-sans mb-6">
-          Plans for Every Journey
+          {t('pricing.heading')}
         </h2>
         <p className="max-w-2xl mx-auto text-base text-slate-500 dark:text-slate-400 mb-12">
-          Unlock the full potential of your next halal holiday. Cancel or upgrade your plan at any time with a single click.
+          {t('pricing.subtext')}
         </p>
 
         {/* Toggle Switch */}
         <div className="flex items-center justify-center gap-4 mb-16">
           <span className={`text-sm font-semibold transition ${billingCycle === 'monthly' ? 'text-brand-emerald-800 dark:text-white' : 'text-slate-400'}`}>
-            Monthly
+            {t('pricing.monthly')}
           </span>
           <button
             onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'annual' : 'monthly')}
@@ -89,9 +91,9 @@ export default function Pricing() {
             />
           </button>
           <span className={`text-sm font-semibold transition flex items-center gap-1.5 ${billingCycle === 'annual' ? 'text-brand-emerald-800 dark:text-white' : 'text-slate-400'}`}>
-            Annually
+            {t('pricing.annually')}
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-gold-100 dark:bg-brand-gold-500/20 text-brand-gold-700 dark:text-brand-gold-400 border border-brand-gold-200/30">
-              Save 20%
+              {t('pricing.save20')}
             </span>
           </span>
         </div>
@@ -112,7 +114,7 @@ export default function Pricing() {
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-brand-gold-500 dark:bg-brand-gold-600 text-white dark:text-brand-emerald-950 text-xs font-bold flex items-center gap-1 shadow-md shadow-brand-gold-500/20">
                   <Star className="w-3.5 h-3.5 fill-current" />
-                  Most Popular
+                  {t('pricing.mostPopular')}
                 </div>
               )}
 
@@ -129,7 +131,7 @@ export default function Pricing() {
                     ${billingCycle === 'annual' ? plan.price.annual : plan.price.monthly}
                   </span>
                   <span className="text-sm font-semibold text-slate-405 dark:text-slate-500">
-                    /month
+                    {t('pricing.perMonth')}
                   </span>
                 </div>
 
