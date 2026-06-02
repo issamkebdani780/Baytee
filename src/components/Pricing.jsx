@@ -92,7 +92,7 @@ export default function Pricing() {
           </button>
           <span className={`text-sm font-semibold transition flex items-center gap-1.5 ${billingCycle === 'annual' ? 'text-brand-emerald-800 dark:text-white' : 'text-slate-400'}`}>
             {t('pricing.annually')}
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-gold-100 dark:bg-brand-gold-500/20 text-brand-gold-700 dark:text-brand-gold-400 border border-brand-gold-200/30">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-gold-100 dark:bg-brand-gold-500/20 text-brand-gold-700 dark:text-brand-gold-500 border border-brand-gold-200/30">
               {t('pricing.save20')}
             </span>
           </span>
@@ -141,7 +141,7 @@ export default function Pricing() {
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300">
-                      <span className="p-0.5 rounded-full bg-brand-gold-500/10 dark:bg-brand-gold-500/20 text-brand-gold-600 dark:text-brand-gold-400 mt-0.5">
+                      <span className="p-0.5 rounded-full bg-brand-gold-500/10 dark:bg-brand-gold-500/20 text-brand-gold-600 dark:text-brand-gold-500 mt-0.5">
                         <Check className="w-3.5 h-3.5" />
                       </span>
                       <span>{feature}</span>
@@ -156,7 +156,7 @@ export default function Pricing() {
                 className={`w-full py-3.5 rounded-full text-sm font-bold shadow-sm transition-all duration-300 cursor-pointer ${
                   plan.popular
                     ? 'bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 hover:shadow-md'
-                    : 'border border-slate-250 dark:border-brand-emerald-800 text-slate-700 dark:text-brand-gold-300 hover:border-brand-emerald-500 dark:hover:border-brand-gold-500'
+                    : 'border border-slate-250 dark:border-brand-emerald-800 text-slate-700 dark:text-brand-gold-200 hover:border-brand-emerald-500 dark:hover:border-brand-gold-500'
                 }`}
               >
                 {plan.cta}

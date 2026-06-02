@@ -69,7 +69,7 @@ export default function Footer() {
                 <Compass className="w-5 h-5 text-brand-gold-500" />
               </div>
               <span className="font-accent text-lg font-bold tracking-wider text-brand-emerald-800 dark:text-brand-gold-100">
-                Muslim<span className="text-brand-gold-500 font-serif italic">Stay</span>
+                Baytee
               </span>
             </a>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -118,7 +118,7 @@ export default function Footer() {
                 <a
                   key={idx}
                   href={social.href}
-                  className="p-2 rounded-full border border-slate-200 dark:border-brand-emerald-800 text-slate-500 dark:text-brand-gold-300 hover:border-brand-gold-500 hover:text-brand-gold-500 transition-all cursor-pointer"
+                  className="p-2 rounded-full border border-slate-200 dark:border-brand-emerald-800 text-slate-500 dark:text-brand-gold-200 hover:border-brand-gold-500 hover:text-brand-gold-500 transition-all cursor-pointer"
                 >
                   {social.icon}
                 </a>
@@ -129,7 +129,7 @@ export default function Footer() {
           {/* Links Columns */}
           {columns.map((col) => (
             <div key={col.title} className="flex flex-col gap-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-brand-emerald-800 dark:text-brand-gold-400">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-brand-emerald-800 dark:text-brand-gold-500">
                 {col.title}
               </h4>
               <ul className="flex flex-col gap-2.5">

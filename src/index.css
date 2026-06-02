@@ -101,30 +101,54 @@
   opacity: 0.25;
 }
 
-/* ============ RTL (Arabic) Support ============ */
+/* ============================================================
+   RTL (Arabic) Support
+   NOTE: setting dir="rtl" on <html> already makes the browser:
+   - Lay out block elements from right to left
+   - Reverse inline text flow
+   - Mirror flex-start / flex-end in row containers
+   We only need to manually fix Tailwind's HARD-CODED directional
+   classes that don't respect direction: rtl.
+   ============================================================ */
+
 [dir="rtl"] {
   font-family: "Noto Sans Arabic", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Smooth direction transition */
-html {
-  transition: none;
+/* ---- Text alignment ---- */
+/* text-left / text-right are hard-coded in Tailwind; flip them. */
+[dir="rtl"] .text-left  { text-align: right; }
+[dir="rtl"] .text-right { text-align: left; }
+
+/* text-center stays centered in both directions */
+
+/* ---- Inputs & textareas ---- */
+[dir="rtl"] input,
+[dir="rtl"] textarea {
+  text-align: right;
+  direction: rtl;
 }
 
-/* Fix for RTL flex row reversal in language switcher dropdown */
-[dir="rtl"] .group-hover\:translate-x-1 {
-  --tw-translate-x: -0.25rem;
+/* ---- Arrow / translate animations ---- */
+/* Flip "slide right" hover effects for RTL arrow icons */
+[dir="rtl"] .group-hover\:translate-x-1:hover {
+  transform: translateX(-0.25rem);
+}
+[dir="rtl"] .translate-x-0\.5 {
+  transform: translateX(-0.125rem);
 }
 
-/* Ensure Lucide icons don't flip in RTL */
-[dir="rtl"] svg {
-  /* icons are directionally neutral, no transform needed */
+/* ---- Language Switcher: always LTR regardless of page dir ---- */
+/* We add dir="ltr" directly on the component element — these rules
+   ensure that inner Tailwind flex/text classes aren't overridden. */
+[dir="rtl"] [dir="ltr"] {
+  direction: ltr;
 }
 
-/* Animate spin slow for Sparkles */
+/* ---- Animate spin slow (Sparkles icon) ---- */
 @keyframes spin-slow {
   from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to   { transform: rotate(360deg); }
 }
 
 .animate-spin-slow {

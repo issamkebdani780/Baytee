@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { Send, Sparkles, User, Bot, Star, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function AIAssistant() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === 'rtl';
 
   const PRESET_PROMPTS = [
     {
@@ -150,7 +152,7 @@ export default function AIAssistant() {
           <div className="lg:col-span-5 text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-gold-500/30 bg-brand-gold-50 dark:bg-brand-emerald-950/50 backdrop-blur-sm mb-6">
               <Sparkles className="w-4 h-4 text-brand-gold-600 dark:text-brand-gold-500 animate-spin-slow" />
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-emerald-800 dark:text-brand-gold-300 font-sans">
+              <span className="text-xs font-bold uppercase tracking-wider text-brand-emerald-800 dark:text-brand-gold-200 font-sans">
                 {t('ai.sectionLabel')}
               </span>
             </div>
@@ -173,12 +175,13 @@ export default function AIAssistant() {
                 <button
                   key={preset.id}
                   onClick={() => handleSendMessage(preset.text)}
-                  className="w-full text-left px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-brand-emerald-800/50 bg-white/80 dark:bg-brand-emerald-950/20 hover:border-brand-gold-500 dark:hover:border-brand-gold-500 transition-all duration-300 text-xs font-semibold text-slate-700 dark:text-slate-350 hover:shadow-sm flex items-center justify-between group cursor-pointer"
+                  className="w-full text-left px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-brand-emerald-800/50 bg-white/80 dark:bg-brand-emerald-950/20 hover:border-brand-gold-500 dark:hover:border-brand-gold-500 transition-all duration-300 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:shadow-sm flex items-center justify-between group cursor-pointer"
                 >
                   <span>{preset.title}</span>
-                  <span className="text-brand-gold-500 font-bold group-hover:translate-x-1 transition-transform">
-                    &rarr;
-                  </span>
+                  {isRTL
+                    ? <ArrowLeft className="w-4 h-4 text-brand-gold-500 flex-shrink-0 group-hover:-translate-x-1 transition-transform" />
+                    : <ArrowRight className="w-4 h-4 text-brand-gold-500 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
+                  }
                 </button>
               ))}
             </div>
@@ -193,7 +196,7 @@ export default function AIAssistant() {
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <div className="w-10 h-10 rounded-full bg-brand-emerald-500 dark:bg-brand-emerald-800 flex items-center justify-center text-white">
-                      <Sparkles className="w-5 h-5 text-brand-gold-400" />
+                      <Sparkles className="w-5 h-5 text-brand-gold-500" />
                     </div>
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-brand-emerald-950 rounded-full" />
                   </div>
@@ -230,7 +233,7 @@ export default function AIAssistant() {
                           : 'bg-brand-emerald-500 dark:bg-brand-emerald-850 border-brand-emerald-600 dark:border-brand-emerald-800 text-white'
                       }`}
                     >
-                      {msg.sender === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-brand-gold-400" />}
+                      {msg.sender === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-brand-gold-500" />}
                     </div>
 
                     {/* Text + Cards */}
@@ -279,7 +282,7 @@ export default function AIAssistant() {
                                     {hotel.features.map((feat) => (
                                       <span
                                         key={feat}
-                                        className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-brand-emerald-50 dark:bg-brand-emerald-900 text-brand-emerald-800 dark:text-brand-gold-300"
+                                        className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-brand-emerald-50 dark:bg-brand-emerald-900 text-brand-emerald-800 dark:text-brand-gold-200"
                                       >
                                         {feat}
                                       </span>
@@ -310,7 +313,7 @@ export default function AIAssistant() {
                 {isTyping && (
                   <div className="flex gap-3 mr-auto max-w-[85%]">
                     <div className="w-8 h-8 rounded-full bg-brand-emerald-500 dark:bg-brand-emerald-850 flex items-center justify-center text-white border dark:border-brand-emerald-800">
-                      <Bot className="w-4 h-4 text-brand-gold-400" />
+                      <Bot className="w-4 h-4 text-brand-gold-500" />
                     </div>
                     <div className="p-4 rounded-2xl bg-slate-50 dark:bg-brand-emerald-900/40 border border-slate-200/50 dark:border-brand-emerald-850 text-slate-800 dark:text-slate-200 rounded-tl-none flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-slate-400 dark:bg-brand-gold-500 animate-bounce" style={{ animationDelay: '0ms' }} />

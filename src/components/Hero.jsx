@@ -601,7 +601,7 @@ export default function Hero() {
                   <p className="text-sm text-slate-300 max-w-md mx-auto mb-6">
                     {t('hero.videoDemoDesc')}
                   </p>
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full border border-brand-gold-500/30 text-brand-gold-300 uppercase tracking-widest bg-brand-gold-500/10">
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full border border-brand-gold-500/30 text-brand-gold-200 uppercase tracking-widest bg-brand-gold-500/10">
                     {t('hero.videoDemo')}
                   </span>
                 </div>

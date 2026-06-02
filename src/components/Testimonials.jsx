@@ -123,7 +123,7 @@ export default function Testimonials() {
                   </h4>
                   <p className="text-xs text-slate-400 dark:text-slate-500">
                     {TESTIMONIALS[currentIndex].location} •{' '}
-                    <span className="text-brand-gold-600 dark:text-brand-gold-400 font-semibold">
+                    <span className="text-brand-gold-600 dark:text-brand-gold-500 font-semibold">
                       {TESTIMONIALS[currentIndex].trip}
                     </span>
                   </p>
@@ -135,7 +135,7 @@ export default function Testimonials() {
           {/* Left Arrow */}
           <button
             onClick={() => paginate(-1)}
-            className="absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 p-3 rounded-full border border-slate-200 dark:border-brand-emerald-800 bg-white/80 dark:bg-brand-emerald-950/80 text-slate-700 dark:text-brand-gold-450 hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900 transition-all shadow-md z-10 cursor-pointer"
+            className="absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 p-3 rounded-full border border-slate-200 dark:border-brand-emerald-800 bg-white/80 dark:bg-brand-emerald-950/80 text-slate-700 dark:text-brand-gold-500 hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900 transition-all shadow-md z-10 cursor-pointer"
             aria-label={t('testimonials.prevSlide')}
           >
             <ChevronLeft className="w-5 h-5" />
@@ -144,7 +144,7 @@ export default function Testimonials() {
           {/* Right Arrow */}
           <button
             onClick={() => paginate(1)}
-            className="absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 p-3 rounded-full border border-slate-200 dark:border-brand-emerald-800 bg-white/80 dark:bg-brand-emerald-950/80 text-slate-700 dark:text-brand-gold-450 hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900 transition-all shadow-md z-10 cursor-pointer"
+            className="absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 p-3 rounded-full border border-slate-200 dark:border-brand-emerald-800 bg-white/80 dark:bg-brand-emerald-950/80 text-slate-700 dark:text-brand-gold-500 hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900 transition-all shadow-md z-10 cursor-pointer"
             aria-label={t('testimonials.nextSlide')}
           >
             <ChevronRight className="w-5 h-5" />

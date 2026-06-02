@@ -58,7 +58,7 @@ export default function FinalCTA() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-4 rounded-2xl border border-brand-gold-500/30 bg-brand-gold-500/10 text-brand-gold-300 font-semibold text-sm"
+                className="p-4 rounded-2xl border border-brand-gold-500/30 bg-brand-gold-500/10 text-brand-gold-200 font-semibold text-sm"
               >
                 {t('cta.successMsg')}
               </motion.div>

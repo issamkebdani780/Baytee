@@ -135,7 +135,7 @@ export default function Destinations() {
               <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between text-left">
                 {/* Top Row: Tag badge */}
                 <div>
-                  <span className="inline-block text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-brand-gold-500/40 bg-brand-gold-500/10 text-brand-gold-300 backdrop-blur-sm">
+                  <span className="inline-block text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-brand-gold-500/40 bg-brand-gold-500/10 text-brand-gold-200 backdrop-blur-sm">
                     {dest.tag}
                   </span>
                 </div>
@@ -153,7 +153,7 @@ export default function Destinations() {
                   {/* Collapsible info block */}
                   <div className="h-0 opacity-0 group-hover:h-8 group-hover:opacity-100 group-hover:mt-4 transition-all duration-300 flex items-center justify-between border-t border-white/20 pt-4">
                     <span className="text-xs text-slate-300 font-semibold">{dest.properties}</span>
-                    <span className="text-xs font-bold text-brand-gold-400 flex items-center gap-1">
+                    <span className="text-xs font-bold text-brand-gold-500 flex items-center gap-1">
                       {t('destinations.discoverStays')} &rarr;
                     </span>
                   </div>
