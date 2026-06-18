@@ -60,7 +60,7 @@ export default function Pricing() {
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-brand-gold-500/5 rounded-full ambient-glow" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 text-center">
-        
+
         {/* Header */}
         <span className="text-xs font-bold uppercase tracking-widest text-brand-gold-600 dark:text-brand-gold-500 font-sans block mb-3">
           {t('pricing.sectionLabel')}
@@ -104,11 +104,10 @@ export default function Pricing() {
             <motion.div
               key={plan.name}
               whileHover={{ y: -6 }}
-              className={`rounded-3xl p-8 border flex flex-col justify-between relative transition-all duration-300 ${
-                plan.popular
+              className={`rounded-3xl p-8 border flex flex-col justify-between relative transition-all duration-300 ${plan.popular
                   ? 'border-brand-gold-500 bg-brand-emerald-900/10 dark:bg-brand-emerald-950/40 shadow-xl shadow-brand-emerald-950/5'
                   : 'border-slate-200/60 dark:border-brand-emerald-800/30 bg-slate-50/50 dark:bg-brand-emerald-950/10'
-              }`}
+                }`}
             >
               {/* Popular Badge Accent */}
               {plan.popular && (
@@ -153,11 +152,10 @@ export default function Pricing() {
               {/* CTA Button */}
               <button
                 type="button"
-                className={`w-full py-3.5 rounded-full text-sm font-bold shadow-sm transition-all duration-300 cursor-pointer ${
-                  plan.popular
+                className={`w-full py-3.5 rounded-full text-sm font-bold shadow-sm transition-all duration-300 cursor-pointer ${plan.popular
                     ? 'bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 hover:shadow-md'
                     : 'border border-slate-250 dark:border-brand-emerald-800 text-slate-700 dark:text-brand-gold-200 hover:border-brand-emerald-500 dark:hover:border-brand-gold-500'
-                }`}
+                  }`}
               >
                 {plan.cta}
               </button>

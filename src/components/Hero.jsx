@@ -149,12 +149,101 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative min-h-screen pt-32 pb-24 overflow-hidden islamic-pattern flex flex-col items-center justify-center">
-      {/* Decorative Blur Backgrounds */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-brand-emerald-200/20 dark:bg-brand-emerald-800/10 rounded-full ambient-glow" />
-      <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-brand-gold-100/30 dark:bg-brand-gold-800/5 rounded-full ambient-glow" />
+    <section className="relative overflow-hidden islamic-pattern">
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full text-center z-10">
+      {/* ══════════════════════════════════════════════
+          UPPER HERO — fixed-height container
+          Images are absolute INSIDE this box so they
+          never shift when search results appear below.
+      ══════════════════════════════════════════════ */}
+      <div className="relative h-[680px] lg:h-[700px] xl:h-[720px] pt-20 flex flex-col items-center justify-center overflow-hidden">
+        {/* Decorative Blur Backgrounds */}
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-brand-emerald-200/20 dark:bg-brand-emerald-800/10 rounded-full ambient-glow pointer-events-none" />
+        <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-brand-gold-100/30 dark:bg-brand-gold-800/5 rounded-full ambient-glow pointer-events-none" />
+
+        {/* ═══ LEFT IMAGE CLUSTER ═══ */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-3 z-10 pl-4 xl:pl-8">
+        {/* Top-left image — tall portrait */}
+        <motion.div
+          initial={{ opacity: 0, x: -60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.85, delay: 0.15, ease: 'easeOut' }}
+        >
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative w-52 xl:w-64 h-60 xl:h-72 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
+            style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+          >
+            <img src="/hotel-istanbul.png" alt="Istanbul" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3">
+              <p className="text-white font-bold text-sm leading-tight drop-shadow">Istanbul</p>
+              <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />Turkey</p>
+            </div>
+            <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-950/90 backdrop-blur-sm shadow-sm">
+              <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+              <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">4.9</span>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Bottom-left image — landscape, offset right */}
+        <motion.div
+          initial={{ opacity: 0, x: -60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.85, delay: 0.3, ease: 'easeOut' }}
+          className="ml-8 xl:ml-10"
+        >
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative w-52 xl:w-60 h-44 xl:h-52 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
+            style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+          >
+            <img src="/hotel-morocco.png" alt="Marrakech" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3">
+              <p className="text-white font-bold text-sm leading-tight drop-shadow">Marrakech</p>
+              <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />Morocco</p>
+            </div>
+            <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-950/90 backdrop-blur-sm shadow-sm">
+              <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+              <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">4.8</span>
+            </div>
+          </motion.div>
+        </motion.div>
+        </div>
+
+        {/* ═══ RIGHT IMAGE (tall single) ═══ */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:block z-10 pr-4 xl:pr-8">
+        <motion.div
+          initial={{ opacity: 0, x: 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.85, delay: 0.2, ease: 'easeOut' }}
+        >
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative w-56 xl:w-68 h-80 xl:h-96 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
+            style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+          >
+            <img src="/hotel-maldives.png" alt="Maldives" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3">
+              <p className="text-white font-bold text-sm leading-tight drop-shadow">Maldives</p>
+              <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />Indian Ocean</p>
+            </div>
+            <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-950/90 backdrop-blur-sm shadow-sm">
+              <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+              <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">4.9</span>
+            </div>
+          </motion.div>
+        </motion.div>
+        </div>
+
+        {/* ═══ CENTER: badge + heading + subtext + CTAs ═══ */}
+        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full text-center z-10">
         {/* Luxury Top Badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -213,7 +302,14 @@ export default function Hero() {
             {t('hero.watchDemo')}
           </button>
         </motion.div>
+        </div> {/* ← close upper hero inner div */}
+      </div> {/* ← close upper hero fixed-height container */}
 
+      {/* ══════════════════════════════════════════════
+          SEARCH WIDGET + RESULTS — grows independently
+          below the fixed upper hero, images unaffected.
+      ══════════════════════════════════════════════ */}
+      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full pb-24">
         {/* Large Interactive Hotel Search Widget */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -415,11 +511,10 @@ export default function Hero() {
                       key={filter.key}
                       type="button"
                       onClick={() => toggleFilter(filter.key)}
-                      className={`p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between h-20 ${
-                        filters[filter.key]
-                          ? 'border-brand-gold-500 bg-brand-gold-50/60 dark:bg-brand-gold-500/10'
-                          : 'border-slate-200 dark:border-brand-emerald-900/60 hover:bg-slate-100/40 dark:hover:bg-brand-emerald-900/10'
-                      }`}
+                      className={`p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between h-20 ${filters[filter.key]
+                        ? 'border-brand-gold-500 bg-brand-gold-50/60 dark:bg-brand-gold-500/10'
+                        : 'border-slate-200 dark:border-brand-emerald-900/60 hover:bg-slate-100/40 dark:hover:bg-brand-emerald-900/10'
+                        }`}
                     >
                       <span className="flex items-center justify-between w-full">
                         <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{filter.label}</span>

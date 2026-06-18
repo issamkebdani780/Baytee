@@ -50,7 +50,7 @@
   .gold-border-gradient {
     border-image: linear-gradient(to right, #FAF7F2, #c5a880, #FAF7F2) 1;
   }
-  
+
   .dark .gold-border-gradient {
     border-image: linear-gradient(to right, #07140e, #c5a880, #07140e) 1;
   }
@@ -117,8 +117,13 @@
 
 /* ---- Text alignment ---- */
 /* text-left / text-right are hard-coded in Tailwind; flip them. */
-[dir="rtl"] .text-left  { text-align: right; }
-[dir="rtl"] .text-right { text-align: left; }
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
 
 /* text-center stays centered in both directions */
 
@@ -134,6 +139,7 @@
 [dir="rtl"] .group-hover\:translate-x-1:hover {
   transform: translateX(-0.25rem);
 }
+
 [dir="rtl"] .translate-x-0\.5 {
   transform: translateX(-0.125rem);
 }
@@ -147,8 +153,13 @@
 
 /* ---- Animate spin slow (Sparkles icon) ---- */
 @keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-spin-slow {

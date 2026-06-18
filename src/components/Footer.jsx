@@ -58,10 +58,10 @@ export default function Footer() {
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-emerald-500/5 rounded-full ambient-glow" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        
+
         {/* Main Columns Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16 text-left">
-          
+
           {/* Logo & Intro Column (occupies 2 columns on lg screens) */}
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-5">
             <a href="#" className="flex items-center gap-2">

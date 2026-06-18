@@ -75,15 +75,22 @@ export default function AIAssistant() {
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-  const isFirstRender = useRef(true);
+  const prevMsgCount = useRef(messages.length);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
+    // Only scroll when a NEW message is added (not on initial mount)
+    if (messages.length > prevMsgCount.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+    prevMsgCount.current = messages.length;
+  }, [messages]);
+
+  // Scroll to bottom when typing indicator appears (already inside chat box)
+  useEffect(() => {
+    if (isTyping) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [isTyping]);
 
   const handleSendMessage = (text) => {
     if (!text.trim()) return;
@@ -147,7 +154,7 @@ export default function AIAssistant() {
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
+
           {/* Left Column: Context Info */}
           <div className="lg:col-span-5 text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-gold-500/30 bg-brand-gold-50 dark:bg-brand-emerald-950/50 backdrop-blur-sm mb-6">
@@ -190,7 +197,7 @@ export default function AIAssistant() {
           {/* Right Column: High Fidelity Chat Terminal Mockup */}
           <div className="lg:col-span-7">
             <div className="w-full max-w-2xl mx-auto rounded-3xl border border-slate-200/80 dark:border-brand-emerald-800/40 bg-white/70 dark:bg-brand-emerald-950/30 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col h-[520px]">
-              
+
               {/* Chat Terminal Header */}
               <div className="px-6 py-4 border-b border-slate-200/60 dark:border-brand-emerald-900/60 flex items-center justify-between bg-slate-50/50 dark:bg-brand-emerald-950/40">
                 <div className="flex items-center gap-3">
@@ -209,7 +216,7 @@ export default function AIAssistant() {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-brand-emerald-800" />
                   <div className="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-brand-emerald-800" />
@@ -221,17 +228,15 @@ export default function AIAssistant() {
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex gap-3 max-w-[85%] ${
-                      msg.sender === 'user' ? 'ml-auto flex-row-reverse' : 'mr-auto'
-                    }`}
+                    className={`flex gap-3 max-w-[85%] ${msg.sender === 'user' ? 'ml-auto flex-row-reverse' : 'mr-auto'
+                      }`}
                   >
                     {/* Icon */}
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border ${
-                        msg.sender === 'user'
+                      className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border ${msg.sender === 'user'
                           ? 'bg-slate-100 dark:bg-brand-emerald-900 border-slate-200 dark:border-brand-emerald-800 text-slate-700 dark:text-brand-gold-500'
                           : 'bg-brand-emerald-500 dark:bg-brand-emerald-850 border-brand-emerald-600 dark:border-brand-emerald-800 text-white'
-                      }`}
+                        }`}
                     >
                       {msg.sender === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-brand-gold-500" />}
                     </div>
@@ -239,11 +244,10 @@ export default function AIAssistant() {
                     {/* Text + Cards */}
                     <div className="space-y-3">
                       <div
-                        className={`p-4 rounded-2xl text-sm leading-relaxed text-left ${
-                          msg.sender === 'user'
+                        className={`p-4 rounded-2xl text-sm leading-relaxed text-left ${msg.sender === 'user'
                             ? 'bg-brand-emerald-500 dark:bg-brand-gold-500 text-white dark:text-brand-emerald-950 font-medium rounded-tr-none'
                             : 'bg-slate-55/90 dark:bg-brand-emerald-900/40 border border-slate-200/50 dark:border-brand-emerald-800/30 text-slate-800 dark:text-slate-200 rounded-tl-none'
-                        }`}
+                          }`}
                       >
                         {msg.text}
                       </div>
