@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Calendar, Users, SlidersHorizontal, Check, Star, MapPin, Sparkles, Play, ShieldAlert, ArrowRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -75,10 +75,30 @@ const MOCK_HOTELS = [
 
 const DESTINATION_SUGGESTIONS = ['Makkah', 'Madinah', 'Istanbul', 'Antalya', 'Dubai', 'Kuala Lumpur'];
 
+const FLOATING_IMAGES = [
+  { src: '/hotel-istanbul.png', city: 'Istanbul', country: 'Turkey', rating: '4.9' },
+  { src: '/hotel-morocco.png', city: 'Marrakech', country: 'Morocco', rating: '4.8' },
+  { src: '/hotel-maldives.png', city: 'Maldives', country: 'Indian Ocean', rating: '4.9' },
+  { src: '/hotel-dubai.png', city: 'Dubai', country: 'UAE', rating: '4.9' },
+  { src: '/hotel-malaysia.png', city: 'Kuala Lumpur', country: 'Malaysia', rating: '4.8' }
+];
+
 export default function Hero() {
   const { t } = useTranslation();
   const [destination, setDestination] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImgIndex((prev) => (prev + 1) % FLOATING_IMAGES.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const card1Data = FLOATING_IMAGES[currentImgIndex % FLOATING_IMAGES.length];
+  const card2Data = FLOATING_IMAGES[(currentImgIndex + 1) % FLOATING_IMAGES.length];
+  const card3Data = FLOATING_IMAGES[(currentImgIndex + 2) % FLOATING_IMAGES.length];
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
@@ -150,96 +170,139 @@ export default function Hero() {
 
   return (
     <section className="relative overflow-hidden islamic-pattern">
+      {/* Background Image with Elegant Theme-Aware Gradient Overlay */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+        <img
+          src="/hero-bg.png"
+          alt="Luxury Resort Background"
+          className="w-full h-full object-cover"
+        />
+        {/* Soft elegant overlays to blend with light and dark modes, maintaining readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FCFBF9]/95 via-[#FCFBF9]/80 to-[#FCFBF9] dark:from-[#07140e]/95 dark:via-[#07140e]/85 dark:to-[#07140e] transition-colors duration-300" />
+      </div>
 
       {/* ══════════════════════════════════════════════
           UPPER HERO — fixed-height container
           Images are absolute INSIDE this box so they
           never shift when search results appear below.
       ══════════════════════════════════════════════ */}
-      <div className="relative h-[680px] lg:h-[700px] xl:h-[720px] pt-20 flex flex-col items-center justify-center overflow-hidden">
+      <div className="relative h-[680px] lg:h-[700px] xl:h-[720px] pt-20 flex flex-col items-center justify-center overflow-hidden z-10">
         {/* Decorative Blur Backgrounds */}
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-brand-emerald-200/20 dark:bg-brand-emerald-800/10 rounded-full ambient-glow pointer-events-none" />
         <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-brand-gold-100/30 dark:bg-brand-gold-800/5 rounded-full ambient-glow pointer-events-none" />
 
-        {/* ═══ LEFT IMAGE CLUSTER ═══ */}
+        {/* ═══ LEFT IMAGE CLUSTER (rotates every 3s) ═══ */}
         <div className="absolute left-0 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-3 z-10 pl-4 xl:pl-8">
-        {/* Top-left image — tall portrait */}
-        <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.85, delay: 0.15, ease: 'easeOut' }}
-        >
+          {/* Top-left image — tall portrait */}
           <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative w-52 xl:w-64 h-60 xl:h-72 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
-            style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+            initial={{ opacity: 0, x: -60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.85, delay: 0.15, ease: 'easeOut' }}
           >
-            <img src="/hotel-istanbul.png" alt="Istanbul" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3">
-              <p className="text-white font-bold text-sm leading-tight drop-shadow">Istanbul</p>
-              <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />Turkey</p>
-            </div>
-            <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-950/90 backdrop-blur-sm shadow-sm">
-              <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-              <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">4.9</span>
-            </div>
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+              className="relative w-52 xl:w-64 h-60 xl:h-72 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
+              style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={card1Data.src}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <img src={card1Data.src} alt={card1Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <p className="text-white font-bold text-sm leading-tight drop-shadow">{card1Data.city}</p>
+                    <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />{card1Data.country}</p>
+                  </div>
+                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-950/90 backdrop-blur-sm shadow-sm">
+                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+                    <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">{card1Data.rating}</span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
           </motion.div>
-        </motion.div>
 
-        {/* Bottom-left image — landscape, offset right */}
-        <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.85, delay: 0.3, ease: 'easeOut' }}
-          className="ml-8 xl:ml-10"
-        >
+          {/* Bottom-left image — landscape, offset right */}
           <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative w-52 xl:w-60 h-44 xl:h-52 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
-            style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+            initial={{ opacity: 0, x: -60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.85, delay: 0.3, ease: 'easeOut' }}
+            className="ml-8 xl:ml-10"
           >
-            <img src="/hotel-morocco.png" alt="Marrakech" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3">
-              <p className="text-white font-bold text-sm leading-tight drop-shadow">Marrakech</p>
-              <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />Morocco</p>
-            </div>
-            <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-950/90 backdrop-blur-sm shadow-sm">
-              <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-              <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">4.8</span>
-            </div>
+            <motion.div
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
+              className="relative w-52 xl:w-60 h-44 xl:h-52 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
+              style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={card2Data.src}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <img src={card2Data.src} alt={card2Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <p className="text-white font-bold text-sm leading-tight drop-shadow">{card2Data.city}</p>
+                    <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />{card2Data.country}</p>
+                  </div>
+                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-955/90 backdrop-blur-sm shadow-sm">
+                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+                    <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">{card2Data.rating}</span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
           </motion.div>
-        </motion.div>
         </div>
 
-        {/* ═══ RIGHT IMAGE (tall single) ═══ */}
+        {/* ═══ RIGHT IMAGE (tall single, rotates every 3s) ═══ */}
         <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:block z-10 pr-4 xl:pr-8">
-        <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.85, delay: 0.2, ease: 'easeOut' }}
-        >
           <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative w-56 xl:w-68 h-80 xl:h-96 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
-            style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.85, delay: 0.2, ease: 'easeOut' }}
           >
-            <img src="/hotel-maldives.png" alt="Maldives" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3">
-              <p className="text-white font-bold text-sm leading-tight drop-shadow">Maldives</p>
-              <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />Indian Ocean</p>
-            </div>
-            <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-950/90 backdrop-blur-sm shadow-sm">
-              <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-              <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">4.9</span>
-            </div>
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+              className="relative w-56 xl:w-68 h-80 xl:h-96 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
+              style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={card3Data.src}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <img src={card3Data.src} alt={card3Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <p className="text-white font-bold text-sm leading-tight drop-shadow">{card3Data.city}</p>
+                    <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />{card3Data.country}</p>
+                  </div>
+                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-955/90 backdrop-blur-sm shadow-sm">
+                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+                    <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">{card3Data.rating}</span>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
           </motion.div>
-        </motion.div>
         </div>
 
         {/* ═══ CENTER: badge + heading + subtext + CTAs ═══ */}
