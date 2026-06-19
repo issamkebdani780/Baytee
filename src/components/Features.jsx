@@ -29,7 +29,7 @@ export default function Features() {
       title: t('features.umrahTitle'),
       description: t('features.umrahDesc'),
       badge: t('features.umrahBadge'),
-      image: '/hotel-istanbul.png',
+      image: '/hotel-umrah.png',
       gridClass: 'col-span-12 lg:col-span-8',
       isImageCard: true,
     },
