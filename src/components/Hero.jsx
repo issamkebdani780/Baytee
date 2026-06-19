@@ -181,11 +181,6 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#FCFBF9]/95 via-[#FCFBF9]/80 to-[#FCFBF9] dark:from-[#07140e]/95 dark:via-[#07140e]/85 dark:to-[#07140e] transition-colors duration-300" />
       </div>
 
-      {/* ══════════════════════════════════════════════
-          UPPER HERO — fixed-height container
-          Images are absolute INSIDE this box so they
-          never shift when search results appear below.
-      ══════════════════════════════════════════════ */}
       <div className="relative h-[680px] lg:h-[700px] xl:h-[720px] pt-20 flex flex-col items-center justify-center overflow-hidden z-10">
         {/* Decorative Blur Backgrounds */}
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-brand-emerald-200/20 dark:bg-brand-emerald-800/10 rounded-full ambient-glow pointer-events-none" />
@@ -306,7 +301,7 @@ export default function Hero() {
         </div>
 
         {/* ═══ CENTER: badge + heading + subtext + CTAs ═══ */}
-        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full text-center z-10">
+        <div className="max-w-7xl mx-auto px-7 md:px-12 w-full text-center z-10">
         {/* Luxury Top Badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -366,12 +361,9 @@ export default function Hero() {
           </button>
         </motion.div>
         </div> {/* ← close upper hero inner div */}
-      </div> {/* ← close upper hero fixed-height container */}
+      </div> 
 
-      {/* ══════════════════════════════════════════════
-          SEARCH WIDGET + RESULTS — grows independently
-          below the fixed upper hero, images unaffected.
-      ══════════════════════════════════════════════ */}
+ 
       <div className="max-w-7xl mx-auto px-6 md:px-12 w-full pb-24">
         {/* Large Interactive Hotel Search Widget */}
         <motion.div
