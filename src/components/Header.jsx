@@ -41,13 +41,7 @@ export default function Header() {
         <div className="flex items-center justify-between px-5 py-3">
           {/* Brand Logo */}
           <a href="#" className="flex items-center gap-2.5 group shrink-0">
-            <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-brand-emerald-500 dark:bg-brand-emerald-800 shadow-inner group-hover:scale-105 transition-all duration-300">
-              <Compass className="w-4.5 h-4.5 text-brand-gold-500 group-hover:rotate-45 transition-transform duration-500" />
-              <div className="absolute inset-0 rounded-xl border border-brand-gold-500/30 group-hover:border-brand-gold-500/60 transition-colors" />
-            </div>
-            <span className="font-accent text-lg font-bold tracking-wider text-brand-emerald-800 dark:text-brand-gold-100">
-              Baytee
-            </span>
+            <img src="/logo.png" alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300" />
           </a>
 
           {/* Desktop Navigation */}

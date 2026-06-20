@@ -12,7 +12,7 @@ import ScrollPlane from './components/ScrollPlane';
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-[#FCFBF9] text-slate-900 transition-colors duration-300 dark:bg-[#07140e] dark:text-slate-100 selection:bg-brand-gold-500 selection:text-brand-emerald-950 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans bg-[#FCFBF9] text-slate-900 transition-colors duration-300 dark:bg-[#060b14] dark:text-slate-100 selection:bg-brand-gold-500 selection:text-brand-emerald-950 overflow-x-hidden">
       {/* Scroll Plane Effect */}
       <ScrollPlane />
 
@@ -40,7 +40,7 @@ function App() {
         <Testimonials />
 
         {/* Flexible Subscription Plans */}
-        <Pricing />
+        {/* <Pricing /> */}
 
         {/* Final Conversion Call To Action */}
         <FinalCTA />

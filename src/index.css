@@ -7,15 +7,15 @@
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --font-accent: "Cinzel", serif;
 
-  --color-brand-emerald-50: #f4f8f6;
-  --color-brand-emerald-100: #e4efe9;
-  --color-brand-emerald-200: #cbdfd5;
-  --color-brand-emerald-500: #0b3b24;
-  --color-brand-emerald-600: #082d1b;
-  --color-brand-emerald-700: #062114;
-  --color-brand-emerald-800: #04150d;
-  --color-brand-emerald-900: #030d08;
-  --color-brand-emerald-950: #010604;
+  --color-brand-emerald-50: #f1f5f9;
+  --color-brand-emerald-100: #e2e8f0;
+  --color-brand-emerald-200: #cbd5e1;
+  --color-brand-emerald-500: #1e3a5f;
+  --color-brand-emerald-600: #172a45;
+  --color-brand-emerald-700: #101d30;
+  --color-brand-emerald-800: #0b1523;
+  --color-brand-emerald-900: #060b14;
+  --color-brand-emerald-950: #03060a;
 
   --color-brand-gold-50: #FAF7F2;
   --color-brand-gold-100: #F3EAD7;
@@ -52,7 +52,7 @@
   }
 
   .dark .gold-border-gradient {
-    border-image: linear-gradient(to right, #07140e, #c5a880, #07140e) 1;
+    border-image: linear-gradient(to right, #060b14, #c5a880, #060b14) 1;
   }
 }
 

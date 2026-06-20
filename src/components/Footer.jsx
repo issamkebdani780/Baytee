@@ -65,12 +65,7 @@ export default function Footer() {
           {/* Logo & Intro Column (occupies 2 columns on lg screens) */}
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-5">
             <a href="#" className="flex items-center gap-2">
-              <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-brand-emerald-500 dark:bg-brand-emerald-800 text-brand-gold-100 shadow-inner">
-                <Compass className="w-5 h-5 text-brand-gold-500" />
-              </div>
-              <span className="font-accent text-lg font-bold tracking-wider text-brand-emerald-800 dark:text-brand-gold-100">
-                Baytee
-              </span>
+              <img src="/logo.png" alt="Baytee Logo" className="h-10 w-auto object-contain" />
             </a>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
               {t('footer.tagline')}

@@ -1,20 +1,38 @@
 import { useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 
 export default function ScrollPlane() {
   const { scrollYProgress } = useScroll();
   const [isVisible, setIsVisible] = useState(false);
+  const rotateMV = useMotionValue(180);
 
-  // Check if we have scrolled past a tiny threshold to show the plane
+  // Check if we have scrolled past a tiny threshold to show the plane and track scroll direction
   useEffect(() => {
+    let lastValue = scrollYProgress.get();
+    
+    // Check initial visibility
+    if (lastValue > 0.01 && lastValue < 0.99) {
+      setIsVisible(true);
+    }
+    
     return scrollYProgress.on('change', (latest) => {
       if (latest > 0.01 && latest < 0.99) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
+
+      // Determine scroll direction with hysteresis to prevent trackpad jitter
+      const delta = latest - lastValue;
+      if (delta > 0.002) {
+        rotateMV.set(180);
+        lastValue = latest;
+      } else if (delta < -0.002) {
+        rotateMV.set(0);
+        lastValue = latest;
+      }
     });
-  }, [scrollYProgress]);
+  }, [scrollYProgress, rotateMV]);
 
   // Move vertically from top (10vh) to bottom (85vh)
   const yTransform = useTransform(
@@ -23,18 +41,16 @@ export default function ScrollPlane() {
     ['10vh', '85vh']
   );
 
-  // Points straight down (180deg since default SVG nose points up)
-  const rotateTransform = useTransform(scrollYProgress, [0, 1], [180, 180]);
-
   // Apply spring config for smooth vertical flight movement
   const springConfig = { stiffness: 60, damping: 18 };
+  const springConfigRotate = { stiffness: 80, damping: 20 };
   const springConfigTrail1 = { stiffness: 40, damping: 15 };
   const springConfigTrail2 = { stiffness: 28, damping: 13 };
   const springConfigTrail3 = { stiffness: 18, damping: 11 };
   const springConfigTrail4 = { stiffness: 10, damping: 9 };
 
   const ySmooth = useSpring(yTransform, springConfig);
-  const rotateSmooth = useSpring(rotateTransform, springConfig);
+  const rotateSmooth = useSpring(rotateMV, springConfigRotate);
 
   // Trail vertical positions with progressive delays
   const trailY1 = useSpring(yTransform, springConfigTrail1);
@@ -42,16 +58,19 @@ export default function ScrollPlane() {
   const trailY3 = useSpring(yTransform, springConfigTrail3);
   const trailY4 = useSpring(yTransform, springConfigTrail4);
 
-  if (!isVisible) return null;
-
   return (
-    <div className="fixed right-6 sm:right-12 top-0 bottom-0 z-50 pointer-events-none select-none w-16">
+    <motion.div 
+      className="fixed right-6 sm:right-12 top-0 bottom-0 z-50 pointer-events-none select-none w-16"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.4, ease: 'easeInOut' }}
+    >
       {/* Dashed flight path line mapping the scroll track */}
       <div className="absolute top-[10vh] bottom-[15vh] left-1/2 -translate-x-1/2 w-[1px] border-l border-dashed border-brand-gold-500/25" />
 
       {/* Contrail trail particles (aligning vertically in the center) */}
       <motion.div
-        className="absolute w-4 h-4 bg-brand-gold-450/30 rounded-full blur-[1.5px]"
+        className="absolute w-4 h-4 bg-brand-gold-500/30 rounded-full blur-[1.5px]"
         style={{
           left: '50%',
           top: trailY1,
@@ -61,7 +80,7 @@ export default function ScrollPlane() {
         }}
       />
       <motion.div
-        className="absolute w-3 h-3 bg-brand-gold-400/40 rounded-full blur-[2px]"
+        className="absolute w-3 h-3 bg-brand-gold-500/40 rounded-full blur-[2px]"
         style={{
           left: '50%',
           top: trailY2,
@@ -71,7 +90,7 @@ export default function ScrollPlane() {
         }}
       />
       <motion.div
-        className="absolute w-2.5 h-2.5 bg-brand-gold-300/30 rounded-full blur-[2.5px]"
+        className="absolute w-2.5 h-2.5 bg-brand-gold-500/30 rounded-full blur-[2.5px]"
         style={{
           left: '50%',
           top: trailY3,
@@ -81,7 +100,7 @@ export default function ScrollPlane() {
         }}
       />
       <motion.div
-        className="absolute w-2 h-2 bg-brand-emerald-450/20 rounded-full blur-[2.5px]"
+        className="absolute w-2 h-2 bg-brand-emerald-500/20 rounded-full blur-[2.5px]"
         style={{
           left: '50%',
           top: trailY4,
@@ -136,13 +155,13 @@ export default function ScrollPlane() {
           <path d="M32 6 C30 6 29 16 29 44 C29 48 32 52 32 52 C32 52 35 48 35 44 C35 16 34 6 32 6 Z" fill="url(#planeGrad)" />
 
           {/* Cockpit Window */}
-          <path d="M32 12 C31.2 12 31 13 31 15 C31 15 32 16 32 16 C32 16 33 15 33 15 C33 13 32.8 12 32 12 Z" fill="#07140e" />
+          <path d="M32 12 C31.2 12 31 13 31 15 C31 15 32 16 32 16 C32 16 33 15 33 15 C33 13 32.8 12 32 12 Z" fill="#060b14" />
 
           {/* Engine Glow Circles */}
           <circle cx="28" cy="44" r="1.5" fill="#ffedd5" />
           <circle cx="36" cy="44" r="1.5" fill="#ffedd5" />
         </svg>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
