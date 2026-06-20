@@ -117,6 +117,9 @@ const resources = {
         subtext: 'Handpicked locales combining rich heritage, breathtaking natural landscapes, and fully verified halal accommodations.',
         viewAll: 'View All Locations',
         discoverStays: 'Discover Stays',
+        tabPicks: 'Top Picks',
+        tabCountries: 'Top Countries',
+        tabCities: 'Top Cities',
       },
       // Testimonials
       testimonials: {
@@ -340,6 +343,9 @@ const resources = {
         subtext: 'Des lieux sélectionnés alliant riche patrimoine, paysages naturels époustouflants et hébergements halal entièrement vérifiés.',
         viewAll: 'Voir Toutes les Destinations',
         discoverStays: 'Découvrir les Séjours',
+        tabPicks: 'Coups de Cœur',
+        tabCountries: 'Pays Populaires',
+        tabCities: 'Villes Principales',
       },
       testimonials: {
         sectionLabel: 'Témoignages de Voyageurs',
@@ -558,6 +564,9 @@ const resources = {
         subtext: 'أماكن مختارة بعناية تجمع بين التراث الغني والمناظر الطبيعية الخلابة وأماكن الإقامة الحلال المعتمدة بالكامل.',
         viewAll: 'عرض كل الوجهات',
         discoverStays: 'اكتشف الإقامات',
+        tabPicks: 'أفضل الاختيارات',
+        tabCountries: 'أهم الدول',
+        tabCities: 'أشهر المدن',
       },
       testimonials: {
         sectionLabel: 'قصص المسافرين',
