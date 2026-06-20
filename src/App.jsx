@@ -1,5 +1,6 @@
 import Header from './components/Header';
 import Hero from './components/Hero';
+import Rewards from './components/Rewards';
 import Features from './components/Features';
 import AIAssistant from './components/AIAssistant';
 import Destinations from './components/Destinations';
@@ -10,6 +11,7 @@ import FinalCTA from './components/FinalCTA';
 import MobileApp from './components/MobileApp';
 import Footer from './components/Footer';
 import ScrollPlane from './components/ScrollPlane';
+
 
 function App() {
   return (
@@ -40,11 +42,11 @@ function App() {
         {/* Reviews Carousel Slider */}
         <Testimonials />
 
+        {/* Airline & Loyalty Partners Scrolling Marquee */}
+        <Rewards />
+
         {/* Mobile App Download Section */}
         <MobileApp />
-
-        {/* Flexible Subscription Plans */}
-        {/* <Pricing /> */}
 
         {/* Final Conversion Call To Action */}
         <FinalCTA />

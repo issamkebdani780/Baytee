@@ -207,6 +207,28 @@ const resources = {
         contact: 'Contact Support',
         sitemap: 'Sitemap',
       },
+      rewards: {
+        sectionLabel: 'Loyalty & Rewards',
+        heading: 'Our Airline & Loyalty Partners',
+        subtext: 'Earn travel miles and unlock exclusive premium benefits when you book Shariah-compliant stays.',
+        partners: {
+          air_algerie: {
+            name: 'Air Algérie',
+            desc: 'AH Espace Club',
+            rewardTag: '3x Miles'
+          },
+          saudia: {
+            name: 'Saudia',
+            desc: 'AlFursan Loyalty',
+            rewardTag: 'Earn & Redeem'
+          },
+          flynas: {
+            name: 'Flynas',
+            desc: 'naSmiles Loyalty',
+            rewardTag: 'Exclusive Rates'
+          }
+        }
+      },
     },
   },
 
@@ -403,6 +425,28 @@ const resources = {
         contact: 'Contacter le Support',
         sitemap: 'Plan du Site',
       },
+      rewards: {
+        sectionLabel: 'Fidélité & Récompenses',
+        heading: 'Compagnies Aériennes Partenaires',
+        subtext: 'Cumulez des miles et débloquez des avantages exclusifs en réservant des séjours conformes à la Charia.',
+        partners: {
+          air_algerie: {
+            name: 'Air Algérie',
+            desc: 'AH Espace Club',
+            rewardTag: '3x Miles'
+          },
+          saudia: {
+            name: 'Saudia',
+            desc: 'Loyauté AlFursan',
+            rewardTag: 'Gagner & Utiliser'
+          },
+          flynas: {
+            name: 'Flynas',
+            desc: 'Loyauté naSmiles',
+            rewardTag: 'Tarifs Exclusifs'
+          }
+        }
+      },
     },
   },
 
@@ -598,6 +642,28 @@ const resources = {
         help: 'مركز المساعدة',
         contact: 'تواصل مع الدعم',
         sitemap: 'خريطة الموقع',
+      },
+      rewards: {
+        sectionLabel: 'الولاء والمكافآت',
+        heading: 'شركاء الطيران وبرامج الولاء',
+        subtext: 'اكسب أميال طيران واستمتع بمزايا حصرية عند حجز إقامات فاخرة متوافقة مع الشريعة.',
+        partners: {
+          air_algerie: {
+            name: 'الخطوط الجوية الجزائرية',
+            desc: 'نادي الفرسان AH',
+            rewardTag: '٣ أضعاف الأميال'
+          },
+          saudia: {
+            name: 'الخطوط السعودية',
+            desc: 'برنامج الفرسان',
+            rewardTag: 'كسب واسترداد'
+          },
+          flynas: {
+            name: 'طيران ناس',
+            desc: 'برنامج ناسمايلز',
+            rewardTag: 'أسعار حصرية'
+          }
+        }
       },
     },
   },
