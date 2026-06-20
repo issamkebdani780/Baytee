@@ -161,6 +161,14 @@ const resources = {
         familyF5: 'Custom kid-friendly activity filters',
         familyF6: 'Complimentary private airport transfers',
       },
+      // Mobile App
+      appDownload: {
+        sectionLabel: 'Mobile App',
+        heading: 'Take Baytee With You',
+        subtext: 'Download our mobile app to access your AI travel companion, manage your halal bookings, and discover exclusive luxury villas on the go.',
+        appStore: 'Download on the App Store',
+        googlePlay: 'Get it on Google Play',
+      },
       // Final CTA
       cta: {
         heading: 'Travel With Confidence',
@@ -352,6 +360,13 @@ const resources = {
         familyF5: 'Filtres d\'activités adaptées aux enfants',
         familyF6: 'Transferts aéroport privés gratuits',
       },
+      appDownload: {
+        sectionLabel: 'Application Mobile',
+        heading: 'Emportez Baytee Partout',
+        subtext: 'Téléchargez notre application mobile pour accéder à votre compagnon de voyage IA, gérer vos réservations halal et découvrir des villas de luxe exclusives en déplacement.',
+        appStore: 'Télécharger dans l\'App Store',
+        googlePlay: 'Disponible sur Google Play',
+      },
       cta: {
         heading: 'Voyagez en Toute Confiance',
         subtext: 'Découvrez des hôtels, villas et complexes adaptés à votre style de vie islamique. Essayez notre assistant de voyage IA aujourd\'hui.',
@@ -540,6 +555,13 @@ const resources = {
         familyF4: 'طلبات فلل فاخرة مع الأولوية للخصوصية',
         familyF5: 'فلاتر أنشطة مناسبة للأطفال',
         familyF6: 'تحويلات مجانية من المطار الخاص',
+      },
+      appDownload: {
+        sectionLabel: 'تطبيق الهاتف',
+        heading: 'خذ Baytee معك',
+        subtext: 'قم بتنزيل تطبيق الهاتف الذكي للوصول إلى مرافق السفر بالذكاء الاصطناعي، وإدارة حجوزاتك الحلال، واكتشاف فلل فاخرة حصرية أثناء تنقلك.',
+        appStore: 'تنزيل من App Store',
+        googlePlay: 'احصل عليه من Google Play',
       },
       cta: {
         heading: 'سافر بثقة',

@@ -7,6 +7,7 @@ import Statistics from './components/Statistics';
 import Testimonials from './components/Testimonials';
 import Pricing from './components/Pricing';
 import FinalCTA from './components/FinalCTA';
+import MobileApp from './components/MobileApp';
 import Footer from './components/Footer';
 import ScrollPlane from './components/ScrollPlane';
 
@@ -38,6 +39,9 @@ function App() {
 
         {/* Reviews Carousel Slider */}
         <Testimonials />
+
+        {/* Mobile App Download Section */}
+        <MobileApp />
 
         {/* Flexible Subscription Plans */}
         {/* <Pricing /> */}
