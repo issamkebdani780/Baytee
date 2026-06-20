@@ -302,32 +302,35 @@ export default function Hero() {
 
         {/* ═══ CENTER: badge + heading + subtext + search + CTAs ═══ */}
         <div className="relative max-w-7xl mx-auto px-7 md:px-12 w-full text-center z-20 flex flex-col items-center">
-          {/* Luxury Top Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-gold-500/30 bg-brand-gold-50/50 dark:bg-brand-emerald-950/40 backdrop-blur-sm mb-6 cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4 text-brand-gold-600 dark:text-brand-gold-500" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-brand-emerald-800 dark:text-brand-gold-200 font-sans">
-              {t('hero.badge')}
-            </span>
-          </motion.div>
+          {/* Glass Card Text Container */}
+          <div className="bg-black/15 dark:bg-brand-emerald-950/20 backdrop-blur-md px-6 sm:px-8 py-8 sm:py-10 rounded-[2.5rem] border border-white/10 dark:border-brand-emerald-800/10 shadow-lg max-w-4xl w-full mb-10 flex flex-col items-center">
+            {/* Luxury Top Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-gold-500/30 bg-brand-gold-50/50 dark:bg-brand-emerald-950/40 backdrop-blur-sm mb-6 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-brand-gold-600 dark:text-brand-gold-500" />
+              <span className="text-xs font-semibold uppercase tracking-widest text-brand-emerald-800 dark:text-brand-gold-200 font-sans">
+                {t('hero.badge')}
+              </span>
+            </motion.div>
 
-          {/* Main Headings */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white text-3d-white leading-[1.1] mb-6"
-          >
-            {t('hero.heading1')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold-200 via-brand-gold-500 to-brand-gold-200 font-serif italic font-normal text-3d-gold [text-shadow:none]">
-              {t('hero.heading2')}
-            </span>{' '}
-            {t('hero.heading3')}
-          </motion.h1>
+            {/* Main Headings */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]"
+            >
+              {t('hero.heading1')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold-200 via-brand-gold-500 to-brand-gold-200 font-serif italic font-normal">
+                {t('hero.heading2')}
+              </span>{' '}
+              {t('hero.heading3')}
+            </motion.h1>
+          </div>
 
           {/* <motion.p
             initial={{ opacity: 0, y: 20 }}
