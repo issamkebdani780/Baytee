@@ -65,7 +65,8 @@ export default function Footer() {
           {/* Logo & Intro Column (occupies 2 columns on lg screens) */}
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-5">
             <a href="#" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Baytee Logo" className="h-10 w-auto object-contain" />
+              <img src="/logo.png" alt="Baytee Logo" className="h-10 w-auto object-contain dark:hidden" />
+              <img src="/darklogo.png" alt="Baytee Logo" className="h-10 w-auto object-contain hidden dark:block" />
             </a>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
               {t('footer.tagline')}

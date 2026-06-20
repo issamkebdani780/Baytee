@@ -173,7 +173,7 @@ const resources = {
       // Footer
       footer: {
         tagline: 'Find halal-friendly hotels anywhere in the world. Fully verified ladies-only pools, verified dining, and private villas.',
-        copyright: '© {{year}} MuslimStay Inc. All rights reserved.',
+        copyright: '© {{year}} Baytee Inc. All rights reserved.',
         madeWith: 'Made with',
         forUmmah: 'for the Global Muslim Ummah.',
         colDestinations: 'Destinations',
@@ -186,7 +186,7 @@ const resources = {
         alcoholFreeHotels: 'Alcohol-Free Hotels',
         prayerFacilities: 'Prayer Facilities',
         umrahFriendly: 'Umrah Friendly Stays',
-        aboutUs: 'About MuslimStay',
+        aboutUs: 'About Baytee',
         shariahCouncil: 'Our Shariah Council',
         aiTech: 'AI Companion Technology',
         partner: 'Partner With Us',
@@ -362,7 +362,7 @@ const resources = {
       },
       footer: {
         tagline: 'Trouvez des hôtels halal partout dans le monde. Piscines réservées aux femmes, restauration vérifiée et villas privées.',
-        copyright: '© {{year}} MuslimStay Inc. Tous droits réservés.',
+        copyright: '© {{year}} Baytee Inc. Tous droits réservés.',
         madeWith: 'Fait avec',
         forUmmah: 'pour l\'Oummah Musulmane Mondiale.',
         colDestinations: 'Destinations',
@@ -551,7 +551,7 @@ const resources = {
       },
       footer: {
         tagline: 'اعثر على فنادق حلال في أي مكان حول العالم. مسابح خاصة بالسيدات معتمدة ومطاعم حلال وفلل خاصة.',
-        copyright: '© {{year}} MuslimStay Inc. جميع الحقوق محفوظة.',
+        copyright: '© {{year}} Baytee Inc. جميع الحقوق محفوظة.',
         madeWith: 'صُنع بـ',
         forUmmah: 'للأمة الإسلامية العالمية.',
         colDestinations: 'الوجهات',
@@ -564,7 +564,7 @@ const resources = {
         alcoholFreeHotels: 'فنادق خالية من الكحول',
         prayerFacilities: 'مرافق الصلاة',
         umrahFriendly: 'إقامات عمرة',
-        aboutUs: 'عن MuslimStay',
+        aboutUs: 'عن Baytee',
         shariahCouncil: 'مجلس الشريعة',
         aiTech: 'تقنية مرافق الذكاء الاصطناعي',
         partner: 'شاركنا',

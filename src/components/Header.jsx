@@ -41,7 +41,8 @@ export default function Header() {
         <div className="flex items-center justify-between px-5 py-3">
           {/* Brand Logo */}
           <a href="#" className="flex items-center gap-2.5 group shrink-0">
-            <img src="/logo.png" alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300" />
+            <img src="/logo.png" alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300 dark:hidden" />
+            <img src="/darklogo.png" alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300 hidden dark:block" />
           </a>
 
           {/* Desktop Navigation */}
