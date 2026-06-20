@@ -4,6 +4,51 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
+const DEMO_CONVERSATIONS = [
+  {
+    user: "Hi! Can you find a family resort in Antalya close to beaches?",
+    bot: "Walaykum As-salam! I highly recommend the **Adenya Hotel & Resort** in Antalya. It features fully secluded ladies-only private beaches, pools, and dedicated spa areas for absolute privacy, plus 100% halal certified dining.",
+    hotels: [
+      {
+        name: 'Adenya Hotel & Resort',
+        location: 'Antalya, Turkey',
+        rating: 4.7,
+        price: 280,
+        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
+        features: ['Women-Only Private Beach', '100% Halal Dining', 'Alcohol-Free Premises'],
+      }
+    ]
+  },
+  {
+    user: "Perfect. Do you have anything in Makkah with Kaaba views?",
+    bot: "Certainly! The **Conrad Makkah Jabal Omar** offers breathtaking Kaaba views, dedicated prayer spaces, and direct elevator access to the Haram courtyard, making it excellent for families.",
+    hotels: [
+      {
+        name: 'Conrad Makkah Jabal Omar',
+        location: 'Makkah, Saudi Arabia',
+        rating: 4.8,
+        price: 450,
+        image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
+        features: ['Kaaba Views', 'Wheelchair Accessible', 'In-room Haram Audio Feed'],
+      }
+    ]
+  },
+  {
+    user: "Suggest an authentic, alcohol-free boutique stay in Istanbul.",
+    bot: "For a historic Ottoman experience, **Ajwa Hotel Sultanahmet** is a masterpiece. It features traditional handcrafted furniture, a premium halal kitchen, and is located just minutes away from the Hagia Sophia.",
+    hotels: [
+      {
+        name: 'Ajwa Hotel Sultanahmet',
+        location: 'Istanbul, Turkey',
+        rating: 4.9,
+        price: 320,
+        image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80',
+        features: ['No Alcohol Onsite', 'Ottoman-style Hammam', 'Halal Verified Kitchen'],
+      }
+    ]
+  }
+];
+
 export default function AIAssistant() {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.dir() === 'rtl';
@@ -65,50 +110,6 @@ export default function AIAssistant() {
     }
   ];
 
-  const DEMO_CONVERSATIONS = [
-    {
-      user: "Hi! Can you find a family resort in Antalya close to beaches?",
-      bot: "Walaykum As-salam! I highly recommend the **Adenya Hotel & Resort** in Antalya. It features fully secluded ladies-only private beaches, pools, and dedicated spa areas for absolute privacy, plus 100% halal certified dining.",
-      hotels: [
-        {
-          name: 'Adenya Hotel & Resort',
-          location: 'Antalya, Turkey',
-          rating: 4.7,
-          price: 280,
-          image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
-          features: ['Women-Only Private Beach', '100% Halal Dining', 'Alcohol-Free Premises'],
-        }
-      ]
-    },
-    {
-      user: "Perfect. Do you have anything in Makkah with Kaaba views?",
-      bot: "Certainly! The **Conrad Makkah Jabal Omar** offers breathtaking Kaaba views, dedicated prayer spaces, and direct elevator access to the Haram courtyard, making it excellent for families.",
-      hotels: [
-        {
-          name: 'Conrad Makkah Jabal Omar',
-          location: 'Makkah, Saudi Arabia',
-          rating: 4.8,
-          price: 450,
-          image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
-          features: ['Kaaba Views', 'Wheelchair Accessible', 'In-room Haram Audio Feed'],
-        }
-      ]
-    },
-    {
-      user: "Suggest an authentic, alcohol-free boutique stay in Istanbul.",
-      bot: "For a historic Ottoman experience, **Ajwa Hotel Sultanahmet** is a masterpiece. It features traditional handcrafted furniture, a premium halal kitchen, and is located just minutes away from the Hagia Sophia.",
-      hotels: [
-        {
-          name: 'Ajwa Hotel Sultanahmet',
-          location: 'Istanbul, Turkey',
-          rating: 4.9,
-          price: 320,
-          image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80',
-          features: ['No Alcohol Onsite', 'Ottoman-style Hammam', 'Halal Verified Kitchen'],
-        }
-      ]
-    }
-  ];
 
   const [messages, setMessages] = useState([
     {
@@ -129,7 +130,7 @@ export default function AIAssistant() {
   useEffect(() => {
     if (!isAutoChatActive) return;
     if (demoStep >= DEMO_CONVERSATIONS.length) {
-      setIsAutoChatActive(false); // Stop when all steps are completed
+      setTimeout(() => setIsAutoChatActive(false), 0); // Stop when all steps are completed
       return;
     }
 
