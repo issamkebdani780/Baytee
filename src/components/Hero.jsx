@@ -320,10 +320,10 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-emerald-950 dark:text-white leading-[1.1] mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white drop-shadow-md leading-[1.1] mb-6"
           >
             {t('hero.heading1')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-emerald-600 via-brand-gold-600 to-brand-emerald-800 dark:from-brand-gold-200 dark:via-brand-gold-500 dark:to-brand-gold-200 font-serif italic font-normal">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold-600 via-brand-gold-500 to-brand-gold-600 dark:from-brand-gold-200 dark:via-brand-gold-500 dark:to-brand-gold-200 font-serif italic font-normal">
               {t('hero.heading2')}
             </span>{' '}
             {t('hero.heading3')}
