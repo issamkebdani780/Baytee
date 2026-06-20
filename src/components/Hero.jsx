@@ -178,7 +178,7 @@ export default function Hero() {
           className="w-full h-full object-cover"
         />
         {/* Soft elegant overlays to blend with light and dark modes, maintaining readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FCFBF9]/30 via-transparent to-[#FCFBF9] dark:from-[#060b14]/20 dark:via-transparent dark:to-[#060b14] transition-colors duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#060b14]/60 via-transparent via-85% to-[#FCFBF9] dark:from-[#060b14]/70 dark:via-transparent dark:via-85% dark:to-[#060b14] transition-colors duration-300" />
       </div>
 
       <div className="relative pt-28 pb-12 flex flex-col items-center justify-center overflow-hidden z-10">
@@ -187,7 +187,7 @@ export default function Hero() {
         <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-brand-gold-100/30 dark:bg-brand-gold-800/5 rounded-full ambient-glow pointer-events-none" />
 
         {/* ═══ LEFT IMAGE CLUSTER (rotates every 3s) ═══ */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-3 z-0 pl-4 2xl:pl-8">
+        <div className="absolute left-0 bottom-0 hidden xl:flex flex-col gap-3 z-0 pl-4 2xl:pl-8">
           {/* Top-left image — tall portrait */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
@@ -320,10 +320,10 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white drop-shadow-md leading-[1.1] mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white text-3d-white leading-[1.1] mb-6"
           >
             {t('hero.heading1')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold-600 via-brand-gold-500 to-brand-gold-600 dark:from-brand-gold-200 dark:via-brand-gold-500 dark:to-brand-gold-200 font-serif italic font-normal">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold-200 via-brand-gold-500 to-brand-gold-200 font-serif italic font-normal text-3d-gold [text-shadow:none]">
               {t('hero.heading2')}
             </span>{' '}
             {t('hero.heading3')}

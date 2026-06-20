@@ -22,7 +22,7 @@ export default function Header() {
     { name: t('nav.features'), href: '#features' },
     { name: t('nav.aiCompanion'), href: '#ai-assistant' },
     { name: t('nav.destinations'), href: '#destinations' },
-    { name: t('nav.pricing'), href: '#pricing' },
+    // { name: t('nav.pricing'), href: '#pricing' },
   ];
 
   return (

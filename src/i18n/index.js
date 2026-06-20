@@ -7,7 +7,7 @@ const resources = {
     translation: {
       // Header
       nav: {
-        features: 'Features',
+        features: 'Experience',
         aiCompanion: 'AI Companion',
         destinations: 'Destinations',
         pricing: 'Pricing',
@@ -205,7 +205,7 @@ const resources = {
   fr: {
     translation: {
       nav: {
-        features: 'Fonctionnalités',
+        features: 'Expérience',
         aiCompanion: 'Compagnon IA',
         destinations: 'Destinations',
         pricing: 'Tarifs',
@@ -394,7 +394,7 @@ const resources = {
   ar: {
     translation: {
       nav: {
-        features: 'المميزات',
+        features: 'التجربة',
         aiCompanion: 'مرافق الذكاء الاصطناعي',
         destinations: 'الوجهات',
         pricing: 'الأسعار',
