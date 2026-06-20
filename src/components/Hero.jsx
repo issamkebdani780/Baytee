@@ -200,13 +200,13 @@ export default function Hero() {
               className="relative w-52 xl:w-64 h-60 xl:h-72 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
               style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
             >
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 <motion.div
                   key={card1Data.src}
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 1.08 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
                   className="absolute inset-0 w-full h-full"
                 >
                   <img src={card1Data.src} alt={card1Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -237,13 +237,13 @@ export default function Hero() {
               className="relative w-52 xl:w-60 h-44 xl:h-52 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
               style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
             >
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 <motion.div
                   key={card2Data.src}
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 1.08 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
                   className="absolute inset-0 w-full h-full"
                 >
                   <img src={card2Data.src} alt={card2Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -275,13 +275,13 @@ export default function Hero() {
               className="relative w-56 xl:w-68 h-80 xl:h-96 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
               style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
             >
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 <motion.div
                   key={card3Data.src}
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 1.08 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
                   className="absolute inset-0 w-full h-full"
                 >
                   <img src={card3Data.src} alt={card3Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />

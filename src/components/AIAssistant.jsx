@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Send, Sparkles, User, Bot, Star, MapPin } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
@@ -65,6 +65,51 @@ export default function AIAssistant() {
     }
   ];
 
+  const DEMO_CONVERSATIONS = [
+    {
+      user: "Hi! Can you find a family resort in Antalya close to beaches?",
+      bot: "Walaykum As-salam! I highly recommend the **Adenya Hotel & Resort** in Antalya. It features fully secluded ladies-only private beaches, pools, and dedicated spa areas for absolute privacy, plus 100% halal certified dining.",
+      hotels: [
+        {
+          name: 'Adenya Hotel & Resort',
+          location: 'Antalya, Turkey',
+          rating: 4.7,
+          price: 280,
+          image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
+          features: ['Women-Only Private Beach', '100% Halal Dining', 'Alcohol-Free Premises'],
+        }
+      ]
+    },
+    {
+      user: "Perfect. Do you have anything in Makkah with Kaaba views?",
+      bot: "Certainly! The **Conrad Makkah Jabal Omar** offers breathtaking Kaaba views, dedicated prayer spaces, and direct elevator access to the Haram courtyard, making it excellent for families.",
+      hotels: [
+        {
+          name: 'Conrad Makkah Jabal Omar',
+          location: 'Makkah, Saudi Arabia',
+          rating: 4.8,
+          price: 450,
+          image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
+          features: ['Kaaba Views', 'Wheelchair Accessible', 'In-room Haram Audio Feed'],
+        }
+      ]
+    },
+    {
+      user: "Suggest an authentic, alcohol-free boutique stay in Istanbul.",
+      bot: "For a historic Ottoman experience, **Ajwa Hotel Sultanahmet** is a masterpiece. It features traditional handcrafted furniture, a premium halal kitchen, and is located just minutes away from the Hagia Sophia.",
+      hotels: [
+        {
+          name: 'Ajwa Hotel Sultanahmet',
+          location: 'Istanbul, Turkey',
+          rating: 4.9,
+          price: 320,
+          image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80',
+          features: ['No Alcohol Onsite', 'Ottoman-style Hammam', 'Halal Verified Kitchen'],
+        }
+      ]
+    }
+  ];
+
   const [messages, setMessages] = useState([
     {
       id: 0,
@@ -74,21 +119,92 @@ export default function AIAssistant() {
   ]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef(null);
+  const [isAutoChatActive, setIsAutoChatActive] = useState(true);
+  const [demoStep, setDemoStep] = useState(0);
+
+  const chatFeedRef = useRef(null);
   const prevMsgCount = useRef(messages.length);
+
+  // Character-by-character automatic typing simulation hook
+  useEffect(() => {
+    if (!isAutoChatActive) return;
+    if (demoStep >= DEMO_CONVERSATIONS.length) {
+      setIsAutoChatActive(false); // Stop when all steps are completed
+      return;
+    }
+
+    // Delay before starting the typing sequence for this step
+    const startTimeout = setTimeout(() => {
+      const targetText = DEMO_CONVERSATIONS[demoStep].user;
+      let currentLength = 0;
+
+      const typingInterval = setInterval(() => {
+        if (!isAutoChatActive) {
+          clearInterval(typingInterval);
+          return;
+        }
+        currentLength++;
+        setInputText(targetText.slice(0, currentLength));
+
+        if (currentLength >= targetText.length) {
+          clearInterval(typingInterval);
+
+          // Short delay after typing finishes, then append message to feed
+          setTimeout(() => {
+            if (!isAutoChatActive) return;
+
+            const userMsg = {
+              id: `user-auto-${demoStep}-${Date.now()}`,
+              sender: 'user',
+              text: targetText,
+            };
+            setMessages((prev) => [...prev, userMsg]);
+            setInputText('');
+            setIsTyping(true);
+
+            // Bot response delay
+            setTimeout(() => {
+              if (!isAutoChatActive) return;
+              setIsTyping(false);
+
+              const botMsg = {
+                id: `bot-auto-${demoStep}-${Date.now()}`,
+                sender: 'bot',
+                text: DEMO_CONVERSATIONS[demoStep].bot,
+                hotels: DEMO_CONVERSATIONS[demoStep].hotels,
+              };
+              setMessages((prev) => [...prev, botMsg]);
+
+              // Advance to next step after reading delay
+              setDemoStep((prev) => prev + 1);
+            }, 1800);
+
+          }, 800);
+        }
+      }, 35); // Typing speed: 35ms per character
+    }, demoStep === 0 ? 3000 : 8000); // 3s for first message, 8s between interactions to allow reading
+
+    return () => clearTimeout(startTimeout);
+  }, [isAutoChatActive, demoStep]);
 
   useEffect(() => {
     // Only scroll when a NEW message is added (not on initial mount)
-    if (messages.length > prevMsgCount.current) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messages.length > prevMsgCount.current && chatFeedRef.current) {
+      chatFeedRef.current.scrollTo({
+        top: chatFeedRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
     }
     prevMsgCount.current = messages.length;
   }, [messages]);
 
   // Scroll to bottom when typing indicator appears (already inside chat box)
   useEffect(() => {
-    if (isTyping) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isTyping && chatFeedRef.current) {
+      chatFeedRef.current.scrollTo({
+        top: chatFeedRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
     }
   }, [isTyping]);
 
@@ -97,7 +213,7 @@ export default function AIAssistant() {
 
     // Add user message
     const userMsg = {
-      id: Date.now(),
+      id: `user-${messages.length}`,
       sender: 'user',
       text: text,
     };
@@ -116,7 +232,7 @@ export default function AIAssistant() {
         setMessages((prev) => [
           ...prev,
           {
-            id: Date.now() + 1,
+            id: `bot-${prev.length}`,
             sender: 'bot',
             text: preset.response.text,
             hotels: preset.response.hotels,
@@ -127,7 +243,7 @@ export default function AIAssistant() {
         setMessages((prev) => [
           ...prev,
           {
-            id: Date.now() + 1,
+            id: `bot-fallback-${prev.length}`,
             sender: 'bot',
             text: `Barakallahu feek! I have processed your request for "${text}". Here is a highly matching destination based on our global halal compliance network:`,
             hotels: [
@@ -136,7 +252,7 @@ export default function AIAssistant() {
                 location: 'Dubai, UAE',
                 rating: 4.9,
                 price: 650,
-                image: 'https://images.unsplash.com/photo-1582672093685-704155248536?auto=format&fit=crop&w=600&q=80',
+                image: 'https://images.unsplash.com/photo-1582672093685-704155248536?auto=format&fit=crop&w=800&q=80',
                 features: ['Ultra-Private Villas', 'Verified Halal Gastronomy', 'Prayer Mat in Room'],
               }
             ],
@@ -181,7 +297,10 @@ export default function AIAssistant() {
               {PRESET_PROMPTS.map((preset) => (
                 <button
                   key={preset.id}
-                  onClick={() => handleSendMessage(preset.text)}
+                  onClick={() => {
+                    setIsAutoChatActive(false);
+                    handleSendMessage(preset.text);
+                  }}
                   className="w-full text-left px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-brand-emerald-800/50 bg-white/80 dark:bg-brand-emerald-950/20 hover:border-brand-gold-500 dark:hover:border-brand-gold-500 transition-all duration-300 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:shadow-sm flex items-center justify-between group cursor-pointer"
                 >
                   <span>{preset.title}</span>
@@ -210,6 +329,11 @@ export default function AIAssistant() {
                   <div className="text-left">
                     <h4 className="text-sm font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
                       {t('ai.chatTitle')}
+                      {isAutoChatActive && (
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-brand-gold-500/20 text-brand-gold-700 dark:text-brand-gold-400 border border-brand-gold-500/30 animate-pulse">
+                          Auto-Demo
+                        </span>
+                      )}
                     </h4>
                     <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
                       {t('ai.chatStatus')}
@@ -217,14 +341,22 @@ export default function AIAssistant() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
+                  {isAutoChatActive && (
+                    <button
+                      onClick={() => setIsAutoChatActive(false)}
+                      className="px-2 py-0.5 rounded text-[9px] font-bold uppercase border border-red-500/20 bg-red-500/10 text-red-500 hover:bg-red-500/25 transition cursor-pointer"
+                    >
+                      Stop
+                    </button>
+                  )}
                   <div className="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-brand-emerald-800" />
                   <div className="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-brand-emerald-800" />
                 </div>
               </div>
 
               {/* Chat Messages Feed */}
-              <div className="flex-grow p-6 overflow-y-auto space-y-6 scrollbar-thin scrollbar-thumb-brand-gold-500">
+              <div ref={chatFeedRef} className="flex-grow p-6 overflow-y-auto space-y-6 scrollbar-thin scrollbar-thumb-brand-gold-500">
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
@@ -326,7 +458,6 @@ export default function AIAssistant() {
                     </div>
                   </div>
                 )}
-                <div ref={messagesEndRef} />
               </div>
 
               {/* Chat Input Area */}
@@ -334,6 +465,7 @@ export default function AIAssistant() {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
+                    setIsAutoChatActive(false);
                     handleSendMessage(inputText);
                   }}
                   className="relative flex items-center"
@@ -341,7 +473,11 @@ export default function AIAssistant() {
                   <input
                     type="text"
                     value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
+                    onChange={(e) => {
+                      setInputText(e.target.value);
+                      setIsAutoChatActive(false);
+                    }}
+                    onFocus={() => setIsAutoChatActive(false)}
                     placeholder={t('ai.placeholder')}
                     className="w-full py-3.5 pl-5 pr-14 rounded-2xl border border-slate-250 dark:border-brand-emerald-800/65 bg-white dark:bg-brand-emerald-900/25 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-brand-gold-500 focus:ring-1 focus:ring-brand-gold-500/20 text-sm"
                   />

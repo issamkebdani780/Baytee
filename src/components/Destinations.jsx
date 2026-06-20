@@ -14,7 +14,7 @@ export default function Destinations() {
       name: 'Makkah',
       country: 'Saudi Arabia',
       properties: '420+ Hotels',
-      image: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80',
+      image: '/dest-makkah.png',
       tag: 'Spiritual Center',
       description: 'Spiritual, peaceful, and family-friendly stays close to the Haram.',
     },
@@ -22,7 +22,7 @@ export default function Destinations() {
       name: 'Madinah',
       country: 'Saudi Arabia',
       properties: '280+ Hotels',
-      image: 'https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=800&q=80',
+      image: '/dest-madinah.png',
       tag: 'Holy Sanctuary',
       description: 'Serene stays with direct access to Al-Masjid an-Nabawi.',
     },
@@ -30,7 +30,7 @@ export default function Destinations() {
       name: 'Istanbul',
       country: 'Turkey',
       properties: '1,450+ Hotels',
-      image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=800&q=80',
+      image: '/dest-istanbul.png',
       tag: 'Ottoman Heritage',
       description: 'Rich Islamic heritage, historic mosques, and stunning Bosphorus views.',
     },
@@ -38,7 +38,7 @@ export default function Destinations() {
       name: 'Antalya',
       country: 'Turkey',
       properties: '320+ Resorts',
-      image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=800&q=80',
+      image: '/dest-antalya.png',
       tag: 'Halal Beachfronts',
       description: 'Coastal resorts featuring fully secluded ladies-only private pools and beaches.',
     },
@@ -46,7 +46,7 @@ export default function Destinations() {
       name: 'Dubai',
       country: 'United Arab Emirates',
       properties: '980+ Hotels',
-      image: 'https://images.unsplash.com/photo-1582672093685-704155248536?auto=format&fit=crop&w=800&q=80',
+      image: '/dest-dubai.png',
       tag: 'Modern Luxury',
       description: 'Sky-high family suites, luxury shopping, and premium halal dining.',
     },
@@ -54,9 +54,25 @@ export default function Destinations() {
       name: 'Kuala Lumpur',
       country: 'Malaysia',
       properties: '640+ Hotels',
-      image: 'https://images.unsplash.com/photo-1595497743400-13f224327363?auto=format&fit=crop&w=800&q=80',
+      image: '/dest-kualalumpur.png',
       tag: 'Islamic Culture',
       description: 'Tropical beauty combined with rich cultural heritage and child-friendly stays.',
+    },
+    {
+      name: 'Marrakech',
+      country: 'Morocco',
+      properties: '210+ Riads',
+      image: '/dest-marrakech.png',
+      tag: 'Cultural Oasis',
+      description: 'Exquisite traditional riads, vibrant spice souks, and beautiful heritage mosques.',
+    },
+    {
+      name: 'Maldives',
+      country: 'Maldives',
+      properties: '150+ Resorts',
+      image: '/dest-maldives.png',
+      tag: 'Secluded Paradise',
+      description: 'Luxurious overwater private villas featuring fully secluded pools and private beaches.',
     },
   ];
 
@@ -84,7 +100,7 @@ export default function Destinations() {
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-    }, 4000); // Transitions to next card every 4 seconds
+    }, 3000); // Transitions to next card every 3 seconds
 
     return () => clearInterval(interval);
   }, [isAutoplay, maxIndex, currentIndex]);
@@ -220,23 +236,23 @@ export default function Destinations() {
               <ChevronLeft className="w-5 h-5 stroke-[2.5px]" />
             </button>
 
-            {/* Dots */}
-            <div className="flex items-center gap-2">
-              {Array.from({ length: destinationList.length }).map((_, i) => {
-                const isActive = i === currentIndex;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => handleDotClick(i)}
-                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      isActive 
-                        ? 'w-7 bg-brand-gold-500' 
-                        : 'w-2.5 bg-slate-300 dark:bg-brand-emerald-800 hover:bg-slate-400 dark:hover:bg-brand-emerald-700'
-                    }`}
-                  />
-                );
-              })}
-            </div>
+             {/* Dots */}
+             <div className="flex items-center gap-2">
+               {Array.from({ length: maxIndex + 1 }).map((_, i) => {
+                 const isActive = i === currentIndex;
+                 return (
+                   <button
+                     key={i}
+                     onClick={() => handleDotClick(i)}
+                     className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                       isActive 
+                         ? 'w-7 bg-brand-gold-500' 
+                         : 'w-2.5 bg-slate-300 dark:bg-brand-emerald-800 hover:bg-slate-400 dark:hover:bg-brand-emerald-700'
+                     }`}
+                   />
+                 );
+               })}
+             </div>
 
             {/* Right Button */}
             <button
