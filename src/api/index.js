@@ -1,4 +1,7 @@
-const BASE_URL = 'http://109.123.250.140:3001/api';
+// In development: Vite proxy forwards /api → http://109.123.250.140:3001/api
+// In production:  set VITE_API_URL=https://your-backend-domain.com/api in your hosting env vars
+//                 OR configure a reverse proxy / rewrite on the same domain
+const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 /**
  * 1. GET /api/search?query=<query>
