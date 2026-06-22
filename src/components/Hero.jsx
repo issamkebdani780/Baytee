@@ -3,7 +3,7 @@ import { Search, Calendar, Users, SlidersHorizontal, Check, Star, MapPin, Sparkl
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { MOCK_HOTELS } from '../data/mockHotels';
-import { searchDestinations } from '../api';
+import { searchDestinations, initSearch, openSearchStream, filterHotels, getHotelById } from '../api';
 
 
 const FLOATING_IMAGES = [
@@ -17,6 +17,7 @@ const FLOATING_IMAGES = [
 export default function Hero() {
   const { t, i18n } = useTranslation();
   const [destination, setDestination] = useState('');
+  const [selectedDestination, setSelectedDestination] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [apiSuggestions, setApiSuggestions] = useState([]);
   const [defaultSuggestions, setDefaultSuggestions] = useState([]);
@@ -88,19 +89,22 @@ export default function Hero() {
   const card1Data = FLOATING_IMAGES[currentImgIndex % FLOATING_IMAGES.length];
   const card2Data = FLOATING_IMAGES[(currentImgIndex + 1) % FLOATING_IMAGES.length];
   const card3Data = FLOATING_IMAGES[(currentImgIndex + 2) % FLOATING_IMAGES.length];
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
+  // Default check-in = tomorrow, check-out = today+4
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const dayAfter3 = new Date(Date.now() + 4 * 86400000).toISOString().split('T')[0];
+  const [checkIn, setCheckIn] = useState(tomorrow);
+  const [checkOut, setCheckOut] = useState(dayAfter3);
   const [guests, setGuests] = useState(1);
   const [showGuestDropdown, setShowGuestDropdown] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
 
-  // Filters State
+  // Filters State — all off by default so no hotels are silently discarded
   const [filters, setFilters] = useState({
-    halalFood: true,
+    halalFood: false,
     womenOnlyPool: false,
     privateVilla: false,
-    alcoholFree: true,
+    alcoholFree: false,
     prayerFacilities: false,
   });
 
@@ -113,40 +117,165 @@ export default function Hero() {
     setFilters((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     setIsSearching(true);
+    setSearchResults([]);
+    setHasSearched(true);
 
-    setTimeout(() => {
-      // Filter logic
-      const filtered = MOCK_HOTELS.filter((hotel) => {
-        // Destination matching
-        const matchesDest =
-          !destination ||
-          hotel.location.toLowerCase().includes(destination.toLowerCase()) ||
-          hotel.name.toLowerCase().includes(destination.toLowerCase());
+    // Scroll to search results section immediately to show feedback
+    const resultsSection = document.getElementById('search-results-section');
+    if (resultsSection) {
+      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
-        // Tag checks
-        const hotelTags = hotel.tags.map((t) => t.toLowerCase());
-        const foodMatch = !filters.halalFood || hotelTags.includes('halal food');
-        const poolMatch = !filters.womenOnlyPool || hotelTags.includes('women-only pools');
-        const villaMatch = !filters.privateVilla || hotelTags.includes('private villas');
-        const alcoholMatch = !filters.alcoholFree || hotelTags.includes('alcohol-free');
-        const prayerMatch = !filters.prayerFacilities || hotelTags.includes('prayer facilities') || hotelTags.some(t => t.includes('haram') || t.includes('nabawi'));
+    try {
+      // Determine destination ID and type (city or hotel)
+      let destId = '24212';
+      let destType = 'city';
 
-        return matchesDest && foodMatch && poolMatch && villaMatch && alcoholMatch && prayerMatch;
-      });
-
-      setSearchResults(filtered);
-      setIsSearching(false);
-      setHasSearched(true);
-
-      // Scroll to search results smoothly
-      const resultsSection = document.getElementById('search-results-section');
-      if (resultsSection) {
-        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (selectedDestination) {
+        destId = selectedDestination.id.toString();
+        destType = selectedDestination.type;
+      } else if (apiSuggestions.length > 0) {
+        destId = apiSuggestions[0].id.toString();
+        destType = apiSuggestions[0].type;
+      } else if (defaultSuggestions.length > 0) {
+        destId = defaultSuggestions[0].id.toString();
+        destType = defaultSuggestions[0].type;
       }
-    }, 800);
+
+      const payload = {
+        [destType]: destId,
+        roomsFilters: {
+          guestNationality: 'DZ',
+          checkIn: checkIn || new Date().toISOString().split('T')[0],
+          checkOut: checkOut || new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0], // 3 days default
+          paxRooms: [
+            {
+              adults: guests,
+              children: 0,
+              childrenAges: []
+            }
+          ],
+          filters: {
+            refundable: false,
+            mealType: 'All'
+          }
+        }
+      };
+
+      const initRes = await initSearch(payload);
+      if (!initRes.success || !initRes.data?.sessionId) {
+        throw new Error('Search initialization failed');
+      }
+
+      const sessionId = initRes.data.sessionId;
+      console.log('Opened search stream with session ID:', sessionId);
+
+      const eventSource = openSearchStream(sessionId);
+
+      eventSource.onmessage = (event) => {
+        try {
+          // Log the raw SSE payload so we can see its exact shape
+          console.log('[SSE] raw event.data:', event.data);
+
+          // Parse once — server sends JSON directly
+          const rawObj = JSON.parse(event.data);
+          console.log('[SSE] parsed object keys:', Object.keys(rawObj));
+
+          // Support both shapes:
+          //   Shape A (flat):   { hotels: [...], done: bool }
+          //   Shape B (nested): { data: '{"hotels":[...],"done":bool}' }
+          let payloadData = rawObj;
+          if (typeof rawObj.data === 'string') {
+            try {
+              payloadData = JSON.parse(rawObj.data);
+            } catch {
+              payloadData = rawObj;
+            }
+          } else if (rawObj.data && typeof rawObj.data === 'object') {
+            payloadData = rawObj.data;
+          }
+
+          console.log('[SSE] payloadData:', payloadData);
+
+          if (payloadData.hotels && Array.isArray(payloadData.hotels)) {
+            const mapped = payloadData.hotels.map((h) => {
+              // Parse tags from compliance filters
+              const tags = [];
+              if (h.hotelFilters?.halalFood?.all || h.hotelFilters?.halalFood?.some) tags.push('Halal Food');
+              if (h.hotelFilters?.pool?.ladiesOnly || h.hotelFilters?.wellnessSpa?.ladiesOnly) tags.push('Women-Only Pools');
+              if (h.hotelFilters?.propertyType?.villa || h.hotelFilters?.pool?.privateHire) tags.push('Private Villas');
+              if (h.hotelFilters?.alcoholFree?.property || h.hotelFilters?.alcoholFree?.restaurant) tags.push('Alcohol-Free');
+              if (h.hotelFilters?.bidetAmenities?.available) tags.push('Prayer Facilities');
+              
+              if (tags.length === 0) tags.push('Halal Friendly');
+
+              // Fallback to high-quality unsplash images if image is null or empty
+              const placeholderImages = [
+                'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1597843797221-72218451897e?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1582672093685-704155248536?auto=format&fit=crop&w=800&q=80'
+              ];
+              const randomImage = placeholderImages[h.id % placeholderImages.length];
+
+              return {
+                id: h.id,
+                name: h.name,
+                location: h.cheapestRoom?.bookingBadges?.[0] || destination || 'Tlemcen',
+                rating: h.rating || 4,
+                price: h.cheapestRoom?.lowestPrice || 120,
+                image: h.image || randomImage,
+                tags: tags,
+                description: h.cheapestRoom?.name || 'A verified halal-friendly stay.'
+              };
+            });
+
+            // Filter mapped hotels only when user has explicitly enabled a filter
+            // A hotel passes a filter if: filter is OFF, or the hotel carries that tag
+            const filtered = mapped.filter((hotel) => {
+              const rawTags = hotel.tags.map((t) => t.toLowerCase());
+              if (!filters.halalFood && !filters.womenOnlyPool && !filters.privateVilla && !filters.alcoholFree && !filters.prayerFacilities) {
+                return true; // no filters active — show everything
+              }
+              const foodMatch = !filters.halalFood || rawTags.some(t => t.includes('halal'));
+              const poolMatch = !filters.womenOnlyPool || rawTags.some(t => t.includes('women') || t.includes('ladies'));
+              const villaMatch = !filters.privateVilla || rawTags.some(t => t.includes('villa') || t.includes('private'));
+              const alcoholMatch = !filters.alcoholFree || rawTags.some(t => t.includes('alcohol'));
+              const prayerMatch = !filters.prayerFacilities || rawTags.some(t => t.includes('prayer') || t.includes('bidet'));
+              return foodMatch && poolMatch && villaMatch && alcoholMatch && prayerMatch;
+            });
+
+            setSearchResults((prev) => {
+              const existingIds = new Set(prev.map((item) => item.id));
+              const uniqueNewHotels = filtered.filter((item) => !existingIds.has(item.id));
+              return [...prev, ...uniqueNewHotels];
+            });
+          }
+
+          if (payloadData.done) {
+            console.log('Search stream finished.');
+            eventSource.close();
+            setIsSearching(false);
+          }
+        } catch (e) {
+          console.error('Error parsing SSE event:', e);
+        }
+      };
+
+      eventSource.onerror = (err) => {
+        console.error('EventSource connection error:', err);
+        eventSource.close();
+        setIsSearching(false);
+      };
+
+    } catch (err) {
+      console.error('Search initiation error:', err);
+      setIsSearching(false);
+    }
   };
 
   const filtersList = [
@@ -397,6 +526,7 @@ export default function Hero() {
                                     type="button"
                                     onClick={() => {
                                       setDestination(item.name);
+                                      setSelectedDestination(item);
                                       setShowSuggestions(false);
                                     }}
                                     className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-brand-emerald-850/80 text-slate-800 dark:text-slate-200 flex items-center justify-between transition-colors duration-150 group cursor-pointer"
@@ -486,6 +616,7 @@ export default function Hero() {
                                 type="button"
                                 onClick={() => {
                                   setDestination(item.name);
+                                  setSelectedDestination(item);
                                   setShowSuggestions(false);
                                 }}
                                 className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-brand-emerald-850/80 text-slate-800 dark:text-slate-200 flex items-center justify-between transition-colors duration-150 group cursor-pointer"
@@ -537,7 +668,10 @@ export default function Hero() {
                 {destination && (
                   <button
                     type="button"
-                    onClick={() => setDestination('')}
+                    onClick={() => {
+                      setDestination('');
+                      setSelectedDestination(null);
+                    }}
                     className="absolute right-3 top-7 p-1 rounded-full text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-350"
                   >
                     <X className="w-3 h-3" />
@@ -553,7 +687,15 @@ export default function Hero() {
                 <input
                   type="date"
                   value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  onChange={(e) => {
+                    setCheckIn(e.target.value);
+                    // Auto-bump checkout if it falls before or on new checkin
+                    if (checkOut && e.target.value >= checkOut) {
+                      const next = new Date(new Date(e.target.value).getTime() + 86400000);
+                      setCheckOut(next.toISOString().split('T')[0]);
+                    }
+                  }}
                   className="w-full bg-transparent border-none text-slate-900 dark:text-white font-medium focus:outline-none text-sm cursor-pointer"
                 />
               </div>
@@ -566,6 +708,7 @@ export default function Hero() {
                 <input
                   type="date"
                   value={checkOut}
+                  min={checkIn ? new Date(new Date(checkIn).getTime() + 86400000).toISOString().split('T')[0] : new Date(Date.now() + 86400000).toISOString().split('T')[0]}
                   onChange={(e) => setCheckOut(e.target.value)}
                   className="w-full bg-transparent border-none text-slate-900 dark:text-white font-medium focus:outline-none text-sm cursor-pointer"
                 />
