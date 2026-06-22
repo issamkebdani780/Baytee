@@ -260,15 +260,14 @@ function HotelCard({ hotel, searchParams }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="flex bg-white dark:bg-[#0a1628] border border-slate-200/80 dark:border-brand-emerald-900/40 rounded-2xl overflow-hidden hover:shadow-lg dark:hover:shadow-brand-emerald-950/50 transition-all duration-300 group"
+      className="flex flex-col sm:flex-row bg-white dark:bg-[#0a1628] border border-slate-200/80 dark:border-brand-emerald-900/40 rounded-2xl overflow-hidden hover:shadow-lg dark:hover:shadow-brand-emerald-950/50 transition-all duration-300 group"
     >
       {/* ── Left: Image ── */}
-      <div className="relative flex-shrink-0 w-56 sm:w-64 lg:w-72">
+      <div className="relative flex-shrink-0 w-full sm:w-64 lg:w-72 h-56 sm:h-auto">
         <img
           src={hotel.image}
           alt={hotel.name}
           className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-          style={{ minHeight: 200 }}
         />
         {/* Heart save */}
         <button
@@ -291,7 +290,7 @@ function HotelCard({ hotel, searchParams }) {
       </div>
 
       {/* ── Right: Details ── */}
-      <div className="flex flex-1 min-w-0">
+      <div className="flex flex-col sm:flex-row flex-1 min-w-0">
         {/* Main info */}
         <div className="flex-1 p-4 lg:p-5 flex flex-col justify-between min-w-0">
           <div>
@@ -350,10 +349,10 @@ function HotelCard({ hotel, searchParams }) {
         </div>
 
         {/* Price column */}
-        <div className="flex flex-col items-end justify-between p-4 lg:p-5 border-l border-slate-100 dark:border-brand-emerald-900/30 flex-shrink-0 w-36 lg:w-44">
-          <div className="text-right">
+        <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between p-4 lg:p-5 border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-brand-emerald-900/30 flex-shrink-0 sm:w-40 lg:w-44">
+          <div className="text-left sm:text-right">
             {discount > 0 && (
-              <div className="flex items-center justify-end gap-1.5 mb-1">
+              <div className="flex items-center justify-start sm:justify-end gap-1.5 mb-1">
                 <span className="text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded">-{discount}%</span>
                 <span className="text-xs text-slate-400 dark:text-slate-500 line-through">
                   ${hotel.originalPrice.toLocaleString()}
@@ -364,13 +363,15 @@ function HotelCard({ hotel, searchParams }) {
               {hotel.price > 0 ? `$${hotel.price.toLocaleString()}` : '—'}
             </p>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 leading-snug">
-              per night<br />taxes & fees incl.
+              per night<br className="hidden sm:block" />
+              <span className="sm:hidden"> • </span>
+              taxes & fees incl.
             </p>
           </div>
 
           <button
             onClick={handleView}
-            className="mt-3 w-full py-2.5 rounded-xl bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 text-xs font-bold shadow transition-all duration-200 cursor-pointer"
+            className="mt-0 sm:mt-3 px-6 py-2.5 sm:px-0 sm:w-full rounded-xl bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 text-xs font-bold shadow transition-all duration-200 cursor-pointer"
           >
             View rooms
           </button>
@@ -383,20 +384,25 @@ function HotelCard({ hotel, searchParams }) {
 // ═══ Skeleton card ════════════════════════════════════════════════════════════
 function SkeletonCard() {
   return (
-    <div className="flex bg-white dark:bg-[#0a1628] border border-slate-200/60 dark:border-brand-emerald-900/30 rounded-2xl overflow-hidden animate-pulse" style={{ height: 200 }}>
-      <div className="w-64 bg-slate-200 dark:bg-brand-emerald-900/30 flex-shrink-0" />
-      <div className="flex-1 p-5 space-y-3">
-        <div className="h-5 w-2/3 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
-        <div className="h-3 w-1/3 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
-        <div className="space-y-2 mt-2">
-          <div className="h-3 w-1/2 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
-          <div className="h-3 w-2/5 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
+    <div className="flex flex-col sm:flex-row bg-white dark:bg-[#0a1628] border border-slate-200/60 dark:border-brand-emerald-900/30 rounded-2xl overflow-hidden animate-pulse min-h-[200px]">
+      <div className="w-full h-48 sm:h-auto sm:w-64 lg:w-72 bg-slate-200 dark:bg-brand-emerald-900/30 flex-shrink-0" />
+      <div className="flex flex-col sm:flex-row flex-1">
+        <div className="flex-1 p-5 space-y-3">
+          <div className="h-5 w-2/3 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
           <div className="h-3 w-1/3 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
+          <div className="space-y-2 mt-2">
+            <div className="h-3 w-1/2 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
+            <div className="h-3 w-2/5 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
+            <div className="h-3 w-1/3 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
+          </div>
         </div>
-      </div>
-      <div className="w-40 p-5 border-l border-slate-100 dark:border-brand-emerald-900/30 flex flex-col justify-between">
-        <div className="h-7 w-24 bg-slate-200 dark:bg-brand-emerald-900/30 rounded ml-auto" />
-        <div className="h-9 w-full bg-slate-200 dark:bg-brand-emerald-900/30 rounded-xl" />
+        <div className="sm:w-40 lg:w-44 p-5 border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-brand-emerald-900/30 flex flex-row sm:flex-col justify-between items-center sm:items-end">
+          <div className="flex flex-col gap-1 w-24">
+            <div className="h-6 w-full bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
+            <div className="h-3 w-16 bg-slate-200 dark:bg-brand-emerald-900/30 rounded sm:ml-auto" />
+          </div>
+          <div className="h-9 w-28 sm:w-full bg-slate-200 dark:bg-brand-emerald-900/30 rounded-xl mt-0 sm:mt-3" />
+        </div>
       </div>
     </div>
   );
@@ -643,7 +649,7 @@ export default function SearchResultsPage() {
       {/* ── Filter chips + sort bar (sticky just below the ~80px fixed header) ── */}
       <div className="sticky top-20 z-30 bg-white dark:bg-[#0a1628] border-b border-slate-200 dark:border-brand-emerald-900/40 shadow-sm">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-2 py-2.5 overflow-x-auto">
+          <div className="flex items-center gap-2 py-2.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
             {/* Mobile filter toggle */}
             <button
@@ -698,16 +704,7 @@ export default function SearchResultsPage() {
 
         {/* ── Left sidebar (desktop, sticky below header+sort bar) ── */}
         <aside className="hidden lg:flex flex-col w-60 xl:w-64 flex-shrink-0 sticky top-[128px] max-h-[calc(100vh-136px)] overflow-y-auto">
-          {/* Map stub — like halalbooking "Switch to map" */}
-          <div className="mb-3 rounded-xl overflow-hidden border border-slate-200 dark:border-brand-emerald-900/40 shadow-sm">
-            <div className="h-24 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-brand-emerald-900/40 dark:to-brand-emerald-800/20 flex items-center justify-center relative">
-              <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle, #c5a880 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
-              <div className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-[#0a1628] rounded-full shadow-md text-xs font-bold text-slate-700 dark:text-slate-200 z-10">
-                <MapPin className="w-3.5 h-3.5 text-brand-gold-500" />
-                Switch to map
-              </div>
-            </div>
-          </div>
+          
 
           {/* Filter sections */}
           <div className="bg-white dark:bg-[#0a1628] border border-slate-200 dark:border-brand-emerald-900/40 rounded-xl p-4 shadow-sm flex-1">
