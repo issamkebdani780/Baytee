@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Calendar, Users, SlidersHorizontal, Check, Star, MapPin, Sparkles, Play, ShieldAlert, ArrowRight, X, Hotel } from 'lucide-react';
+import { Search, Calendar, Users, SlidersHorizontal, Check, Star, MapPin, Sparkles, Play, ArrowRight, X, Hotel } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { MOCK_HOTELS } from '../data/mockHotels';
-import { searchDestinations, initSearch, openSearchStream, filterHotels, getHotelById } from '../api';
+import { searchDestinations } from '../api';
 
 
 const FLOATING_IMAGES = [
@@ -16,6 +17,7 @@ const FLOATING_IMAGES = [
 
 export default function Hero() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [destination, setDestination] = useState('');
   const [selectedDestination, setSelectedDestination] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -108,9 +110,6 @@ export default function Hero() {
     prayerFacilities: false,
   });
 
-  // Search results state
-  const [searchResults, setSearchResults] = useState([]);
-  const [hasSearched, setHasSearched] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
 
   const toggleFilter = (key) => {
@@ -120,162 +119,36 @@ export default function Hero() {
   const handleSearch = async (e) => {
     e.preventDefault();
     setIsSearching(true);
-    setSearchResults([]);
-    setHasSearched(true);
 
-    // Scroll to search results section immediately to show feedback
-    const resultsSection = document.getElementById('search-results-section');
-    if (resultsSection) {
-      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Determine destination ID and type (city or hotel)
+    let destId = '24212';
+    let destType = 'city';
+    let destName = destination || 'Hotels';
+
+    if (selectedDestination) {
+      destId = selectedDestination.id.toString();
+      destType = selectedDestination.type;
+      destName = selectedDestination.name;
+    } else if (apiSuggestions.length > 0) {
+      destId = apiSuggestions[0].id.toString();
+      destType = apiSuggestions[0].type;
+      destName = apiSuggestions[0].name;
+    } else if (defaultSuggestions.length > 0) {
+      destId = defaultSuggestions[0].id.toString();
+      destType = defaultSuggestions[0].type;
+      destName = defaultSuggestions[0].name;
     }
 
-    try {
-      // Determine destination ID and type (city or hotel)
-      let destId = '24212';
-      let destType = 'city';
+    const params = new URLSearchParams({
+      destId,
+      destType,
+      destName,
+      checkIn: checkIn || new Date(Date.now() + 86400000).toISOString().split('T')[0],
+      checkOut: checkOut || new Date(Date.now() + 4 * 86400000).toISOString().split('T')[0],
+      guests: guests.toString(),
+    });
 
-      if (selectedDestination) {
-        destId = selectedDestination.id.toString();
-        destType = selectedDestination.type;
-      } else if (apiSuggestions.length > 0) {
-        destId = apiSuggestions[0].id.toString();
-        destType = apiSuggestions[0].type;
-      } else if (defaultSuggestions.length > 0) {
-        destId = defaultSuggestions[0].id.toString();
-        destType = defaultSuggestions[0].type;
-      }
-
-      const payload = {
-        [destType]: destId,
-        roomsFilters: {
-          guestNationality: 'DZ',
-          checkIn: checkIn || new Date().toISOString().split('T')[0],
-          checkOut: checkOut || new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0], // 3 days default
-          paxRooms: [
-            {
-              adults: guests,
-              children: 0,
-              childrenAges: []
-            }
-          ],
-          filters: {
-            refundable: false,
-            mealType: 'All'
-          }
-        }
-      };
-
-      const initRes = await initSearch(payload);
-      if (!initRes.success || !initRes.data?.sessionId) {
-        throw new Error('Search initialization failed');
-      }
-
-      const sessionId = initRes.data.sessionId;
-      console.log('Opened search stream with session ID:', sessionId);
-
-      const eventSource = openSearchStream(sessionId);
-
-      eventSource.onmessage = (event) => {
-        try {
-          // Log the raw SSE payload so we can see its exact shape
-          console.log('[SSE] raw event.data:', event.data);
-
-          // Parse once — server sends JSON directly
-          const rawObj = JSON.parse(event.data);
-          console.log('[SSE] parsed object keys:', Object.keys(rawObj));
-
-          // Support both shapes:
-          //   Shape A (flat):   { hotels: [...], done: bool }
-          //   Shape B (nested): { data: '{"hotels":[...],"done":bool}' }
-          let payloadData = rawObj;
-          if (typeof rawObj.data === 'string') {
-            try {
-              payloadData = JSON.parse(rawObj.data);
-            } catch {
-              payloadData = rawObj;
-            }
-          } else if (rawObj.data && typeof rawObj.data === 'object') {
-            payloadData = rawObj.data;
-          }
-
-          console.log('[SSE] payloadData:', payloadData);
-
-          if (payloadData.hotels && Array.isArray(payloadData.hotels)) {
-            const mapped = payloadData.hotels.map((h) => {
-              // Parse tags from compliance filters
-              const tags = [];
-              if (h.hotelFilters?.halalFood?.all || h.hotelFilters?.halalFood?.some) tags.push('Halal Food');
-              if (h.hotelFilters?.pool?.ladiesOnly || h.hotelFilters?.wellnessSpa?.ladiesOnly) tags.push('Women-Only Pools');
-              if (h.hotelFilters?.propertyType?.villa || h.hotelFilters?.pool?.privateHire) tags.push('Private Villas');
-              if (h.hotelFilters?.alcoholFree?.property || h.hotelFilters?.alcoholFree?.restaurant) tags.push('Alcohol-Free');
-              if (h.hotelFilters?.bidetAmenities?.available) tags.push('Prayer Facilities');
-              
-              if (tags.length === 0) tags.push('Halal Friendly');
-
-              // Fallback to high-quality unsplash images if image is null or empty
-              const placeholderImages = [
-                'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1597843797221-72218451897e?auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1582672093685-704155248536?auto=format&fit=crop&w=800&q=80'
-              ];
-              const randomImage = placeholderImages[h.id % placeholderImages.length];
-
-              return {
-                id: h.id,
-                name: h.name,
-                location: h.cheapestRoom?.bookingBadges?.[0] || destination || 'Tlemcen',
-                rating: h.rating || 4,
-                price: h.cheapestRoom?.lowestPrice || 120,
-                image: h.image || randomImage,
-                tags: tags,
-                description: h.cheapestRoom?.name || 'A verified halal-friendly stay.'
-              };
-            });
-
-            // Filter mapped hotels only when user has explicitly enabled a filter
-            // A hotel passes a filter if: filter is OFF, or the hotel carries that tag
-            const filtered = mapped.filter((hotel) => {
-              const rawTags = hotel.tags.map((t) => t.toLowerCase());
-              if (!filters.halalFood && !filters.womenOnlyPool && !filters.privateVilla && !filters.alcoholFree && !filters.prayerFacilities) {
-                return true; // no filters active — show everything
-              }
-              const foodMatch = !filters.halalFood || rawTags.some(t => t.includes('halal'));
-              const poolMatch = !filters.womenOnlyPool || rawTags.some(t => t.includes('women') || t.includes('ladies'));
-              const villaMatch = !filters.privateVilla || rawTags.some(t => t.includes('villa') || t.includes('private'));
-              const alcoholMatch = !filters.alcoholFree || rawTags.some(t => t.includes('alcohol'));
-              const prayerMatch = !filters.prayerFacilities || rawTags.some(t => t.includes('prayer') || t.includes('bidet'));
-              return foodMatch && poolMatch && villaMatch && alcoholMatch && prayerMatch;
-            });
-
-            setSearchResults((prev) => {
-              const existingIds = new Set(prev.map((item) => item.id));
-              const uniqueNewHotels = filtered.filter((item) => !existingIds.has(item.id));
-              return [...prev, ...uniqueNewHotels];
-            });
-          }
-
-          if (payloadData.done) {
-            console.log('Search stream finished.');
-            eventSource.close();
-            setIsSearching(false);
-          }
-        } catch (e) {
-          console.error('Error parsing SSE event:', e);
-        }
-      };
-
-      eventSource.onerror = (err) => {
-        console.error('EventSource connection error:', err);
-        eventSource.close();
-        setIsSearching(false);
-      };
-
-    } catch (err) {
-      console.error('Search initiation error:', err);
-      setIsSearching(false);
-    }
+    navigate(`/search?${params.toString()}`);
   };
 
   const filtersList = [
@@ -867,136 +740,6 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full pb-24">
-        {/* dynamic interactive search results container */}
-        <div id="search-results-section" className="scroll-mt-28">
-          <AnimatePresence>
-            {hasSearched && (
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 40 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 100 }}
-                className="max-w-5xl mx-auto mt-16 text-left"
-              >
-                <div className="flex items-center justify-between mb-8 border-b border-slate-200/50 dark:border-brand-emerald-800/20 pb-4">
-                  <div>
-                    <h3 className="text-2xl font-bold font-serif text-brand-emerald-950 dark:text-white">
-                      {t('hero.availableStays')}
-                    </h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                      {t('hero.showingProperties', { count: searchResults.length })}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setHasSearched(false);
-                      setDestination('');
-                    }}
-                    className="text-xs font-semibold text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-350 cursor-pointer"
-                  >
-                    {t('hero.clearSearch')}
-                  </button>
-                </div>
-
-                {searchResults.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {searchResults.map((hotel, index) => (
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        key={hotel.id}
-                        className="rounded-3xl overflow-hidden border border-slate-200/70 dark:border-brand-emerald-800/30 bg-white dark:bg-brand-emerald-950/20 backdrop-blur-sm group hover:shadow-xl dark:hover:shadow-brand-emerald-900/10 transition-all duration-300 flex flex-col h-full"
-                      >
-                        <div className="relative aspect-video overflow-hidden">
-                          <img
-                            src={hotel.image}
-                            alt={hotel.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                          <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-white/90 dark:bg-brand-emerald-900/90 backdrop-blur-sm text-xs font-bold text-slate-900 dark:text-brand-gold-500 flex items-center gap-1">
-                            <Star className="w-3.5 h-3.5 fill-current text-yellow-500" />
-                            {hotel.rating}
-                          </div>
-                        </div>
-                        <div className="p-5 flex flex-col justify-between flex-grow">
-                          <div>
-                            <div className="flex items-center gap-1 text-[11px] font-semibold text-brand-gold-600 dark:text-brand-gold-500 uppercase tracking-wider mb-2">
-                              <MapPin className="w-3 h-3" />
-                              {hotel.location}
-                            </div>
-                            <h4 className="text-lg font-bold text-brand-emerald-950 dark:text-white mb-2 leading-tight group-hover:text-brand-emerald-700 dark:group-hover:text-brand-gold-500 transition-colors">
-                              {hotel.name}
-                            </h4>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">
-                              {hotel.description}
-                            </p>
-                          </div>
-                          <div>
-                            <div className="flex flex-wrap gap-1.5 mb-4">
-                              {hotel.tags.map((tag) => (
-                                <span
-                                  key={tag}
-                                  className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-emerald-50 dark:bg-brand-emerald-900/40 text-brand-emerald-800 dark:text-brand-gold-200 border border-brand-emerald-100/30 dark:border-brand-emerald-800/30"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                            <div className="flex items-center justify-between border-t border-slate-100 dark:border-brand-emerald-900/30 pt-3">
-                              <div>
-                                <span className="text-xs text-slate-400 dark:text-slate-500">{t('hero.from')} </span>
-                                <span className="text-lg font-extrabold text-brand-emerald-950 dark:text-white">
-                                  ${hotel.price}
-                                </span>
-                                <span className="text-xs text-slate-400 dark:text-slate-500">{t('hero.perNight')}</span>
-                              </div>
-                              <button
-                                type="button"
-                                className="px-4 py-2 rounded-xl bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 text-xs font-bold shadow-sm transition cursor-pointer"
-                              >
-                                {t('hero.bookNow')}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="p-12 text-center rounded-3xl border border-dashed border-slate-200 dark:border-brand-emerald-800/40 bg-white/40 dark:bg-brand-emerald-950/10 flex flex-col items-center">
-                    <ShieldAlert className="w-12 h-12 text-brand-gold-500 mb-4" />
-                    <h4 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-1">
-                      {t('hero.noMatches')}
-                    </h4>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">
-                      {t('hero.noMatchesDesc')}
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setFilters({
-                          halalFood: true,
-                          womenOnlyPool: false,
-                          privateVilla: false,
-                          alcoholFree: false,
-                          prayerFacilities: false,
-                        });
-                        setDestination('');
-                      }}
-                      className="px-5 py-2.5 rounded-xl bg-brand-emerald-500 text-white text-xs font-semibold hover:bg-brand-emerald-600 cursor-pointer"
-                    >
-                      {t('hero.resetFilters')}
-                    </button>
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
 
       {/* Watch Demo Modal */}
       <AnimatePresence>

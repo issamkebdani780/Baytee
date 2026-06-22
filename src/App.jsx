@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Rewards from './components/Rewards';
@@ -11,50 +12,37 @@ import FinalCTA from './components/FinalCTA';
 import MobileApp from './components/MobileApp';
 import Footer from './components/Footer';
 import ScrollPlane from './components/ScrollPlane';
+import SearchResultsPage from './pages/SearchResultsPage';
+import HotelDetailPage from './pages/HotelDetailPage';
 
+function HomePage() {
+  return (
+    <div className="min-h-screen flex flex-col font-sans bg-[#FCFBF9] text-slate-900 transition-colors duration-300 dark:bg-[#060b14] dark:text-slate-100 selection:bg-brand-gold-500 selection:text-brand-emerald-950 overflow-x-hidden">
+      <ScrollPlane />
+      <Header />
+      <main className="flex-grow">
+        <Hero />
+        <Features />
+        {/* <AIAssistant /> */}
+        <Statistics />
+        <Destinations />
+        <Testimonials />
+        <Rewards />
+        <MobileApp />
+        <FinalCTA />
+      </main>
+      <Footer />
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-[#FCFBF9] text-slate-900 transition-colors duration-300 dark:bg-[#060b14] dark:text-slate-100 selection:bg-brand-gold-500 selection:text-brand-emerald-950 overflow-x-hidden">
-      {/* Scroll Plane Effect */}
-      <ScrollPlane />
-
-      {/* Sticky Premium Navigation Header */}
-      <Header />
-
-      {/* Main Content Layout */}
-      <main className="flex-grow">
-        {/* Hero Banner & Search Widget */}
-        <Hero />
-
-        {/* Feature Grid Section */}
-        <Features />
-
-        {/* Dynamic AI Assistant Section */}
-        <AIAssistant />
-
-        {/* Stat Metrics Counter Panel */}
-        <Statistics />
-
-        {/* High Fidelity Destinations Gallery */}
-        <Destinations />
-
-        {/* Reviews Carousel Slider */}
-        <Testimonials />
-
-        {/* Airline & Loyalty Partners Scrolling Marquee */}
-        <Rewards />
-
-        {/* Mobile App Download Section */}
-        <MobileApp />
-
-        {/* Final Conversion Call To Action */}
-        <FinalCTA />
-      </main>
-
-      {/* Multi-Column Corporate Footer */}
-      <Footer />
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/search" element={<SearchResultsPage />} />
+      <Route path="/hotel/:id" element={<HotelDetailPage />} />
+    </Routes>
   );
 }
 
