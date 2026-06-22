@@ -406,6 +406,65 @@ function SkeletonCard() {
   );
 }
 
+// ═══ Sidebar content (defined outside render to avoid re-creation) ═══════════
+function SidebarContent({ isStreaming, displayedHotels, backendFilters, filterSections, activeKeys, toggleKey, setActiveKeys }) {
+  return (
+    <div>
+      {/* Count + spinner */}
+      <div className="flex items-center justify-between mb-5">
+        <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+          {displayedHotels.length.toLocaleString()} properties
+        </span>
+        {isStreaming && <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-gold-500" />}
+      </div>
+
+      {/* Filter shimmer while streaming */}
+      {!backendFilters && isStreaming && (
+        <div className="space-y-5 animate-pulse">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="border-b border-slate-100 dark:border-brand-emerald-900/30 pb-4">
+              <div className="h-4 w-28 bg-slate-200 dark:bg-brand-emerald-900/30 rounded mb-3" />
+              {[1,2,3].map(j => (
+                <div key={j} className="flex items-center justify-between py-1.5 gap-2">
+                  <div className="w-4 h-4 bg-slate-200 dark:bg-brand-emerald-900/30 rounded flex-shrink-0" />
+                  <div className="h-3 flex-1 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
+                  <div className="h-3 w-7 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* No filter data (stream done but no filters) */}
+      {!backendFilters && !isStreaming && (
+        <p className="text-xs text-slate-400 dark:text-slate-500">No filter data available</p>
+      )}
+
+      {/* Dynamic filter sections from backend */}
+      {filterSections.map(sec => (
+        <SidebarSection
+          key={sec.id}
+          title={sec.title}
+          options={sec.options}
+          activeKeys={activeKeys}
+          onToggle={toggleKey}
+        />
+      ))}
+
+      {/* Clear all */}
+      {activeKeys.size > 0 && (
+        <button
+          onClick={() => setActiveKeys(new Set())}
+          className="mt-4 w-full py-2 rounded-xl border border-brand-emerald-300 dark:border-brand-gold-600/40 text-brand-emerald-600 dark:text-brand-gold-400 text-sm font-semibold hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900/20 transition cursor-pointer"
+        >
+          Clear all filters
+        </button>
+      )}
+    </div>
+  );
+}
+
 // ═══ Main Page ════════════════════════════════════════════════════════════════
 export default function SearchResultsPage() {
   const [searchParams] = useSearchParams();
@@ -527,65 +586,6 @@ export default function SearchResultsPage() {
     filterSections.forEach(sec => sec.options.forEach(o => { labels[o.key] = o.label; }));
     return [...activeKeys].map(k => ({ key: k, label: labels[k] || k }));
   }, [activeKeys, filterSections]);
-
-// ═══ Sidebar content (defined outside render to avoid re-creation) ═══════════
-function SidebarContent({ isStreaming, displayedHotels, backendFilters, filterSections, activeKeys, toggleKey, setActiveKeys }) {
-  return (
-    <div>
-      {/* Count + spinner */}
-      <div className="flex items-center justify-between mb-5">
-        <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
-          {displayedHotels.length.toLocaleString()} properties
-        </span>
-        {isStreaming && <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-gold-500" />}
-      </div>
-
-      {/* Filter shimmer while streaming */}
-      {!backendFilters && isStreaming && (
-        <div className="space-y-5 animate-pulse">
-          {[1,2,3,4].map(i => (
-            <div key={i} className="border-b border-slate-100 dark:border-brand-emerald-900/30 pb-4">
-              <div className="h-4 w-28 bg-slate-200 dark:bg-brand-emerald-900/30 rounded mb-3" />
-              {[1,2,3].map(j => (
-                <div key={j} className="flex items-center justify-between py-1.5 gap-2">
-                  <div className="w-4 h-4 bg-slate-200 dark:bg-brand-emerald-900/30 rounded flex-shrink-0" />
-                  <div className="h-3 flex-1 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
-                  <div className="h-3 w-7 bg-slate-200 dark:bg-brand-emerald-900/30 rounded" />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* No filter data (stream done but no filters) */}
-      {!backendFilters && !isStreaming && (
-        <p className="text-xs text-slate-400 dark:text-slate-500">No filter data available</p>
-      )}
-
-      {/* Dynamic filter sections from backend */}
-      {filterSections.map(sec => (
-        <SidebarSection
-          key={sec.id}
-          title={sec.title}
-          options={sec.options}
-          activeKeys={activeKeys}
-          onToggle={toggleKey}
-        />
-      ))}
-
-      {/* Clear all */}
-      {activeKeys.size > 0 && (
-        <button
-          onClick={() => setActiveKeys(new Set())}
-          className="mt-4 w-full py-2 rounded-xl border border-brand-emerald-300 dark:border-brand-gold-600/40 text-brand-emerald-600 dark:text-brand-gold-400 text-sm font-semibold hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900/20 transition cursor-pointer"
-        >
-          Clear all filters
-        </button>
-      )}
-    </div>
-  );
-}
 
   // ─── RENDER ───────────────────────────────────────────────────────────────
   return (
