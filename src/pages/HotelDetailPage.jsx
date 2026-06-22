@@ -91,17 +91,24 @@ export default function HotelDetailPage() {
       guestNationality: 'DZ',
       checkIn,
       checkOut,
-      paxRooms: [{ adults: guests, children: 0, childrenAges: [] }],
-      filters: { refundable: false, noOfRooms: 0, mealType: 'All' },
+      paxRooms: [{ adults: Math.max(1, guests), children: 0, childrenAges: [] }],
+      filters: { refundable: false, mealType: 'All' },
     };
 
     getHotelById(id, payload)
       .then(res => {
-        if (!res.success) throw new Error('Hotel details not available');
+        if (!res.success) throw new Error(res.message || 'Hotel details not available');
         const data = res.data;
-        setHotel(data.hotel || data);
-        // Rooms may be in data.rooms or data.hotel.rooms
-        const roomList = data.rooms || data.hotel?.rooms || data.cheapestRooms || [];
+        // API can return hotel info at several shapes
+        const hotelData = data?.hotel || data?.hotelDetails || data || {};
+        setHotel(hotelData);
+        // Rooms can be at several paths
+        const roomList =
+          data?.rooms ||
+          data?.hotel?.rooms ||
+          data?.cheapestRooms ||
+          hotelData?.rooms ||
+          [];
         setRooms(Array.isArray(roomList) ? roomList : []);
       })
       .catch(err => {
@@ -127,7 +134,7 @@ export default function HotelDetailPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-[#FCFBF9] text-slate-900 dark:bg-[#060b14] dark:text-slate-100">
+    <div className="min-h-screen flex flex-col font-sans bg-[#FCFBF9] text-slate-900 dark:bg-[#060b14] dark:text-slate-100 pt-20">
       <Header />
 
       <div className="max-w-screen-xl mx-auto w-full px-4 sm:px-6 py-6">
