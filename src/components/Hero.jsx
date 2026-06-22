@@ -1,79 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Search, Calendar, Users, SlidersHorizontal, Check, Star, MapPin, Sparkles, Play, ShieldAlert, ArrowRight, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Search, Calendar, Users, SlidersHorizontal, Check, Star, MapPin, Sparkles, Play, ShieldAlert, ArrowRight, X, Hotel } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { MOCK_HOTELS } from '../data/mockHotels';
+import { searchDestinations } from '../api';
 
-// Mock hotel database
-const MOCK_HOTELS = [
-  {
-    id: 1,
-    name: 'Ajwa Hotel Sultanahmet',
-    location: 'Istanbul, Turkey',
-    rating: 4.9,
-    reviews: 142,
-    price: 320,
-    image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80',
-    tags: ['Alcohol-Free', 'Halal Food', 'Prayer Facilities'],
-    description: 'Experience 5-star Ottoman luxury with custom prayer rugs, Qibla indicators, and fully verified halal cuisine.',
-  },
-  {
-    id: 2,
-    name: 'Conrad Makkah Jabal Omar',
-    location: 'Makkah, Saudi Arabia',
-    rating: 4.8,
-    reviews: 912,
-    price: 450,
-    image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
-    tags: ['Prayer Facilities', 'Halal Food', 'Umrah Friendly'],
-    description: 'Located in the heart of Makkah, offering breathtaking Haram views and dedicated Islamic hospitality services.',
-  },
-  {
-    id: 3,
-    name: 'Adenya Hotel & Resort',
-    location: 'Antalya, Turkey',
-    rating: 4.7,
-    reviews: 324,
-    price: 280,
-    image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
-    tags: ['Women-Only Pools', 'Alcohol-Free', 'Halal Food'],
-    description: 'An elite beach resort featuring dedicated ladies-only private beaches, pools, and wellness sanctuaries.',
-  },
-  {
-    id: 4,
-    name: 'Dar Al Taqwa Hotel',
-    location: 'Madinah, Saudi Arabia',
-    rating: 4.9,
-    reviews: 580,
-    price: 380,
-    image: 'https://images.unsplash.com/photo-1597843797221-72218451897e?auto=format&fit=crop&w=800&q=80',
-    tags: ['Prayer Facilities', 'Halal Food', 'Steps to Nabawi'],
-    description: 'Overlooking Al-Masjid an-Nabawi courtyard, offering premium spiritual convenience and refined service.',
-  },
-  {
-    id: 5,
-    name: 'Jumeirah Dar Al Masyaf',
-    location: 'Dubai, UAE',
-    rating: 4.9,
-    reviews: 410,
-    price: 650,
-    image: 'https://images.unsplash.com/photo-1582672093685-704155248536?auto=format&fit=crop&w=800&q=80',
-    tags: ['Private Villas', 'Halal Food', 'Prayer Facilities'],
-    description: 'Exquisite Arabian-style summerhouses featuring private butler services, serene waterways, and bespoke privacy.',
-  },
-  {
-    id: 6,
-    name: 'Grand Hyatt Kuala Lumpur',
-    location: 'Kuala Lumpur, Malaysia',
-    rating: 4.8,
-    reviews: 730,
-    price: 210,
-    image: 'https://images.unsplash.com/photo-1595497743400-13f224327363?auto=format&fit=crop&w=800&q=80',
-    tags: ['Halal Food', 'Prayer Facilities'],
-    description: 'Unmatched Petronas Twin Towers views, with proximity to Islamic cultural centers and verified halal culinary experiences.',
-  }
-];
-
-const DESTINATION_SUGGESTIONS = ['Makkah', 'Madinah', 'Istanbul', 'Antalya', 'Dubai', 'Kuala Lumpur'];
 
 const FLOATING_IMAGES = [
   { src: '/hotel-istanbul.png', city: 'Istanbul', country: 'Turkey', rating: '4.9' },
@@ -84,10 +15,68 @@ const FLOATING_IMAGES = [
 ];
 
 export default function Hero() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [destination, setDestination] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [apiSuggestions, setApiSuggestions] = useState([]);
+  const [defaultSuggestions, setDefaultSuggestions] = useState([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const searchContainerRef = useRef(null);
+
+  // Fetch popular/default suggestions on mount
+  useEffect(() => {
+    searchDestinations('a')
+      .then((res) => {
+        if (res.success && Array.isArray(res.data)) {
+          setDefaultSuggestions(res.data.slice(0, 5));
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching default suggestions:", err);
+      });
+  }, []);
+
+  // Close suggestions dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Fetch search suggestions from backend API with debouncing
+  useEffect(() => {
+    if (!destination.trim()) {
+      setApiSuggestions([]);
+      setIsLoadingSuggestions(false);
+      return;
+    }
+
+    setIsLoadingSuggestions(true);
+    const delayDebounceFn = setTimeout(() => {
+      searchDestinations(destination)
+        .then((res) => {
+          if (res.success && Array.isArray(res.data)) {
+            setApiSuggestions(res.data);
+          } else {
+            setApiSuggestions([]);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching suggestions:", err);
+          setApiSuggestions([]);
+        })
+        .finally(() => {
+          setIsLoadingSuggestions(false);
+        });
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [destination]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -353,7 +342,7 @@ export default function Hero() {
           >
             <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
               {/* Destination Input */}
-              <div className="relative md:col-span-4 p-3 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-brand-emerald-900/30 transition duration-200 cursor-pointer">
+              <div ref={searchContainerRef} className="relative md:col-span-4 p-3 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-brand-emerald-900/30 transition duration-200 cursor-pointer">
                 <label className="block text-xs font-semibold text-brand-gold-600 dark:text-brand-gold-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5" /> {t('hero.destinationLabel')}
                 </label>
@@ -375,25 +364,173 @@ export default function Hero() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute left-0 right-0 mt-3 bg-white dark:bg-brand-emerald-900 border border-slate-200 dark:border-brand-emerald-800 rounded-2xl shadow-xl overflow-hidden z-20"
+                      className="absolute left-0 right-0 mt-3 bg-white dark:bg-brand-emerald-900 border border-slate-200 dark:border-brand-emerald-800 rounded-2xl shadow-xl overflow-hidden z-20 w-full max-w-sm sm:max-w-md md:max-w-lg"
                     >
-                      <div className="p-2">
-                        <p className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 px-3 py-1">{t('hero.popularDestinations')}</p>
-                        {DESTINATION_SUGGESTIONS.map((city) => (
-                          <button
-                            key={city}
-                            type="button"
-                            onClick={() => {
-                              setDestination(city);
-                              setShowSuggestions(false);
-                            }}
-                            className="w-full text-left px-3 py-2 text-sm rounded-xl hover:bg-slate-100 dark:hover:bg-brand-emerald-800 text-slate-700 dark:text-slate-200 flex items-center gap-2"
-                          >
-                            <MapPin className="w-4 h-4 text-brand-gold-500" />
-                            {city}
-                          </button>
-                        ))}
-                      </div>
+                      {!destination.trim() ? (
+                        <div className="p-2">
+                          <p className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 px-3 py-1">{t('hero.popularDestinations')}</p>
+                          {defaultSuggestions.length > 0 ? (
+                            <div className="max-h-64 overflow-y-auto space-y-0.5 scrollbar-thin">
+                              {defaultSuggestions.map((item) => {
+                                const currentLang = i18n.language || 'en';
+                                const countryName = item.countryNameTranslations?.[currentLang] || item.countryNameTranslations?.en || '';
+                                
+                                let displayLabel = item.name;
+                                let subLabel = '';
+                                
+                                if (item.type === 'city') {
+                                  subLabel = countryName ? `${countryName}` : '';
+                                } else if (item.type === 'hotel') {
+                                  const cityName = item.cityNameTranslations?.[currentLang] || item.cityNameTranslations?.en || '';
+                                  subLabel = [cityName, countryName].filter(Boolean).join(', ');
+                                }
+
+                                const typeLabel = item.type === 'hotel'
+                                  ? (i18n.language === 'ar' ? 'فندق' : i18n.language === 'fr' ? 'Hôtel' : 'Hotel')
+                                  : (i18n.language === 'ar' ? 'مدينة' : i18n.language === 'fr' ? 'Ville' : 'City');
+
+                                const propertiesLabel = i18n.language === 'ar' ? 'عقار' : i18n.language === 'fr' ? 'propriétés' : 'properties';
+                                
+                                return (
+                                  <button
+                                    key={`${item.type}-${item.id}`}
+                                    type="button"
+                                    onClick={() => {
+                                      setDestination(item.name);
+                                      setShowSuggestions(false);
+                                    }}
+                                    className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-brand-emerald-850/80 text-slate-800 dark:text-slate-200 flex items-center justify-between transition-colors duration-150 group cursor-pointer"
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className="p-2 rounded-lg bg-slate-100 dark:bg-brand-emerald-900 text-brand-gold-600 dark:text-brand-gold-500 group-hover:bg-white dark:group-hover:bg-brand-emerald-800 transition-colors">
+                                        {item.type === 'hotel' ? (
+                                          <Hotel className="w-4 h-4" />
+                                        ) : (
+                                          <MapPin className="w-4 h-4" />
+                                        )}
+                                      </div>
+                                      <div>
+                                        <span className="text-sm font-bold text-slate-900 dark:text-white block group-hover:text-brand-emerald-600 dark:group-hover:text-brand-gold-400 transition-colors">
+                                          {displayLabel}
+                                        </span>
+                                        {subLabel && (
+                                          <span className="text-[11px] text-slate-450 dark:text-slate-400 block mt-0.5">
+                                            {subLabel}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-2">
+                                      {item.type === 'city' && typeof item.hotelsCount === 'number' && (
+                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-emerald-50 dark:bg-brand-emerald-900/60 text-brand-emerald-800 dark:text-brand-gold-200 border border-brand-emerald-100/10 dark:border-brand-emerald-800/20">
+                                          {item.hotelsCount} {propertiesLabel}
+                                        </span>
+                                      )}
+                                      {item.type === 'hotel' && typeof item.rating === 'number' && (
+                                        <div className="flex items-center gap-0.5 text-[10px] font-bold text-slate-800 dark:text-brand-gold-500 bg-slate-100 dark:bg-brand-emerald-900/60 px-1.5 py-0.5 rounded">
+                                          <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+                                          {item.rating}
+                                        </div>
+                                      )}
+                                      <span className="text-[9px] uppercase tracking-widest text-slate-455 dark:text-slate-500 font-extrabold hidden sm:inline-block">
+                                        {typeLabel}
+                                      </span>
+                                    </div>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center py-4">
+                              <div className="w-4 h-4 border-2 border-brand-gold-500 border-t-transparent rounded-full animate-spin" />
+                            </div>
+                          )}
+                        </div>
+                      ) : isLoadingSuggestions ? (
+                        <div className="flex items-center justify-center gap-2 py-6 text-slate-500 dark:text-slate-400">
+                          <div className="w-4 h-4 border-2 border-brand-gold-500 border-t-transparent rounded-full animate-spin" />
+                          <span className="text-xs font-semibold">
+                            {i18n.language === 'ar' ? 'جاري البحث...' : i18n.language === 'fr' ? 'Recherche...' : 'Searching...'}
+                          </span>
+                        </div>
+                      ) : apiSuggestions.length === 0 ? (
+                        <div className="py-6 text-center text-slate-500 dark:text-slate-400 text-xs font-medium">
+                          {t('hero.noMatches')}
+                        </div>
+                      ) : (
+                        <div className="max-h-64 overflow-y-auto p-1.5 space-y-0.5 scrollbar-thin">
+                          {apiSuggestions.map((item) => {
+                            const currentLang = i18n.language || 'en';
+                            const countryName = item.countryNameTranslations?.[currentLang] || item.countryNameTranslations?.en || '';
+                            
+                            let displayLabel = item.name;
+                            let subLabel = '';
+                            
+                            if (item.type === 'city') {
+                              subLabel = countryName ? `${countryName}` : '';
+                            } else if (item.type === 'hotel') {
+                              const cityName = item.cityNameTranslations?.[currentLang] || item.cityNameTranslations?.en || '';
+                              subLabel = [cityName, countryName].filter(Boolean).join(', ');
+                            }
+
+                            const typeLabel = item.type === 'hotel'
+                              ? (i18n.language === 'ar' ? 'فندق' : i18n.language === 'fr' ? 'Hôtel' : 'Hotel')
+                              : (i18n.language === 'ar' ? 'مدينة' : i18n.language === 'fr' ? 'Ville' : 'City');
+
+                            const propertiesLabel = i18n.language === 'ar' ? 'عقار' : i18n.language === 'fr' ? 'propriétés' : 'properties';
+                            
+                            return (
+                              <button
+                                key={`${item.type}-${item.id}`}
+                                type="button"
+                                onClick={() => {
+                                  setDestination(item.name);
+                                  setShowSuggestions(false);
+                                }}
+                                className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-brand-emerald-850/80 text-slate-800 dark:text-slate-200 flex items-center justify-between transition-colors duration-150 group cursor-pointer"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="p-2 rounded-lg bg-slate-100 dark:bg-brand-emerald-900 text-brand-gold-600 dark:text-brand-gold-500 group-hover:bg-white dark:group-hover:bg-brand-emerald-800 transition-colors">
+                                    {item.type === 'hotel' ? (
+                                      <Hotel className="w-4 h-4" />
+                                    ) : (
+                                      <MapPin className="w-4 h-4" />
+                                    )}
+                                  </div>
+                                  <div>
+                                    <span className="text-sm font-bold text-slate-900 dark:text-white block group-hover:text-brand-emerald-600 dark:group-hover:text-brand-gold-400 transition-colors">
+                                      {displayLabel}
+                                    </span>
+                                    {subLabel && (
+                                      <span className="text-[11px] text-slate-450 dark:text-slate-400 block mt-0.5">
+                                        {subLabel}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                                
+                                <div className="flex items-center gap-2">
+                                  {item.type === 'city' && typeof item.hotelsCount === 'number' && (
+                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-emerald-50 dark:bg-brand-emerald-900/60 text-brand-emerald-800 dark:text-brand-gold-200 border border-brand-emerald-100/10 dark:border-brand-emerald-800/20">
+                                      {item.hotelsCount} {propertiesLabel}
+                                    </span>
+                                  )}
+                                  {item.type === 'hotel' && typeof item.rating === 'number' && (
+                                    <div className="flex items-center gap-0.5 text-[10px] font-bold text-slate-800 dark:text-brand-gold-500 bg-slate-100 dark:bg-brand-emerald-900/60 px-1.5 py-0.5 rounded">
+                                      <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+                                      {item.rating}
+                                    </div>
+                                  )}
+                                  <span className="text-[9px] uppercase tracking-widest text-slate-455 dark:text-slate-500 font-extrabold hidden sm:inline-block">
+                                    {typeLabel}
+                                  </span>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
