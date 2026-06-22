@@ -96,7 +96,7 @@ export default function Hero() {
   const dayAfter3 = new Date(Date.now() + 4 * 86400000).toISOString().split('T')[0];
   const [checkIn, setCheckIn] = useState(tomorrow);
   const [checkOut, setCheckOut] = useState(dayAfter3);
-  const [guests, setGuests] = useState(1);
+  const [rooms, setRooms] = useState([{ adults: 1, children: 0, childrenAges: [] }]);
   const [showGuestDropdown, setShowGuestDropdown] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
@@ -145,7 +145,7 @@ export default function Hero() {
       destName,
       checkIn: checkIn || new Date(Date.now() + 86400000).toISOString().split('T')[0],
       checkOut: checkOut || new Date(Date.now() + 4 * 86400000).toISOString().split('T')[0],
-      guests: guests.toString(),
+      paxRooms: JSON.stringify(rooms),
     });
 
     navigate(`/search?${params.toString()}`);
@@ -160,7 +160,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative overflow-hidden islamic-pattern">
+    <section className="relative islamic-pattern">
       {/* Background Image with Elegant Theme-Aware Gradient Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none w-full h-full">
         <img
@@ -172,7 +172,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-85% to-[#FCFBF9] dark:from-transparent dark:via-transparent dark:via-85% dark:to-[#060b14] transition-colors duration-300" />
       </div>
 
-      <div className="relative pt-28 pb-12 flex flex-col items-center justify-center overflow-hidden z-10">
+      <div className="relative pt-28 pb-12 flex flex-col items-center justify-center z-10">
         {/* Decorative Blur Backgrounds */}
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-brand-emerald-200/20 dark:bg-brand-emerald-800/10 rounded-full ambient-glow pointer-events-none" />
         <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-brand-gold-100/30 dark:bg-brand-gold-800/5 rounded-full ambient-glow pointer-events-none" />
@@ -340,9 +340,9 @@ export default function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             id="explore"
-            className="w-full max-w-md md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto p-4 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-brand-emerald-800/30 bg-white/80 dark:bg-brand-emerald-950/40 backdrop-blur-xl shadow-xl dark:shadow-2xl/40 text-left mt-2 mb-10"
+            className="relative z-30 w-full max-w-md md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto p-4 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-brand-emerald-800/30 bg-white/80 dark:bg-brand-emerald-950/40 backdrop-blur-xl shadow-xl dark:shadow-2xl/40 text-left mt-2 mb-10"
           >
-            <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+            <form onSubmit={handleSearch} className="relative z-40 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
               {/* Destination Input */}
               <div ref={searchContainerRef} className="relative md:col-span-4 p-3 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-brand-emerald-900/30 transition duration-200 cursor-pointer">
                 <label className="block text-xs font-semibold text-brand-gold-600 dark:text-brand-gold-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
@@ -587,51 +587,150 @@ export default function Hero() {
                 />
               </div>
 
-              {/* Guests Counter */}
+              {/* Guests/Rooms Selector */}
               <div className="relative md:col-span-2 p-3 rounded-2xl hover:bg-slate-100/50 dark:hover:bg-brand-emerald-900/30 transition duration-200 cursor-pointer">
                 <div onClick={() => setShowGuestDropdown(!showGuestDropdown)}>
                   <label className="block text-xs font-semibold text-brand-gold-600 dark:text-brand-gold-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5" /> {t('hero.guests')}
+                    <Users className="w-3.5 h-3.5" /> Rooms & Guests
                   </label>
-                  <div className="text-slate-900 dark:text-white font-medium text-sm">
-                    {guests} {guests === 1 ? t('hero.guest') : t('hero.guests')}
+                  <div className="text-slate-900 dark:text-white font-medium text-sm truncate">
+                    {rooms.length} Room{rooms.length > 1 ? 's' : ''}, {rooms.reduce((acc, r) => acc + r.adults + r.children, 0)} Guest{rooms.reduce((acc, r) => acc + r.adults + r.children, 0) > 1 ? 's' : ''}
                   </div>
                 </div>
 
-                {/* Guest counter popover */}
+                {/* Guest/Room counter popover */}
                 <AnimatePresence>
                   {showGuestDropdown && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-3 p-4 bg-white dark:bg-brand-emerald-900 border border-slate-200 dark:border-brand-emerald-800 rounded-2xl shadow-xl w-48 z-20"
+                      className="absolute right-0 top-full mt-3 p-4 bg-white dark:bg-brand-emerald-900 border border-slate-200 dark:border-brand-emerald-800 rounded-2xl shadow-xl w-72 sm:w-80 z-20 max-h-[70vh] overflow-y-auto scrollbar-thin"
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t('hero.guests')}</span>
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            disabled={guests <= 1}
-                            onClick={() => setGuests(g => Math.max(1, g - 1))}
-                            className="w-8 h-8 rounded-full border border-slate-250 dark:border-brand-emerald-700 flex items-center justify-center font-bold disabled:opacity-40 text-slate-750 dark:text-slate-200"
-                          >
-                            -
-                          </button>
-                          <span className="font-semibold text-slate-900 dark:text-white">{guests}</span>
-                          <button
-                            type="button"
-                            onClick={() => setGuests(g => Math.min(10, g + 1))}
-                            className="w-8 h-8 rounded-full border border-slate-250 dark:border-brand-emerald-700 flex items-center justify-center font-bold text-slate-750 dark:text-slate-200"
-                          >
-                            +
-                          </button>
-                        </div>
+                      <div className="space-y-5">
+                        {rooms.map((room, rIndex) => (
+                          <div key={rIndex} className="pb-4 border-b border-slate-100 dark:border-brand-emerald-800/50 last:border-0 last:pb-0">
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="text-sm font-bold text-slate-800 dark:text-white">Room {rIndex + 1}</span>
+                              {rooms.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => setRooms(prev => prev.filter((_, i) => i !== rIndex))}
+                                  className="text-xs text-red-500 hover:text-red-600 font-semibold cursor-pointer"
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
+                            
+                            {/* Adults */}
+                            <div className="flex items-center justify-between mb-3">
+                              <div>
+                                <span className="block text-sm font-medium text-slate-700 dark:text-slate-200">Adults</span>
+                                <span className="block text-[10px] text-slate-500 dark:text-slate-400">Ages 18 or above</span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  type="button"
+                                  disabled={room.adults <= 1}
+                                  onClick={() => setRooms(prev => {
+                                    const next = [...prev];
+                                    next[rIndex] = { ...next[rIndex] };
+                                    next[rIndex].adults = Math.max(1, next[rIndex].adults - 1);
+                                    return next;
+                                  })}
+                                  className="w-8 h-8 rounded-full border border-slate-250 dark:border-brand-emerald-700 flex items-center justify-center font-bold disabled:opacity-40 text-slate-750 dark:text-slate-200 cursor-pointer"
+                                >-</button>
+                                <span className="font-semibold text-slate-900 dark:text-white w-3 text-center">{room.adults}</span>
+                                <button
+                                  type="button"
+                                  disabled={room.adults >= 10}
+                                  onClick={() => setRooms(prev => {
+                                    const next = [...prev];
+                                    next[rIndex] = { ...next[rIndex] };
+                                    next[rIndex].adults = Math.min(10, next[rIndex].adults + 1);
+                                    return next;
+                                  })}
+                                  className="w-8 h-8 rounded-full border border-slate-250 dark:border-brand-emerald-700 flex items-center justify-center font-bold text-slate-750 dark:text-slate-200 cursor-pointer"
+                                >+</button>
+                              </div>
+                            </div>
+
+                            {/* Children */}
+                            <div className="flex items-center justify-between mb-2">
+                              <div>
+                                <span className="block text-sm font-medium text-slate-700 dark:text-slate-200">Children</span>
+                                <span className="block text-[10px] text-slate-500 dark:text-slate-400">Ages 0-17</span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  type="button"
+                                  disabled={room.children <= 0}
+                                  onClick={() => setRooms(prev => {
+                                    const next = [...prev];
+                                    next[rIndex] = { ...next[rIndex] };
+                                    next[rIndex].children = Math.max(0, next[rIndex].children - 1);
+                                    next[rIndex].childrenAges = next[rIndex].childrenAges.slice(0, next[rIndex].children);
+                                    return next;
+                                  })}
+                                  className="w-8 h-8 rounded-full border border-slate-250 dark:border-brand-emerald-700 flex items-center justify-center font-bold disabled:opacity-40 text-slate-750 dark:text-slate-200 cursor-pointer"
+                                >-</button>
+                                <span className="font-semibold text-slate-900 dark:text-white w-3 text-center">{room.children}</span>
+                                <button
+                                  type="button"
+                                  disabled={room.children >= 6}
+                                  onClick={() => setRooms(prev => {
+                                    const next = [...prev];
+                                    next[rIndex] = { ...next[rIndex] };
+                                    next[rIndex].children = Math.min(6, next[rIndex].children + 1);
+                                    next[rIndex].childrenAges = [...next[rIndex].childrenAges, 1];
+                                    return next;
+                                  })}
+                                  className="w-8 h-8 rounded-full border border-slate-250 dark:border-brand-emerald-700 flex items-center justify-center font-bold text-slate-750 dark:text-slate-200 cursor-pointer"
+                                >+</button>
+                              </div>
+                            </div>
+
+                            {/* Children Ages */}
+                            {room.children > 0 && (
+                              <div className="mt-2 grid grid-cols-2 gap-2 bg-slate-50 dark:bg-brand-emerald-950 p-2.5 rounded-xl border border-slate-100 dark:border-brand-emerald-800/40">
+                                {Array.from({ length: room.children }).map((_, cIndex) => (
+                                  <div key={cIndex} className="flex flex-col gap-1">
+                                    <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Age (Child {cIndex + 1})</label>
+                                    <select
+                                      value={room.childrenAges[cIndex] || 1}
+                                      onChange={(e) => setRooms(prev => {
+                                        const next = [...prev];
+                                        next[rIndex] = { ...next[rIndex], childrenAges: [...next[rIndex].childrenAges] };
+                                        next[rIndex].childrenAges[cIndex] = parseInt(e.target.value, 10);
+                                        return next;
+                                      })}
+                                      className="w-full bg-white dark:bg-[#060b14] border border-slate-200 dark:border-brand-emerald-800 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-brand-gold-500"
+                                    >
+                                      {Array.from({ length: 18 }).map((_, age) => (
+                                        <option key={age} value={age}>{age} {age === 1 ? 'year' : 'years'} old</option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
+                      
+                      <button
+                        type="button"
+                        onClick={() => setRooms(prev => [...prev, { adults: 1, children: 0, childrenAges: [] }])}
+                        className="mt-4 w-full py-2.5 text-center text-xs font-semibold border border-brand-emerald-300 dark:border-brand-gold-500/40 text-brand-emerald-700 dark:text-brand-gold-400 rounded-xl hover:bg-brand-emerald-50 dark:hover:bg-brand-emerald-900/20 cursor-pointer"
+                      >
+                        Add another room
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => setShowGuestDropdown(false)}
-                        className="mt-3 w-full py-1.5 text-center text-xs font-semibold bg-brand-emerald-500 text-white rounded-lg hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:text-brand-emerald-950"
+                        className="mt-2 w-full py-2.5 text-center text-xs font-semibold bg-brand-emerald-500 text-white rounded-xl hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:text-brand-emerald-950 shadow-sm cursor-pointer"
                       >
                         {t('hero.done')}
                       </button>

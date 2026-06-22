@@ -248,12 +248,8 @@ function HotelCard({ hotel, searchParams }) {
     : 0;
 
   const handleView = () => {
-    const params = new URLSearchParams({
-      checkIn: searchParams.get('checkIn') || '',
-      checkOut: searchParams.get('checkOut') || '',
-      guests: searchParams.get('guests') || '1',
-      destName: hotel.location,
-    });
+    const params = new URLSearchParams(searchParams);
+    params.set('destName', hotel.location);
     navigate(`/hotel/${hotel.id}?${params.toString()}`);
   };
 
@@ -475,7 +471,22 @@ export default function SearchResultsPage() {
   const destName = searchParams.get('destName') || 'Hotels';
   const checkIn  = searchParams.get('checkIn')  || '';
   const checkOut = searchParams.get('checkOut') || '';
-  const guests   = parseInt(searchParams.get('guests') || '1', 10);
+  
+  const rawPax = searchParams.get('paxRooms');
+  const rawGuests = searchParams.get('guests');
+  let paxRooms = [{ adults: 1, children: 0, childrenAges: [] }];
+  try {
+    if (rawPax) {
+      paxRooms = JSON.parse(rawPax);
+    } else if (rawGuests) {
+      paxRooms = [{ adults: parseInt(rawGuests || '1', 10), children: 0, childrenAges: [] }];
+    }
+  } catch (e) {
+    console.error('Failed to parse paxRooms', e);
+  }
+
+  const totalGuests = paxRooms.reduce((acc, r) => acc + r.adults + r.children, 0);
+  const totalRooms = paxRooms.length;
 
   // ── Stream state ──────────────────────────────────────────────────────────
   const [hotels, setHotels]           = useState([]);
@@ -507,7 +518,7 @@ export default function SearchResultsPage() {
         guestNationality: 'DZ',
         checkIn,
         checkOut,
-        paxRooms: [{ adults: guests, children: 0, childrenAges: [] }],
+        paxRooms,
         filters: { refundable: false, mealType: 'All' },
       },
     };
@@ -525,7 +536,8 @@ export default function SearchResultsPage() {
             const raw = JSON.parse(event.data);
             let data = raw;
             if (typeof raw.data === 'string') {
-              try { data = JSON.parse(raw.data); } catch {}
+              // eslint-disable-next-line no-unused-vars
+              try { data = JSON.parse(raw.data); } catch (e) { /* ignore */ }
             } else if (raw.data && typeof raw.data === 'object') {
               data = raw.data;
             }
@@ -554,7 +566,7 @@ export default function SearchResultsPage() {
       .catch(err => { setStreamError(err.message); setIsStreaming(false); });
 
     return () => { if (es) es.close(); if (eventSourceRef.current) eventSourceRef.current.close(); };
-  }, [destId, destType, destName, checkIn, checkOut, guests]);
+  }, [destId, destType, destName, checkIn, checkOut, rawPax, rawGuests]);
 
   // ── Dynamic sidebar sections (from backend after stream ends) ─────────────
   const filterSections = useMemo(() => buildFilterSections(backendFilters), [backendFilters]);
@@ -621,7 +633,9 @@ export default function SearchResultsPage() {
 
           {/* Guests pill */}
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-brand-emerald-900/30 border border-slate-200 dark:border-brand-emerald-800/40">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{guests} guest{guests !== 1 ? 's' : ''}</span>
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              {totalRooms} Room{totalRooms > 1 ? 's' : ''}, {totalGuests} Guest{totalGuests !== 1 ? 's' : ''}
+            </span>
           </div>
         </div>
       </div>

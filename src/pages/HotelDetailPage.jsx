@@ -72,7 +72,22 @@ export default function HotelDetailPage() {
 
   const checkIn  = searchParams.get('checkIn')  || '';
   const checkOut = searchParams.get('checkOut') || '';
-  const guests   = parseInt(searchParams.get('guests') || '1', 10);
+  
+  const rawPax = searchParams.get('paxRooms');
+  const rawGuests = searchParams.get('guests');
+  let paxRooms = [{ adults: 1, children: 0, childrenAges: [] }];
+  try {
+    if (rawPax) {
+      paxRooms = JSON.parse(rawPax);
+    } else if (rawGuests) {
+      paxRooms = [{ adults: parseInt(rawGuests || '1', 10), children: 0, childrenAges: [] }];
+    }
+  } catch (e) {
+    console.error('Failed to parse paxRooms', e);
+  }
+
+  const totalGuests = paxRooms.reduce((acc, r) => acc + r.adults + r.children, 0);
+  const totalRooms = paxRooms.length;
   const destName = searchParams.get('destName') || '';
 
   const [hotel, setHotel] = useState(null);
@@ -91,7 +106,7 @@ export default function HotelDetailPage() {
       guestNationality: 'DZ',
       checkIn,
       checkOut,
-      paxRooms: [{ adults: Math.max(1, guests), children: 0, childrenAges: [] }],
+      paxRooms,
       filters: { refundable: false, mealType: 'All' },
     };
 
@@ -115,7 +130,7 @@ export default function HotelDetailPage() {
         setError(err.message);
       })
       .finally(() => setIsLoading(false));
-  }, [id, checkIn, checkOut, guests]);
+  }, [id, checkIn, checkOut, rawPax, rawGuests]);
 
   const hotelImages = hotel?.images?.length
     ? hotel.images
@@ -235,7 +250,7 @@ export default function HotelDetailPage() {
                   )}
                   <span className="flex items-center gap-1.5">
                     <Users className="w-4 h-4 text-brand-gold-500" />
-                    {guests} guest{guests !== 1 ? 's' : ''}
+                    {totalRooms} Room{totalRooms > 1 ? 's' : ''}, {totalGuests} Guest{totalGuests !== 1 ? 's' : ''}
                   </span>
                 </div>
               </div>
@@ -312,7 +327,7 @@ export default function HotelDetailPage() {
                 )}
                 <div className="flex justify-between">
                   <span className="text-slate-500 dark:text-slate-400">Guests</span>
-                  <span className="font-semibold text-slate-900 dark:text-white">{guests}</span>
+                  <span className="font-semibold text-slate-900 dark:text-white">{totalRooms} Room{totalRooms > 1 ? 's' : ''}, {totalGuests} Guest{totalGuests !== 1 ? 's' : ''}</span>
                 </div>
                 <div className="border-t border-slate-100 dark:border-brand-emerald-900/30 pt-3 flex justify-between text-base font-bold">
                   <span className="text-slate-700 dark:text-slate-300">Total / night</span>
