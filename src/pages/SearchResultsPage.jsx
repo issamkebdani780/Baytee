@@ -605,7 +605,7 @@ export default function SearchResultsPage() {
       <Header />
 
       {/* ── Search context bar (destination / dates / guests + back) ── */}
-      <div className="bg-white dark:bg-[#0a1628] border-b border-slate-200 dark:border-brand-emerald-900/40 shadow-sm">
+      <div className="sticky top-[76px] z-40 bg-white/90 dark:bg-[#0a1628]/90 backdrop-blur-md border-b border-slate-200 dark:border-brand-emerald-900/40 shadow-sm transition-all duration-300">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3">
           {/* Back */}
           <button
