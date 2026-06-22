@@ -20,7 +20,7 @@ export default function Header() {
 
   const navLinks = [
     { name: t('nav.features'), href: '#features' },
-    { name: t('nav.aiCompanion'), href: '#ai-assistant' },
+    { name: t('appDownload.sectionLabel'), href: '#mobile-app' },
     { name: t('nav.destinations'), href: '#destinations' },
     // { name: t('nav.pricing'), href: '#pricing' },
   ];

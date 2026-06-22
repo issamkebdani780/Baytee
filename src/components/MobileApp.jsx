@@ -690,7 +690,7 @@ export default function MobileApp() {
   };
 
   return (
-    <section className="py-24 md:py-32 bg-white dark:bg-brand-emerald-950 relative overflow-hidden border-b border-slate-100 dark:border-brand-emerald-900/40">
+    <section id="mobile-app" className="py-24 md:py-32 bg-white dark:bg-brand-emerald-950 relative overflow-hidden border-b border-slate-100 dark:border-brand-emerald-900/40">
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-emerald-500/5 rounded-full blur-[100px] pointer-events-none animate-pulse duration-[8s]" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-gold-500/5 rounded-full blur-[100px] pointer-events-none" />
