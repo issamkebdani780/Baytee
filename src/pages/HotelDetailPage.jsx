@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Star, MapPin, Check, Loader2, ShieldAlert, Calendar, Users, Utensils, X } from 'lucide-react';
+import { ArrowLeft, Star, MapPin, Check, Loader2, ShieldAlert, Calendar, Users, Utensils, X, Maximize, BedDouble, Bath, Droplets, Tag, Info } from 'lucide-react';
 import Header from '../components/Header';
 import { getHotelById } from '../api';
 
@@ -14,49 +14,120 @@ const PLACEHOLDER_IMAGES = [
 ];
 
 // ─── Room card ────────────────────────────────────────────────────────────────
-function RoomCard({ room, onBook }) {
-  const [expanded, setExpanded] = useState(false);
+function RoomCard({ room, onBook, hotelImage }) {
+  // Real data parsing
+  const roomImage = room.image || room.images?.[0]?.url || room.images?.[0] || hotelImage;
+  
+  const size = room.size || room.roomSize;
+  const bedrooms = room.bedrooms;
+  const bathrooms = room.bathrooms;
+  const adults = room.maxAdults || room.pax || room.occupancy?.adults;
+  const beds = room.beds || room.bedType || room.bedding;
+  const bidet = room.hasBidet || room.roomFilters?.bidetAmenities?.available;
+  
+  const currentPrice = room.price || room.lowestPrice;
+  const oldPrice = room.originalPrice || room.strikethroughPrice;
+  const discountPercent = oldPrice && currentPrice && oldPrice > currentPrice
+    ? Math.round(((oldPrice - currentPrice) / oldPrice) * 100)
+    : null;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="border border-slate-200/70 dark:border-brand-emerald-800/30 rounded-2xl bg-white dark:bg-brand-emerald-950/20 overflow-hidden hover:shadow-lg transition-shadow"
+      className="border border-slate-200/70 dark:border-brand-emerald-800/30 rounded-2xl bg-white dark:bg-[#0b1320] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col"
     >
-      <div className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex-1">
-          <h4 className="font-bold text-slate-900 dark:text-white text-base mb-1">{room.name || 'Standard Room'}</h4>
-          {room.mealType && (
-            <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1 mb-2">
-              <Utensils className="w-3 h-3 text-brand-gold-500" />
-              {room.mealType}
-            </p>
+      {/* Room Image */}
+      {roomImage ? (
+        <div className="relative h-48 sm:h-56 overflow-hidden bg-slate-100 dark:bg-brand-emerald-950/50 flex-shrink-0">
+          <img src={roomImage} alt={room.name || 'Room'} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+          {/* Simple dots for carousel if multiple images exist */}
+          {room.images && room.images.length > 1 && (
+            <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
+              {room.images.slice(0, 4).map((_, idx) => (
+                <div key={idx} className={`w-2 h-2 rounded-full bg-white ${idx === 0 ? 'opacity-100' : 'opacity-50'}`}></div>
+              ))}
+            </div>
           )}
-          <div className="flex flex-wrap gap-1.5">
-            {room.freeCancellation && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/40">
-                Free Cancellation
-              </span>
-            )}
-            {room.boardType && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-emerald-50 dark:bg-brand-emerald-900/40 text-brand-emerald-700 dark:text-brand-gold-200 border border-brand-emerald-100/30">
-                {room.boardType}
-              </span>
-            )}
-          </div>
         </div>
+      ) : (
+        <div className="h-48 sm:h-56 bg-slate-100 dark:bg-brand-emerald-900/20 flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 flex-shrink-0">
+          <span className="text-sm font-medium">No Image Provided</span>
+        </div>
+      )}
 
-        <div className="flex flex-col items-end gap-2 flex-shrink-0">
-          <div className="text-right">
-            <p className="text-xs text-slate-400 dark:text-slate-500">From</p>
-            <p className="text-2xl font-extrabold text-slate-900 dark:text-white">${(room.price || 0).toLocaleString()}</p>
-            <p className="text-xs text-slate-400 dark:text-slate-500">per night</p>
+      <div className="p-5 flex flex-col flex-1">
+        <h4 className="font-bold text-slate-900 dark:text-white text-[19px] mb-3 leading-tight">{room.name || room.roomName || 'Standard Room'}</h4>
+        
+        {/* Room specs */}
+        {(size || bedrooms || bathrooms) && (
+          <div className="flex flex-wrap gap-2 mb-3 text-[13px] font-medium text-amber-800 dark:text-amber-200/80">
+            {size && (
+              <span className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded">
+                <Maximize className="w-3.5 h-3.5" /> {size} {typeof size === 'number' ? 'm²' : ''}
+              </span>
+            )}
+            {bedrooms && (
+              <span className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded">
+                <BedDouble className="w-3.5 h-3.5" /> {bedrooms} bedroom{bedrooms > 1 ? 's' : ''}
+              </span>
+            )}
+            {bathrooms && (
+              <span className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded">
+                <Bath className="w-3.5 h-3.5" /> {bathrooms} bathroom{bathrooms > 1 ? 's' : ''}
+              </span>
+            )}
           </div>
+        )}
+
+        {/* Suitability */}
+        {adults && (
+          <div className="flex items-center gap-1.5 text-red-600 dark:text-red-400 text-[13.5px] font-medium mb-2.5">
+            <Users className="w-4 h-4 fill-current" />
+            <span>Default suitability: {adults} adults</span>
+            <Info className="w-3.5 h-3.5 text-slate-400" />
+          </div>
+        )}
+
+        {/* Bed setup */}
+        {beds && (
+          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-[13.5px] mb-4">
+            <BedDouble className="w-4 h-4 text-brand-gold-500" />
+            <span>{beds}</span>
+          </div>
+        )}
+
+        {/* Amenities tag (like Bidet) */}
+        {bidet && (
+          <div className="border border-slate-200 dark:border-brand-emerald-800/50 rounded-lg p-2.5 flex items-center gap-2 mb-5 shadow-sm">
+            <Droplets className="w-4 h-4 text-orange-500" />
+            <span className="text-sm font-medium text-slate-800 dark:text-slate-200 border-b border-dashed border-slate-400">Handheld bidet spray</span>
+          </div>
+        )}
+
+        <div className="mt-auto pt-2">
+          {/* Pricing area */}
+          {discountPercent > 0 && (
+            <div className="flex items-center gap-2 mb-1">
+              <span className="flex items-center gap-1 bg-red-600 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">
+                <Tag className="w-3 h-3 fill-current" /> -{discountPercent}%
+              </span>
+              <span className="text-sm text-slate-400 line-through decoration-slate-400">${oldPrice?.toLocaleString()}</span>
+            </div>
+          )}
+          
+          <div className="flex items-baseline gap-2 mb-4">
+            <span className="text-[26px] font-extrabold text-slate-900 dark:text-white tracking-tight">${currentPrice?.toLocaleString() || '—'}</span>
+            <span className="text-xs text-slate-500 font-medium flex items-center gap-1">
+              standard price <Info className="w-3.5 h-3.5" />
+            </span>
+          </div>
+
           <button
             onClick={() => onBook(room)}
-            className="px-5 py-2 rounded-xl bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 text-sm font-bold shadow-md transition cursor-pointer"
+            className="w-full py-2.5 rounded-xl bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 text-sm font-bold shadow-md transition cursor-pointer"
           >
-            Book Now
+            Select Room
           </button>
         </div>
       </div>
@@ -273,13 +344,18 @@ export default function HotelDetailPage() {
                   <p className="text-slate-500 dark:text-slate-400 text-sm">No room details available for the selected dates.</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {rooms.map((room, i) => (
-                    <RoomCard key={room.id || i} room={{
-                      ...room,
-                      price: room.lowestPrice || room.price || 0,
-                      name: room.name || room.roomName || 'Room',
-                    }} onBook={handleBookRoom} />
+                    <RoomCard 
+                      key={room.id || i} 
+                      hotelImage={typeof hotelImages[0] === 'string' ? hotelImages[0] : hotelImages[0]?.url}
+                      room={{
+                        ...room,
+                        price: room.lowestPrice || room.price || 0,
+                        name: room.name || room.roomName || 'Room',
+                      }} 
+                      onBook={handleBookRoom} 
+                    />
                   ))}
                 </div>
               )}
