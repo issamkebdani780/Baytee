@@ -16,6 +16,7 @@ import SearchResultsPage from './pages/SearchResultsPage';
 import HotelDetailPage from './pages/HotelDetailPage';
 import RestaurantsPage from './pages/RestaurantsPage';
 import RestaurantDetailPage from './pages/RestaurantDetailPage';
+import ApartmentsPage from './pages/ApartmentsPage';
 
 function HomePage() {
   return (
@@ -46,6 +47,7 @@ function App() {
       <Route path="/hotel/:id" element={<HotelDetailPage />} />
       <Route path="/restaurants" element={<RestaurantsPage />} />
       <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
+      <Route path="/apartments" element={<ApartmentsPage />} />
     </Routes>
   );
 }
