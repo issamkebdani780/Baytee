@@ -50,17 +50,21 @@ export default function Header() {
             <img src="/darklogo.png" alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300 hidden dark:block" />
           </button>
 
-          {/* Desktop Navigation — home page only */}
-          {isHome && (
-            <nav className="hidden md:flex items-center gap-6">
-              {navLinks.map((link) => (
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-6">
+            {navLinks.map((link) => {
+              const finalHref = (!isHome && link.href.startsWith('#')) ? `/${link.href}` : link.href;
+              return (
                 <a
                   key={link.name}
-                  href={link.href}
+                  href={finalHref}
                   onClick={(e) => {
                     if (link.href.startsWith('/')) {
                       e.preventDefault();
                       navigate(link.href);
+                    } else if (!isHome && link.href.startsWith('#')) {
+                      e.preventDefault();
+                      navigate(finalHref);
                     }
                   }}
                   className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-white dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
@@ -69,76 +73,61 @@ export default function Header() {
                   {link.name}
                   <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-gold-500 rounded-full transition-all duration-300 group-hover:w-full" />
                 </a>
-              ))}
-            </nav>
-          )}
+              );
+            })}
+          </nav>
 
-          {/* Action Controls — home page only */}
-          {isHome && (
-            <div className="hidden md:flex items-center gap-2.5 shrink-0">
-              <LanguageSwitcher />
-              <ThemeToggle />
+          {/* Action Controls & Mobile Toggle */}
+          <div className="hidden md:flex items-center gap-2.5 shrink-0">
+            <LanguageSwitcher />
+            <ThemeToggle />
+            {isHome && (
               <a
                 href="#explore"
                 className="px-5 py-2 rounded-full bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 font-semibold text-sm shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer whitespace-nowrap"
               >
                 {t('nav.startExploring')}
               </a>
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* Controls always visible */}
-          {!isHome && (
-            <div className="hidden md:flex items-center gap-2.5 shrink-0">
-              <LanguageSwitcher />
-              <ThemeToggle />
-            </div>
-          )}
-
-          {/* Mobile Toggle — home page only */}
-          {isHome && (
-            <div className="flex md:hidden items-center gap-2">
-              <LanguageSwitcher />
-              <ThemeToggle />
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-xl text-slate-600 hover:text-brand-emerald-500 dark:text-slate-300 dark:hover:text-brand-gold-500 hover:bg-slate-100 dark:hover:bg-brand-emerald-900/40 transition-all"
-                aria-label="Toggle menu"
-              >
-                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
-          )}
-
-          {/* Mobile Controls — other pages */}
-          {!isHome && (
-            <div className="flex md:hidden items-center gap-2">
-              <LanguageSwitcher />
-              <ThemeToggle />
-            </div>
-          )}
+          <div className="flex md:hidden items-center gap-2">
+            <LanguageSwitcher />
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-xl text-slate-600 hover:text-brand-emerald-500 dark:text-slate-300 dark:hover:text-brand-gold-500 hover:bg-slate-100 dark:hover:bg-brand-emerald-900/40 transition-all"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Menu Panel — home page only */}
-        {isHome && (
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.25 }}
-                className="md:hidden overflow-hidden border-t border-slate-100 dark:border-brand-emerald-900/50"
-              >
-                <div className="flex flex-col px-5 py-5 gap-4">
-                  {navLinks.map((link) => (
+        {/* Mobile Menu Panel */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25 }}
+              className="md:hidden overflow-hidden border-t border-slate-100 dark:border-brand-emerald-900/50"
+            >
+              <div className="flex flex-col px-5 py-5 gap-4">
+                {navLinks.map((link) => {
+                  const finalHref = (!isHome && link.href.startsWith('#')) ? `/${link.href}` : link.href;
+                  return (
                     <a
                       key={link.name}
-                      href={link.href}
+                      href={finalHref}
                       onClick={(e) => {
                         if (link.href.startsWith('/')) {
                           e.preventDefault();
                           navigate(link.href);
+                        } else if (!isHome && link.href.startsWith('#')) {
+                          e.preventDefault();
+                          navigate(finalHref);
                         }
                         setIsOpen(false);
                       }}
@@ -147,20 +136,24 @@ export default function Header() {
                       <link.icon className="w-5 h-5 text-brand-emerald-500 dark:text-brand-gold-500" />
                       {link.name}
                     </a>
-                  ))}
-                  <hr className="border-slate-200 dark:border-brand-emerald-900" />
-                  <a
-                    href="#explore"
-                    onClick={() => setIsOpen(false)}
-                    className="w-full py-2.5 rounded-full text-center bg-brand-emerald-500 dark:bg-brand-gold-500 text-white dark:text-brand-emerald-950 font-semibold text-sm shadow-sm"
-                  >
-                    {t('nav.startExploring')}
-                  </a>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        )}
+                  );
+                })}
+                {isHome && (
+                  <>
+                    <hr className="border-slate-200 dark:border-brand-emerald-900" />
+                    <a
+                      href="#explore"
+                      onClick={() => setIsOpen(false)}
+                      className="w-full py-2.5 rounded-full text-center bg-brand-emerald-500 dark:bg-brand-gold-500 text-white dark:text-brand-emerald-950 font-semibold text-sm shadow-sm"
+                    >
+                      {t('nav.startExploring')}
+                    </a>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </header>
   );
