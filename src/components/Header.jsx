@@ -24,7 +24,7 @@ export default function Header() {
     { name: 'Location', href: '#location', icon: MapPin },
     { name: 'Location de vacance', href: '#destinations', icon: Home },
     { name: 'Hotels', href: '/search', icon: Hotel },
-    { name: 'Restaurants', href: '#restaurants', icon: Utensils },
+    { name: 'Restaurants', href: '/restaurants', icon: Utensils },
   ];
 
   return (

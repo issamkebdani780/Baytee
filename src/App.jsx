@@ -14,6 +14,8 @@ import Footer from './components/Footer';
 import ScrollPlane from './components/ScrollPlane';
 import SearchResultsPage from './pages/SearchResultsPage';
 import HotelDetailPage from './pages/HotelDetailPage';
+import RestaurantsPage from './pages/RestaurantsPage';
+import RestaurantDetailPage from './pages/RestaurantDetailPage';
 
 function HomePage() {
   return (
@@ -42,6 +44,8 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/search" element={<SearchResultsPage />} />
       <Route path="/hotel/:id" element={<HotelDetailPage />} />
+      <Route path="/restaurants" element={<RestaurantsPage />} />
+      <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
     </Routes>
   );
 }
