@@ -271,7 +271,8 @@ function HotelCard({ hotel, searchParams }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="flex flex-col sm:flex-row bg-white dark:bg-[#0a1628] border border-slate-200/80 dark:border-brand-emerald-900/40 rounded-2xl overflow-hidden hover:shadow-lg dark:hover:shadow-brand-emerald-950/50 transition-all duration-300 group"
+      onClick={handleView}
+      className="flex flex-col sm:flex-row bg-white dark:bg-[#0a1628] border border-slate-200/80 dark:border-brand-emerald-900/40 rounded-2xl overflow-hidden hover:shadow-lg dark:hover:shadow-brand-emerald-950/50 transition-all duration-300 group cursor-pointer"
     >
       {/* ── Left: Image ── */}
       <div className="relative flex-shrink-0 w-full sm:w-64 lg:w-72 h-56 sm:h-auto">
@@ -282,8 +283,8 @@ function HotelCard({ hotel, searchParams }) {
         />
         {/* Heart save */}
         <button
-          onClick={() => setSaved(s => !s)}
-          className="absolute top-3 left-3 w-8 h-8 rounded-full bg-white/80 dark:bg-black/50 backdrop-blur-sm flex items-center justify-center hover:scale-110 transition-transform cursor-pointer shadow"
+          onClick={(e) => { e.stopPropagation(); setSaved(s => !s); }}
+          className="absolute top-3 left-3 w-8 h-8 rounded-full bg-white/80 dark:bg-black/50 backdrop-blur-sm flex items-center justify-center hover:scale-110 transition-transform cursor-pointer shadow z-10"
         >
           <Heart className={`w-4 h-4 transition-colors ${saved ? 'fill-red-500 text-red-500' : 'text-slate-500'}`} />
         </button>
