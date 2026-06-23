@@ -62,9 +62,16 @@ export default function Header() {
                     if (link.href.startsWith('/')) {
                       e.preventDefault();
                       navigate(link.href);
-                    } else if (!isHome && link.href.startsWith('#')) {
+                    } else if (link.href.startsWith('#')) {
                       e.preventDefault();
-                      navigate(finalHref);
+                      if (!isHome) {
+                        navigate('/');
+                        setTimeout(() => {
+                          document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                        }, 300);
+                      } else {
+                        document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                      }
                     }
                   }}
                   className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-white dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
@@ -125,9 +132,16 @@ export default function Header() {
                         if (link.href.startsWith('/')) {
                           e.preventDefault();
                           navigate(link.href);
-                        } else if (!isHome && link.href.startsWith('#')) {
+                        } else if (link.href.startsWith('#')) {
                           e.preventDefault();
-                          navigate(finalHref);
+                          if (!isHome) {
+                            navigate('/');
+                            setTimeout(() => {
+                              document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                            }, 300);
+                          } else {
+                            document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                          }
                         }
                         setIsOpen(false);
                       }}
