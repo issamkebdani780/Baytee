@@ -169,7 +169,7 @@ export default function Hero() {
           className="w-full h-full object-cover"
         />
         {/* Soft elegant overlays to blend with light and dark modes, maintaining readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-85% to-[#FCFBF9] dark:from-transparent dark:via-transparent dark:via-85% dark:to-[#060b14] transition-colors duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-85% to-[#FCFBF9] dark:from-transparent dark:via-transparent dark:via-85% dark:to-[#0a1628] transition-colors duration-300" />
       </div>
 
       <div className="relative pt-28 pb-12 flex flex-col items-center justify-center z-10">

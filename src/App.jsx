@@ -17,7 +17,7 @@ import HotelDetailPage from './pages/HotelDetailPage';
 
 function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-[#FCFBF9] text-slate-900 transition-colors duration-300 dark:bg-[#060b14] dark:text-slate-100 selection:bg-brand-gold-500 selection:text-brand-emerald-950 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans bg-[#FCFBF9] text-slate-900 transition-colors duration-300 dark:bg-[#0a1628] dark:text-slate-100 selection:bg-brand-gold-500 selection:text-brand-emerald-950 overflow-x-hidden">
       <ScrollPlane />
       <Header />
       <main className="flex-grow">
