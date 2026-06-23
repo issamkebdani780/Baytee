@@ -57,7 +57,7 @@ export default function Header() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-slate-300 dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
+                  className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-white dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
                 >
                   <link.icon className="w-4 h-4 mb-0.5" />
                   {link.name}
@@ -130,7 +130,7 @@ export default function Header() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-2 text-base font-medium text-slate-700 hover:text-brand-emerald-600 dark:text-slate-200 dark:hover:text-brand-gold-400 transition-colors"
+                      className="flex items-center gap-2 text-base font-medium text-slate-700 hover:text-brand-emerald-600 dark:text-white dark:hover:text-brand-gold-400 transition-colors"
                     >
                       <link.icon className="w-5 h-5 text-brand-emerald-500 dark:text-brand-gold-500" />
                       {link.name}

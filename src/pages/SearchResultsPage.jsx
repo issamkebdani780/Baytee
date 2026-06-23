@@ -3,7 +3,8 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Star, MapPin, ChevronDown, ChevronUp, ShieldAlert, Loader2,
-  X, Check, SlidersHorizontal, ArrowLeft, Heart
+  X, Check, SlidersHorizontal, ArrowLeft, Heart,
+  Utensils, WineOff, Users, Droplets, Coffee, Home, ShieldCheck
 } from 'lucide-react';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
@@ -77,14 +78,14 @@ function buildFilterSections(backendFilters) {
     { key: 'halalFood.onRequest', label: 'Halal food on request',   count: f.halalFood?.onRequest || 0 },
     { key: 'halalFood.nearby',    label: 'Halal food nearby',       count: f.halalFood?.nearby || 0 },
   ];
-  if (halalOptions.length > 0) sections.push({ id: 'halalFood', title: 'Halal food', options: halalOptions });
+  if (halalOptions.length > 0) sections.push({ id: 'halalFood', title: 'Halal food', icon: Utensils, options: halalOptions });
 
   // --- Alcohol-free ---
   const alcoholOptions = [
     { key: 'alcoholFree.property',   label: 'Alcohol-free property',   count: f.alcoholFree?.property || 0 },
     { key: 'alcoholFree.restaurant', label: 'Alcohol-free restaurant', count: f.alcoholFree?.restaurant || 0 },
   ];
-  if (alcoholOptions.length > 0) sections.push({ id: 'alcoholFree', title: 'Alcohol-free areas', options: alcoholOptions });
+  if (alcoholOptions.length > 0) sections.push({ id: 'alcoholFree', title: 'Alcohol-free areas', icon: WineOff, options: alcoholOptions });
 
   // --- Leisure for ladies ---
   const leisureOptions = [
@@ -94,18 +95,18 @@ function buildFilterSections(backendFilters) {
     { key: 'wellnessSpa.ladiesOnly',label: 'Ladies-only spa',        count: f.wellnessSpa?.ladiesOnly || 0 },
     { key: 'beach.ladiesOnly',      label: 'Ladies-only beach',      count: f.beach?.ladiesOnly || 0 },
   ];
-  if (leisureOptions.length > 0) sections.push({ id: 'leisure', title: 'Leisure for ladies and family', options: leisureOptions });
+  if (leisureOptions.length > 0) sections.push({ id: 'leisure', title: 'Leisure for ladies and family', icon: Users, options: leisureOptions });
 
   // --- Bidet amenities ---
   const bidetOptions = [
     { key: 'bidetAmenities.available', label: 'Bidet amenities', count: f.bidetAmenities?.available || 0 },
   ];
-  if (bidetOptions.length > 0) sections.push({ id: 'bidet', title: 'Bidet amenities', options: bidetOptions });
+  if (bidetOptions.length > 0) sections.push({ id: 'bidet', title: 'Bidet amenities', icon: Droplets, options: bidetOptions });
 
   // --- Stars ---
   const starOptions = [5, 4, 3, 2, 1]
     .map(n => ({ key: `starRating.${n}`, label: `${n} Star${n > 1 ? 's' : ''}`, count: f.starRating?.[n] || f.starRating?.[String(n)] || 0 }));
-  if (starOptions.length > 0) sections.push({ id: 'stars', title: 'Stars', options: starOptions });
+  if (starOptions.length > 0) sections.push({ id: 'stars', title: 'Stars', icon: Star, options: starOptions });
 
   // --- Meal plan ---
   const mealOptions = [
@@ -116,7 +117,7 @@ function buildFilterSections(backendFilters) {
     { key: 'mealPlan.selfCatering',      label: 'Self catering',       count: f.mealPlan?.selfCatering || 0 },
     { key: 'mealPlan.roomOnly',          label: 'Room only',           count: f.mealPlan?.roomOnly || 0 },
   ];
-  if (mealOptions.length > 0) sections.push({ id: 'mealPlan', title: 'Meal plan', options: mealOptions });
+  if (mealOptions.length > 0) sections.push({ id: 'mealPlan', title: 'Meal plan', icon: Coffee, options: mealOptions });
 
   // --- Property type ---
   const propOptions = [
@@ -127,11 +128,11 @@ function buildFilterSections(backendFilters) {
     { key: 'propertyType.guestHouse',label: 'Guest house', count: f.propertyType?.guestHouse || 0 },
     { key: 'propertyType.hostel',   label: 'Hostel',   count: f.propertyType?.hostel || 0 },
   ];
-  if (propOptions.length > 0) sections.push({ id: 'propertyType', title: 'Property type', options: propOptions });
+  if (propOptions.length > 0) sections.push({ id: 'propertyType', title: 'Property type', icon: Home, options: propOptions });
 
   // --- Free cancellation ---
   const cancelCount = f.freeCancellation?.freeCancellation || 0;
-  sections.push({ id: 'freeCancellation', title: 'Free cancellation', options: [
+  sections.push({ id: 'freeCancellation', title: 'Free cancellation', icon: ShieldCheck, options: [
     { key: 'freeCancellation.freeCancellation', label: 'Free cancellation', count: cancelCount },
   ]});
 
@@ -167,7 +168,7 @@ function hotelPassesFilters(hotel, activeKeys) {
 }
 
 // ═══ Collapsible sidebar filter section ══════════════════════════════════════
-function SidebarSection({ title, options, activeKeys, onToggle, defaultOpen = true }) {
+function SidebarSection({ title, icon: Icon, options, activeKeys, onToggle, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
   const hasActive = options.some(o => activeKeys.has(o.key));
 
@@ -178,6 +179,7 @@ function SidebarSection({ title, options, activeKeys, onToggle, defaultOpen = tr
         className="w-full flex items-center justify-between py-3.5 px-1 text-sm font-semibold text-slate-800 dark:text-slate-200 hover:text-brand-emerald-600 dark:hover:text-brand-gold-400 transition-colors cursor-pointer"
       >
         <span className="flex items-center gap-2">
+          {Icon && <Icon className="w-5 h-5 text-brand-emerald-500 dark:text-brand-gold-500" />}
           {title}
           {hasActive && <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald-500 dark:bg-brand-gold-500" />}
         </span>
@@ -460,6 +462,7 @@ function SidebarContent({ isStreaming, displayedHotels, backendFilters, filterSe
         <SidebarSection
           key={sec.id}
           title={sec.title}
+          icon={sec.icon}
           options={sec.options}
           activeKeys={activeKeys}
           onToggle={toggleKey}
