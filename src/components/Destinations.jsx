@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { searchDestinations } from '../api';
 
 const CITIES = [
   {
@@ -150,6 +152,38 @@ const PICKS = [
 
 export default function Destinations() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  // Click handler: resolve real city/hotel ID then navigate to search results
+  const handleDestinationClick = async (dest) => {
+    const tomorrow  = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+    const dayAfter3 = new Date(Date.now() + 4 * 86400000).toISOString().split('T')[0];
+    const paxRooms  = JSON.stringify([{ adults: 2, children: 0, childrenAges: [] }]);
+
+    let destId   = '';
+    let destType = 'city';
+    let destName = dest.name;
+
+    try {
+      const res = await searchDestinations(dest.name);
+      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+        const match = res.data.find(d => d.name.toLowerCase() === dest.name.toLowerCase()) || res.data[0];
+        destId   = match.id.toString();
+        destType = match.type;
+        destName = match.name;
+      }
+    } catch (err) {
+      console.error('Failed to resolve destination:', err);
+    }
+
+    if (!destId) {
+      // Fallback: navigate anyway, the search page handles missing IDs gracefully
+      destId = '0';
+    }
+
+    const params = new URLSearchParams({ destId, destType, destName, checkIn: tomorrow, checkOut: dayAfter3, paxRooms });
+    navigate(`/search?${params.toString()}`);
+  };
   
   // Interactive Tab State
   const [activeTab, setActiveTab] = useState('picks'); // 'picks' | 'countries' | 'cities'
@@ -270,6 +304,7 @@ export default function Destinations() {
               <div
                 key={`${dest.name}-${idx}`}
                 className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 px-4"
+                onClick={() => handleDestinationClick(dest)}
               >
                 <motion.div
                   whileHover={{ y: -8 }}

@@ -72,71 +72,68 @@ function buildFilterSections(backendFilters) {
 
   // --- Halal Food ---
   const halalOptions = [
-    { key: 'halalFood.all',       label: 'All halal food',          count: f.halalFood?.all },
-    { key: 'halalFood.some',      label: 'Some halal food',         count: f.halalFood?.some },
-    { key: 'halalFood.onRequest', label: 'Halal food on request',   count: f.halalFood?.onRequest },
-    { key: 'halalFood.nearby',    label: 'Halal food nearby',       count: f.halalFood?.nearby },
-  ].filter(o => o.count > 0);
+    { key: 'halalFood.all',       label: 'All halal food',          count: f.halalFood?.all || 0 },
+    { key: 'halalFood.some',      label: 'Some halal food',         count: f.halalFood?.some || 0 },
+    { key: 'halalFood.onRequest', label: 'Halal food on request',   count: f.halalFood?.onRequest || 0 },
+    { key: 'halalFood.nearby',    label: 'Halal food nearby',       count: f.halalFood?.nearby || 0 },
+  ];
   if (halalOptions.length > 0) sections.push({ id: 'halalFood', title: 'Halal food', options: halalOptions });
 
   // --- Alcohol-free ---
   const alcoholOptions = [
-    { key: 'alcoholFree.property',   label: 'Alcohol-free property',   count: f.alcoholFree?.property },
-    { key: 'alcoholFree.restaurant', label: 'Alcohol-free restaurant', count: f.alcoholFree?.restaurant },
-  ].filter(o => o.count > 0);
+    { key: 'alcoholFree.property',   label: 'Alcohol-free property',   count: f.alcoholFree?.property || 0 },
+    { key: 'alcoholFree.restaurant', label: 'Alcohol-free restaurant', count: f.alcoholFree?.restaurant || 0 },
+  ];
   if (alcoholOptions.length > 0) sections.push({ id: 'alcoholFree', title: 'Alcohol-free areas', options: alcoholOptions });
 
   // --- Leisure for ladies ---
   const leisureOptions = [
-    { key: 'pool.ladiesOnly',       label: 'Ladies-only pool',       count: f.pool?.ladiesOnly },
-    { key: 'pool.privateHire',      label: 'Private pool hire',      count: f.pool?.privateHire },
-    { key: 'pool.mixedModest',      label: 'Pool • Modest swimwear', count: f.pool?.mixedModest },
-    { key: 'wellnessSpa.ladiesOnly',label: 'Ladies-only spa',        count: f.wellnessSpa?.ladiesOnly },
-    { key: 'beach.ladiesOnly',      label: 'Ladies-only beach',      count: f.beach?.ladiesOnly },
-  ].filter(o => o.count > 0);
+    { key: 'pool.ladiesOnly',       label: 'Ladies-only pool',       count: f.pool?.ladiesOnly || 0 },
+    { key: 'pool.privateHire',      label: 'Private pool hire',      count: f.pool?.privateHire || 0 },
+    { key: 'pool.mixedModest',      label: 'Pool • Modest swimwear', count: f.pool?.mixedModest || 0 },
+    { key: 'wellnessSpa.ladiesOnly',label: 'Ladies-only spa',        count: f.wellnessSpa?.ladiesOnly || 0 },
+    { key: 'beach.ladiesOnly',      label: 'Ladies-only beach',      count: f.beach?.ladiesOnly || 0 },
+  ];
   if (leisureOptions.length > 0) sections.push({ id: 'leisure', title: 'Leisure for ladies and family', options: leisureOptions });
 
   // --- Bidet amenities ---
   const bidetOptions = [
-    { key: 'bidetAmenities.available', label: 'Bidet amenities', count: f.bidetAmenities?.available },
-  ].filter(o => o.count > 0);
+    { key: 'bidetAmenities.available', label: 'Bidet amenities', count: f.bidetAmenities?.available || 0 },
+  ];
   if (bidetOptions.length > 0) sections.push({ id: 'bidet', title: 'Bidet amenities', options: bidetOptions });
 
   // --- Stars ---
   const starOptions = [5, 4, 3, 2, 1]
-    .map(n => ({ key: `starRating.${n}`, label: `${n} Star${n > 1 ? 's' : ''}`, count: f.starRating?.[n] || f.starRating?.[String(n)] }))
-    .filter(o => o.count > 0);
+    .map(n => ({ key: `starRating.${n}`, label: `${n} Star${n > 1 ? 's' : ''}`, count: f.starRating?.[n] || f.starRating?.[String(n)] || 0 }));
   if (starOptions.length > 0) sections.push({ id: 'stars', title: 'Stars', options: starOptions });
 
   // --- Meal plan ---
   const mealOptions = [
-    { key: 'mealPlan.allInclusive',      label: 'All inclusive',       count: f.mealPlan?.allInclusive },
-    { key: 'mealPlan.breakfastIncluded', label: 'Breakfast included',  count: f.mealPlan?.breakfastIncluded },
-    { key: 'mealPlan.halfBoard',         label: 'Half board',          count: f.mealPlan?.halfBoard },
-    { key: 'mealPlan.fullBoard',         label: 'Full board',          count: f.mealPlan?.fullBoard },
-    { key: 'mealPlan.selfCatering',      label: 'Self catering',       count: f.mealPlan?.selfCatering },
-    { key: 'mealPlan.roomOnly',          label: 'Room only',           count: f.mealPlan?.roomOnly },
-  ].filter(o => o.count > 0);
+    { key: 'mealPlan.allInclusive',      label: 'All inclusive',       count: f.mealPlan?.allInclusive || 0 },
+    { key: 'mealPlan.breakfastIncluded', label: 'Breakfast included',  count: f.mealPlan?.breakfastIncluded || 0 },
+    { key: 'mealPlan.halfBoard',         label: 'Half board',          count: f.mealPlan?.halfBoard || 0 },
+    { key: 'mealPlan.fullBoard',         label: 'Full board',          count: f.mealPlan?.fullBoard || 0 },
+    { key: 'mealPlan.selfCatering',      label: 'Self catering',       count: f.mealPlan?.selfCatering || 0 },
+    { key: 'mealPlan.roomOnly',          label: 'Room only',           count: f.mealPlan?.roomOnly || 0 },
+  ];
   if (mealOptions.length > 0) sections.push({ id: 'mealPlan', title: 'Meal plan', options: mealOptions });
 
   // --- Property type ---
   const propOptions = [
-    { key: 'propertyType.hotel',    label: 'Hotel',    count: f.propertyType?.hotel },
-    { key: 'propertyType.resort',   label: 'Resort',   count: f.propertyType?.resort },
-    { key: 'propertyType.villa',    label: 'Villa',    count: f.propertyType?.villa },
-    { key: 'propertyType.apartment',label: 'Apartment',count: f.propertyType?.apartment },
-    { key: 'propertyType.guestHouse',label: 'Guest house', count: f.propertyType?.guestHouse },
-    { key: 'propertyType.hostel',   label: 'Hostel',   count: f.propertyType?.hostel },
-  ].filter(o => o.count > 0);
+    { key: 'propertyType.hotel',    label: 'Hotel',    count: f.propertyType?.hotel || 0 },
+    { key: 'propertyType.resort',   label: 'Resort',   count: f.propertyType?.resort || 0 },
+    { key: 'propertyType.villa',    label: 'Villa',    count: f.propertyType?.villa || 0 },
+    { key: 'propertyType.apartment',label: 'Apartment',count: f.propertyType?.apartment || 0 },
+    { key: 'propertyType.guestHouse',label: 'Guest house', count: f.propertyType?.guestHouse || 0 },
+    { key: 'propertyType.hostel',   label: 'Hostel',   count: f.propertyType?.hostel || 0 },
+  ];
   if (propOptions.length > 0) sections.push({ id: 'propertyType', title: 'Property type', options: propOptions });
 
   // --- Free cancellation ---
-  const cancelCount = f.freeCancellation?.freeCancellation;
-  if (cancelCount > 0) {
-    sections.push({ id: 'freeCancellation', title: 'Free cancellation', options: [
-      { key: 'freeCancellation.freeCancellation', label: 'Free cancellation', count: cancelCount },
-    ]});
-  }
+  const cancelCount = f.freeCancellation?.freeCancellation || 0;
+  sections.push({ id: 'freeCancellation', title: 'Free cancellation', options: [
+    { key: 'freeCancellation.freeCancellation', label: 'Free cancellation', count: cancelCount },
+  ]});
 
   return sections;
 }
@@ -201,17 +198,30 @@ function SidebarSection({ title, options, activeKeys, onToggle, defaultOpen = tr
             <div className="pb-3 space-y-0.5">
               {options.map(opt => {
                 const checked = activeKeys.has(opt.key);
+                const disabled = !checked && (opt.count === 0 || opt.count === undefined);
                 return (
                   <label
                     key={opt.key}
-                    className="flex items-center justify-between py-1.5 px-1 rounded-lg cursor-pointer group hover:bg-slate-50 dark:hover:bg-brand-emerald-900/20 transition-colors"
-                    onClick={() => onToggle(opt.key)}
+                    className={`flex items-center justify-between py-1.5 px-1 rounded-lg transition-colors ${
+                      disabled 
+                        ? 'opacity-50 cursor-not-allowed' 
+                        : 'cursor-pointer group hover:bg-slate-50 dark:hover:bg-brand-emerald-900/20'
+                    }`}
+                    onClick={(e) => {
+                      if (disabled) {
+                        e.preventDefault();
+                        return;
+                      }
+                      onToggle(opt.key);
+                    }}
                   >
                     <span className="flex items-center gap-2.5">
                       <span className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 border transition-all
                         ${checked
                           ? 'bg-brand-emerald-500 dark:bg-brand-gold-500 border-brand-emerald-500 dark:border-brand-gold-500'
-                          : 'border-slate-300 dark:border-brand-emerald-700 group-hover:border-brand-emerald-400'}`}
+                          : disabled
+                            ? 'border-slate-200 dark:border-brand-emerald-800 bg-slate-100 dark:bg-brand-emerald-900'
+                            : 'border-slate-300 dark:border-brand-emerald-700 group-hover:border-brand-emerald-400'}`}
                       >
                         {checked && <Check className="w-2.5 h-2.5 text-white dark:text-brand-emerald-950" />}
                       </span>
