@@ -177,7 +177,7 @@ export default function HotelDetailPage() {
       guestNationality: 'DZ',
       checkIn,
       checkOut,
-      paxRooms,
+      paxRooms: paxRooms.map(r => ({ Adults: r.adults ?? r.Adults, Children: r.children ?? r.Children, ChildrenAges: r.childrenAges ?? r.ChildrenAges ?? [] })),
       filters: { refundable: false, mealType: 'All' },
     };
 
