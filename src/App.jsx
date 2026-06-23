@@ -26,7 +26,7 @@ function HomePage() {
       <main className="flex-grow">
         <Hero />
         <Features />
-        {/* <AIAssistant /> */}
+        <AIAssistant />
         <Statistics />
         <Destinations />
         <Testimonials />
