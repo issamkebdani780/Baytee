@@ -245,7 +245,7 @@ export default function Destinations() {
   };
 
   return (
-    <section id="destinations" className="py-24 bg-white dark:bg-[#07140e] relative overflow-hidden transition-colors duration-300">
+    <section id="destinations" className="py-24 bg-white dark:bg-[#0a1628] relative overflow-hidden transition-colors duration-300">
       {/* Subtle decorations */}
       <div className="absolute top-10 left-10 w-80 h-80 bg-brand-emerald-500/5 rounded-full ambient-glow pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-brand-gold-500/5 rounded-full ambient-glow pointer-events-none" />

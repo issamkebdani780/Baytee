@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, MapPin, Home, Hotel, Utensils } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -21,9 +21,10 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: t('nav.features'),            href: '#features' },
-    { name: t('appDownload.sectionLabel'), href: '#mobile-app' },
-    { name: t('nav.destinations'),         href: '#destinations' },
+    { name: 'Location', href: '#location', icon: MapPin },
+    { name: 'Location de vacance', href: '#vacation', icon: Home },
+    { name: 'Hotels', href: '#hotels', icon: Hotel },
+    { name: 'Restaurants', href: '#restaurants', icon: Utensils },
   ];
 
   return (
@@ -56,8 +57,9 @@ export default function Header() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-slate-300 dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
+                  className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-slate-300 dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
                 >
+                  <link.icon className="w-4 h-4 mb-0.5" />
                   {link.name}
                   <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-gold-500 rounded-full transition-all duration-300 group-hover:w-full" />
                 </a>
@@ -128,8 +130,9 @@ export default function Header() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="text-base font-medium text-slate-700 hover:text-brand-emerald-600 dark:text-slate-200 dark:hover:text-brand-gold-400 transition-colors"
+                      className="flex items-center gap-2 text-base font-medium text-slate-700 hover:text-brand-emerald-600 dark:text-slate-200 dark:hover:text-brand-gold-400 transition-colors"
                     >
+                      <link.icon className="w-5 h-5 text-brand-emerald-500 dark:text-brand-gold-500" />
                       {link.name}
                     </a>
                   ))}

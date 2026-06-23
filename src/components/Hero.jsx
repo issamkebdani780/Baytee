@@ -160,7 +160,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative islamic-pattern">
+    <section className="relative islamic-pattern mb-24 pb-30">
       {/* Background Image with Elegant Theme-Aware Gradient Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none w-full h-full">
         <img
@@ -313,11 +313,11 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.3] mb-10"
           >
-            <span className="inline-block bg-black/25 dark:bg-brand-emerald-950/30 backdrop-blur-md px-5 py-2 rounded-2xl border border-white/10 dark:border-brand-emerald-800/10 shadow-sm mb-3">
+            <span className="inline-block bg-black/5 dark:bg-brand-emerald-950/5 backdrop-blur-sm px-5 py-2 rounded-2xl border border-white/5 dark:border-brand-emerald-800/5 shadow-sm mb-3">
               {t('hero.heading1')}
             </span>
             <br />
-            <span className="inline-block bg-black/25 dark:bg-brand-emerald-950/30 backdrop-blur-md px-5 py-2 rounded-2xl border border-white/10 dark:border-brand-emerald-800/10 shadow-sm">
+            <span className="inline-block bg-black/5 dark:bg-brand-emerald-950/5 backdrop-blur-sm px-5 py-2 rounded-2xl border border-white/5 dark:border-brand-emerald-800/5 shadow-sm">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold-200 via-brand-gold-500 to-brand-gold-200 font-serif italic font-normal">
                 {t('hero.heading2')}
               </span>{' '}
@@ -376,10 +376,10 @@ export default function Hero() {
                               {defaultSuggestions.map((item) => {
                                 const currentLang = i18n.language || 'en';
                                 const countryName = item.countryNameTranslations?.[currentLang] || item.countryNameTranslations?.en || '';
-                                
+
                                 let displayLabel = item.name;
                                 let subLabel = '';
-                                
+
                                 if (item.type === 'city') {
                                   subLabel = countryName ? `${countryName}` : '';
                                 } else if (item.type === 'hotel') {
@@ -392,7 +392,7 @@ export default function Hero() {
                                   : (i18n.language === 'ar' ? 'مدينة' : i18n.language === 'fr' ? 'Ville' : 'City');
 
                                 const propertiesLabel = i18n.language === 'ar' ? 'عقار' : i18n.language === 'fr' ? 'propriétés' : 'properties';
-                                
+
                                 return (
                                   <button
                                     key={`${item.type}-${item.id}`}
@@ -423,7 +423,7 @@ export default function Hero() {
                                         )}
                                       </div>
                                     </div>
-                                    
+
                                     <div className="flex items-center gap-2">
                                       {item.type === 'city' && typeof item.hotelsCount === 'number' && (
                                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-emerald-50 dark:bg-brand-emerald-900/60 text-brand-emerald-800 dark:text-brand-gold-200 border border-brand-emerald-100/10 dark:border-brand-emerald-800/20">
@@ -466,10 +466,10 @@ export default function Hero() {
                           {apiSuggestions.map((item) => {
                             const currentLang = i18n.language || 'en';
                             const countryName = item.countryNameTranslations?.[currentLang] || item.countryNameTranslations?.en || '';
-                            
+
                             let displayLabel = item.name;
                             let subLabel = '';
-                            
+
                             if (item.type === 'city') {
                               subLabel = countryName ? `${countryName}` : '';
                             } else if (item.type === 'hotel') {
@@ -482,7 +482,7 @@ export default function Hero() {
                               : (i18n.language === 'ar' ? 'مدينة' : i18n.language === 'fr' ? 'Ville' : 'City');
 
                             const propertiesLabel = i18n.language === 'ar' ? 'عقار' : i18n.language === 'fr' ? 'propriétés' : 'properties';
-                            
+
                             return (
                               <button
                                 key={`${item.type}-${item.id}`}
@@ -513,7 +513,7 @@ export default function Hero() {
                                     )}
                                   </div>
                                 </div>
-                                
+
                                 <div className="flex items-center gap-2">
                                   {item.type === 'city' && typeof item.hotelsCount === 'number' && (
                                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-emerald-50 dark:bg-brand-emerald-900/60 text-brand-emerald-800 dark:text-brand-gold-200 border border-brand-emerald-100/10 dark:border-brand-emerald-800/20">
@@ -622,7 +622,7 @@ export default function Hero() {
                                 </button>
                               )}
                             </div>
-                            
+
                             {/* Adults */}
                             <div className="flex items-center justify-between mb-3">
                               <div>
@@ -718,7 +718,7 @@ export default function Hero() {
                           </div>
                         ))}
                       </div>
-                      
+
                       <button
                         type="button"
                         onClick={() => setRooms(prev => [...prev, { adults: 1, children: 0, childrenAges: [] }])}

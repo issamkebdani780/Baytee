@@ -81,7 +81,7 @@ export default function Features() {
   };
 
   return (
-    <section id="features" className="py-20 md:py-28 bg-[#FCFBF9] dark:bg-[#07140e] relative overflow-hidden">
+    <section id="features" className="py-20 md:py-28 bg-[#FCFBF9] dark:bg-[#0a1628] relative overflow-hidden">
       {/* Decorative background vectors */}
       <div className="absolute top-1/3 left-1/10 w-72 h-72 bg-brand-gold-100/10 dark:bg-brand-emerald-800/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-brand-emerald-250/10 dark:bg-brand-emerald-900/5 rounded-full blur-3xl pointer-events-none" />
