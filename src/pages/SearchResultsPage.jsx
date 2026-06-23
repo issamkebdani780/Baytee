@@ -44,10 +44,14 @@ function mapHotel(h, destName) {
   if (f.freeCancellation?.freeCancellation) features.push({ key: 'free_cancel', label: 'Free cancellation' });
   if (features.length === 0)  features.push({ key: 'halal_friendly', label: 'Halal friendly' });
 
+  const countryStr = h.countryNameTranslations?.en || h.countryName || h.country || '';
+  const cityStr = h.city || '';
+  const computedLocation = [cityStr, countryStr].filter(Boolean).join(', ');
+
   return {
     id: h.id,
     name: h.name,
-    location: destName || 'Unknown',
+    location: computedLocation || destName || 'Unknown',
     rating: h.rating || 0,
     reviewScore: h.reviewScore || h.rating || 0,
     reviewLabel: h.reviewLabel || (h.reviewScore >= 9 ? 'Exceptional' : h.reviewScore >= 8 ? 'Very good' : h.reviewScore >= 7 ? 'Good' : ''),
@@ -490,8 +494,14 @@ export default function SearchResultsPage() {
   const destId   = searchParams.get('destId')   || '24212';
   const destType = searchParams.get('destType') || 'city';
   const destName = searchParams.get('destName') || 'Hotels';
-  const checkIn  = searchParams.get('checkIn')  || '';
-  const checkOut = searchParams.get('checkOut') || '';
+  
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const checkoutDate = new Date(tomorrow);
+  checkoutDate.setDate(checkoutDate.getDate() + 3);
+  
+  const checkIn  = searchParams.get('checkIn')  || tomorrow.toISOString().split('T')[0];
+  const checkOut = searchParams.get('checkOut') || checkoutDate.toISOString().split('T')[0];
   
   const rawPax = searchParams.get('paxRooms');
   const rawGuests = searchParams.get('guests');

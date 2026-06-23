@@ -22,8 +22,8 @@ export default function Header() {
 
   const navLinks = [
     { name: 'Location', href: '#location', icon: MapPin },
-    { name: 'Location de vacance', href: '#vacation', icon: Home },
-    { name: 'Hotels', href: '#hotels', icon: Hotel },
+    { name: 'Location de vacance', href: '#destinations', icon: Home },
+    { name: 'Hotels', href: '/search', icon: Hotel },
     { name: 'Restaurants', href: '#restaurants', icon: Utensils },
   ];
 
@@ -57,6 +57,12 @@ export default function Header() {
                 <a
                   key={link.name}
                   href={link.href}
+                  onClick={(e) => {
+                    if (link.href.startsWith('/')) {
+                      e.preventDefault();
+                      navigate(link.href);
+                    }
+                  }}
                   className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-white dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
                 >
                   <link.icon className="w-4 h-4 mb-0.5" />
@@ -129,7 +135,13 @@ export default function Header() {
                     <a
                       key={link.name}
                       href={link.href}
-                      onClick={() => setIsOpen(false)}
+                      onClick={(e) => {
+                        if (link.href.startsWith('/')) {
+                          e.preventDefault();
+                          navigate(link.href);
+                        }
+                        setIsOpen(false);
+                      }}
                       className="flex items-center gap-2 text-base font-medium text-slate-700 hover:text-brand-emerald-600 dark:text-white dark:hover:text-brand-gold-400 transition-colors"
                     >
                       <link.icon className="w-5 h-5 text-brand-emerald-500 dark:text-brand-gold-500" />
