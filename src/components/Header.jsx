@@ -1,28 +1,27 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Compass } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { name: t('nav.features'), href: '#features' },
+    { name: t('nav.features'),            href: '#features' },
     { name: t('appDownload.sectionLabel'), href: '#mobile-app' },
-    { name: t('nav.destinations'), href: '#destinations' },
-    // { name: t('nav.pricing'), href: '#pricing' },
+    { name: t('nav.destinations'),         href: '#destinations' },
   ];
 
   return (
@@ -39,11 +38,14 @@ export default function Header() {
         } backdrop-blur-xl`}
       >
         <div className="flex items-center justify-between px-5 py-3">
-          {/* Brand Logo */}
-          <a href="#" className="flex items-center gap-2.5 group shrink-0">
-            <img src="/logo.png" alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300 dark:hidden" />
+          {/* Brand Logo — clicks to home */}
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2.5 group shrink-0 cursor-pointer bg-transparent border-none p-0"
+          >
+            <img src="/logo.png"     alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300 dark:hidden" />
             <img src="/darklogo.png" alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300 hidden dark:block" />
-          </a>
+          </button>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
@@ -85,7 +87,7 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu Panel — inside the pill */}
+        {/* Mobile Menu Panel */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
