@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -47,79 +49,103 @@ export default function Header() {
             <img src="/darklogo.png" alt="Baytee Logo" className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300 hidden dark:block" />
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
+          {/* Desktop Navigation — home page only */}
+          {isHome && (
+            <nav className="hidden md:flex items-center gap-6">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-slate-300 dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
+                >
+                  {link.name}
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-gold-500 rounded-full transition-all duration-300 group-hover:w-full" />
+                </a>
+              ))}
+            </nav>
+          )}
+
+          {/* Action Controls — home page only */}
+          {isHome && (
+            <div className="hidden md:flex items-center gap-2.5 shrink-0">
+              <LanguageSwitcher />
+              <ThemeToggle />
               <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-slate-600 hover:text-brand-emerald-600 dark:text-slate-300 dark:hover:text-brand-gold-400 transition-colors duration-200 relative group whitespace-nowrap"
+                href="#explore"
+                className="px-5 py-2 rounded-full bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 font-semibold text-sm shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer whitespace-nowrap"
               >
-                {link.name}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-brand-gold-500 rounded-full transition-all duration-300 group-hover:w-full" />
+                {t('nav.startExploring')}
               </a>
-            ))}
-          </nav>
+            </div>
+          )}
 
-          {/* Action Controls */}
-          <div className="hidden md:flex items-center gap-2.5 shrink-0">
-            <LanguageSwitcher />
-            <ThemeToggle />
-            <a
-              href="#explore"
-              className="px-5 py-2 rounded-full bg-brand-emerald-500 hover:bg-brand-emerald-600 dark:bg-brand-gold-500 dark:hover:bg-brand-gold-600 text-white dark:text-brand-emerald-950 font-semibold text-sm shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer whitespace-nowrap"
-            >
-              {t('nav.startExploring')}
-            </a>
-          </div>
+          {/* Controls always visible */}
+          {!isHome && (
+            <div className="hidden md:flex items-center gap-2.5 shrink-0">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
+          )}
 
-          {/* Mobile Toggle */}
-          <div className="flex md:hidden items-center gap-2">
-            <LanguageSwitcher />
-            <ThemeToggle />
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-xl text-slate-600 hover:text-brand-emerald-500 dark:text-slate-300 dark:hover:text-brand-gold-500 hover:bg-slate-100 dark:hover:bg-brand-emerald-900/40 transition-all"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+          {/* Mobile Toggle — home page only */}
+          {isHome && (
+            <div className="flex md:hidden items-center gap-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-xl text-slate-600 hover:text-brand-emerald-500 dark:text-slate-300 dark:hover:text-brand-gold-500 hover:bg-slate-100 dark:hover:bg-brand-emerald-900/40 transition-all"
+                aria-label="Toggle menu"
+              >
+                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
+          )}
+
+          {/* Mobile Controls — other pages */}
+          {!isHome && (
+            <div className="flex md:hidden items-center gap-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
+          )}
         </div>
 
-        {/* Mobile Menu Panel */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="md:hidden overflow-hidden border-t border-slate-100 dark:border-brand-emerald-900/50"
-            >
-              <div className="flex flex-col px-5 py-5 gap-4">
-                {navLinks.map((link) => (
+        {/* Mobile Menu Panel — home page only */}
+        {isHome && (
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25 }}
+                className="md:hidden overflow-hidden border-t border-slate-100 dark:border-brand-emerald-900/50"
+              >
+                <div className="flex flex-col px-5 py-5 gap-4">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className="text-base font-medium text-slate-700 hover:text-brand-emerald-600 dark:text-slate-200 dark:hover:text-brand-gold-400 transition-colors"
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                  <hr className="border-slate-200 dark:border-brand-emerald-900" />
                   <a
-                    key={link.name}
-                    href={link.href}
+                    href="#explore"
                     onClick={() => setIsOpen(false)}
-                    className="text-base font-medium text-slate-700 hover:text-brand-emerald-600 dark:text-slate-200 dark:hover:text-brand-gold-400 transition-colors"
+                    className="w-full py-2.5 rounded-full text-center bg-brand-emerald-500 dark:bg-brand-gold-500 text-white dark:text-brand-emerald-950 font-semibold text-sm shadow-sm"
                   >
-                    {link.name}
+                    {t('nav.startExploring')}
                   </a>
-                ))}
-                <hr className="border-slate-200 dark:border-brand-emerald-900" />
-                <a
-                  href="#explore"
-                  onClick={() => setIsOpen(false)}
-                  className="w-full py-2.5 rounded-full text-center bg-brand-emerald-500 dark:bg-brand-gold-500 text-white dark:text-brand-emerald-950 font-semibold text-sm shadow-sm"
-                >
-                  {t('nav.startExploring')}
-                </a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
       </motion.div>
     </header>
   );
