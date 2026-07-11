@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -40,6 +41,21 @@ function HomePage() {
 }
 
 function App() {
+  useEffect(() => {
+    async function getUserCountry() {
+      try {
+        const res = await fetch('https://ipwho.is/');
+        if (!res.ok) throw new Error('Failed to fetch IP location');
+        const data = await res.json();
+        console.log("User detected location:", data);
+        console.log("User country:", data.country);
+      } catch (err) {
+        console.error("Failed to detect location:", err);
+      }
+    }
+    getUserCountry();
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
