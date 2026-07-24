@@ -21,10 +21,8 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: 'Location', href: '/apartments', icon: MapPin },
-    { name: 'Location de vacance', href: '#destinations', icon: Home },
-    { name: 'Hotels', href: '/search', icon: Hotel },
-    { name: 'Restaurants', href: '/restaurants', icon: Utensils },
+    { name: 'Villas', href: '#destinations', icon: Home },
+    { name: 'Hôtels', href: '/search', icon: Hotel },
   ];
 
   return (
@@ -51,7 +49,7 @@ export default function Header() {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => {
               const finalHref = (!isHome && link.href.startsWith('#')) ? `/${link.href}` : link.href;
               return (

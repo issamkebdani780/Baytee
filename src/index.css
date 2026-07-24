@@ -3,27 +3,27 @@
 @custom-variant dark (&:is(.dark, .dark *));
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Gotham Rounded", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --font-accent: "Cinzel", serif;
 
-  --color-brand-emerald-50: #f1f5f9;
-  --color-brand-emerald-100: #e2e8f0;
-  --color-brand-emerald-200: #cbd5e1;
-  --color-brand-emerald-500: #1e3a5f;
-  --color-brand-emerald-600: #172a45;
-  --color-brand-emerald-700: #101d30;
-  --color-brand-emerald-800: #0b1523;
-  --color-brand-emerald-900: #060b14;
-  --color-brand-emerald-950: #03060a;
+  --color-brand-emerald-50: #f8f9fa;
+  --color-brand-emerald-100: #f1f3f5;
+  --color-brand-emerald-200: #e9ecef;
+  --color-brand-emerald-500: #495057;
+  --color-brand-emerald-600: #343a40;
+  --color-brand-emerald-700: #212529;
+  --color-brand-emerald-800: #121416;
+  --color-brand-emerald-900: #08090a;
+  --color-brand-emerald-950: #000000;
 
-  --color-brand-gold-50: #FAF7F2;
-  --color-brand-gold-100: #F3EAD7;
-  --color-brand-gold-200: #E6D4AF;
-  --color-brand-gold-500: #c5a880;
-  --color-brand-gold-600: #b5956a;
-  --color-brand-gold-700: #9e7f55;
-  --color-brand-gold-800: #7b6241;
+  --color-brand-gold-50: #fdfaf7;
+  --color-brand-gold-100: #f7ede3;
+  --color-brand-gold-200: #e8cbaa;
+  --color-brand-gold-500: #c59763;
+  --color-brand-gold-600: #af7a50;
+  --color-brand-gold-700: #8c6240;
+  --color-brand-gold-800: #694930;
 }
 
 @layer utilities {
@@ -44,31 +44,31 @@
   }
 
   .text-glow-gold {
-    text-shadow: 0 0 12px rgba(197, 168, 128, 0.4);
+    text-shadow: 0 0 12px rgba(197, 151, 99, 0.4);
   }
 
   .gold-border-gradient {
-    border-image: linear-gradient(to right, #FAF7F2, #c5a880, #FAF7F2) 1;
+    border-image: linear-gradient(to right, #fdfaf7, #c59763, #fdfaf7) 1;
   }
 
   .dark .gold-border-gradient {
-    border-image: linear-gradient(to right, #060b14, #c5a880, #060b14) 1;
+    border-image: linear-gradient(to right, #000000, #c59763, #000000) 1;
   }
 
   .text-3d-white {
-    text-shadow: 1px 1px 0 #cbd5e1, 2px 2px 0 #94a3b8, 3px 3px 0 #64748b, 4px 4px 12px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px 0 #cbd5e1, 2px 2px 0 #94a3b8, 3px 3px 0 #64748b, 4px 4px 12px rgba(0, 0, 0, 0.5);
   }
 
   .dark .text-3d-white {
-    text-shadow: 1px 1px 0 #1e3a5f, 2px 2px 0 #172a45, 3px 3px 0 #101d30, 4px 4px 12px rgba(0,0,0,0.8);
+    text-shadow: 1px 1px 0 #1e3a5f, 2px 2px 0 #172a45, 3px 3px 0 #101d30, 4px 4px 12px rgba(0, 0, 0, 0.8);
   }
 
   .text-3d-gold {
-    filter: drop-shadow(1px 1px 0px #b5956a) drop-shadow(1px 1px 0px #9e7f55) drop-shadow(1px 1px 0px #7b6241) drop-shadow(2px 2px 8px rgba(0,0,0,0.5));
+    filter: drop-shadow(1px 1px 0px #af7a50) drop-shadow(1px 1px 0px #8c6240) drop-shadow(1px 1px 0px #694930) drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.5));
   }
 
   .dark .text-3d-gold {
-    filter: drop-shadow(1px 1px 0px #7b6241) drop-shadow(1px 1px 0px #5e4a30) drop-shadow(1px 1px 0px #40301b) drop-shadow(2px 2px 8px rgba(0,0,0,0.8));
+    filter: drop-shadow(1px 1px 0px #694930) drop-shadow(1px 1px 0px #4e3522) drop-shadow(1px 1px 0px #352316) drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.8));
   }
 }
 
@@ -87,22 +87,22 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c5a880;
+  background: #c59763;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b5956a;
+  background: #af7a50;
 }
 
 /* Luxury Islamic Geometric Background Overlay */
 .islamic-pattern {
-  background-image: radial-gradient(circle at 1px 1px, rgba(197, 168, 128, 0.08) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(197, 151, 99, 0.08) 1px, transparent 0);
   background-size: 24px 24px;
 }
 
 .dark .islamic-pattern {
-  background-image: radial-gradient(circle at 1px 1px, rgba(197, 168, 128, 0.04) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(197, 151, 99, 0.04) 1px, transparent 0);
   background-size: 24px 24px;
 }
 
@@ -128,7 +128,7 @@
    ============================================================ */
 
 [dir="rtl"] {
-  font-family: "Noto Sans Arabic", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Gotham Rounded", "Noto Sans Arabic", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ---- Text alignment ---- */

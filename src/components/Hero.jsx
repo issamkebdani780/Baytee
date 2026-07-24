@@ -177,119 +177,9 @@ export default function Hero() {
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-brand-emerald-200/20 dark:bg-brand-emerald-800/10 rounded-full ambient-glow pointer-events-none" />
         <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-brand-gold-100/30 dark:bg-brand-gold-800/5 rounded-full ambient-glow pointer-events-none" />
 
-        {/* ═══ LEFT IMAGE CLUSTER (rotates every 3s) ═══ */}
-        <div className="absolute left-0 bottom-0 hidden xl:flex flex-col gap-3 z-0 pl-4 2xl:pl-8">
-          {/* Top-left image — tall portrait */}
-          <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.85, delay: 0.15, ease: 'easeOut' }}
-          >
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative w-52 2xl:w-72 h-64 2xl:h-80 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
-              style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
-            >
-              <AnimatePresence>
-                <motion.div
-                  key={card1Data.src}
-                  initial={{ opacity: 0, scale: 1.08 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <img src={card1Data.src} alt={card1Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <p className="text-white font-bold text-sm leading-tight drop-shadow">{card1Data.city}</p>
-                    <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />{card1Data.country}</p>
-                  </div>
-                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-950/90 backdrop-blur-sm shadow-sm">
-                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-                    <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">{card1Data.rating}</span>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
 
-          {/* Bottom-left image — landscape, offset right */}
-          <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.85, delay: 0.3, ease: 'easeOut' }}
-            className="ml-6 2xl:ml-10"
-          >
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative w-48 2xl:w-64 h-40 2xl:h-52 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
-              style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
-            >
-              <AnimatePresence>
-                <motion.div
-                  key={card2Data.src}
-                  initial={{ opacity: 0, scale: 1.08 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <img src={card2Data.src} alt={card2Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <p className="text-white font-bold text-sm leading-tight drop-shadow">{card2Data.city}</p>
-                    <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />{card2Data.country}</p>
-                  </div>
-                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-955/90 backdrop-blur-sm shadow-sm">
-                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-                    <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">{card2Data.rating}</span>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
-        </div>
 
-        {/* ═══ RIGHT IMAGE (tall single, rotates every 3s) ═══ */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden xl:block z-0 pr-4 2xl:pr-8">
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.85, delay: 0.2, ease: 'easeOut' }}
-          >
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative w-56 2xl:w-72 h-80 2xl:h-96 rounded-2xl overflow-hidden shadow-2xl border border-white/15 dark:border-brand-emerald-800/30 group cursor-pointer"
-              style={{ filter: 'drop-shadow(0 24px 48px rgba(11,59,36,0.22))' }}
-            >
-              <AnimatePresence>
-                <motion.div
-                  key={card3Data.src}
-                  initial={{ opacity: 0, scale: 1.08 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <img src={card3Data.src} alt={card3Data.city} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <p className="text-white font-bold text-sm leading-tight drop-shadow">{card3Data.city}</p>
-                    <p className="text-brand-gold-300 text-[11px] flex items-center gap-1 mt-0.5"><MapPin className="w-3 h-3" />{card3Data.country}</p>
-                  </div>
-                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 dark:bg-brand-emerald-955/90 backdrop-blur-sm shadow-sm">
-                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-                    <span className="text-[10px] font-bold text-slate-800 dark:text-brand-gold-400">{card3Data.rating}</span>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
-        </div>
+
 
         {/* ═══ CENTER: badge + heading + subtext + search + CTAs ═══ */}
         <div className="relative max-w-7xl mx-auto px-7 md:px-12 w-full text-center z-20 flex flex-col items-center">
@@ -775,10 +665,10 @@ export default function Hero() {
                   </span>
                 )}
               </button>
-              <div className="flex items-center gap-1.5 text-xs text-slate-450 dark:text-slate-400">
+              {/* <div className="flex items-center gap-1.5 text-xs text-slate-450 dark:text-slate-400">
                 <Check className="w-3.5 h-3.5 text-brand-gold-500" />
                 {t('hero.shariah')}
-              </div>
+              </div> */}
             </div>
 
             {/* Halal Filters Expandable Panel */}

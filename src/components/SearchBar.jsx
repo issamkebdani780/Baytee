@@ -14,35 +14,35 @@ import { searchDestinations } from '../api';
  */
 export default function SearchBar({
   initialDestination = '',
-  initialDestId      = '24212',
-  initialDestType    = 'city',
-  initialCheckIn     = '',
-  initialCheckOut    = '',
-  initialRooms       = [{ adults: 2, children: 0, childrenAges: [] }],
+  initialDestId = '24212',
+  initialDestType = 'city',
+  initialCheckIn = '',
+  initialCheckOut = '',
+  initialRooms = [{ adults: 2, children: 0, childrenAges: [] }],
 }) {
   const navigate = useNavigate();
 
-  const tomorrow  = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
   const dayAfter3 = new Date(Date.now() + 4 * 86400000).toISOString().split('T')[0];
 
-  const [destination,     setDestination]     = useState(initialDestination);
-  const [selectedDest,    setSelectedDest]     = useState(null);
-  const [showSuggestions, setShowSuggestions]  = useState(false);
-  const [apiSuggestions,  setApiSuggestions]   = useState([]);
-  const [defaultSuggs,    setDefaultSuggs]     = useState([]);
-  const [isLoadingSuggs,  setIsLoadingSuggs]   = useState(false);
-  const [checkIn,         setCheckIn]          = useState(initialCheckIn  || tomorrow);
-  const [checkOut,        setCheckOut]         = useState(initialCheckOut || dayAfter3);
-  const [rooms,           setRooms]            = useState(initialRooms);
-  const [showGuests,      setShowGuests]       = useState(false);
-  const [isSearching,     setIsSearching]      = useState(false);
+  const [destination, setDestination] = useState(initialDestination);
+  const [selectedDest, setSelectedDest] = useState(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [apiSuggestions, setApiSuggestions] = useState([]);
+  const [defaultSuggs, setDefaultSuggs] = useState([]);
+  const [isLoadingSuggs, setIsLoadingSuggs] = useState(false);
+  const [checkIn, setCheckIn] = useState(initialCheckIn || tomorrow);
+  const [checkOut, setCheckOut] = useState(initialCheckOut || dayAfter3);
+  const [rooms, setRooms] = useState(initialRooms);
+  const [showGuests, setShowGuests] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const containerRef = useRef(null);
 
   // Popular suggestions on mount
   useEffect(() => {
     searchDestinations('a')
       .then(res => { if (res.success && Array.isArray(res.data)) setDefaultSuggs(res.data.slice(0, 6)); })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Debounced API suggestions
@@ -70,36 +70,36 @@ export default function SearchBar({
     return () => document.removeEventListener('mousedown', h);
   }, []);
 
-  const totalGuests   = rooms.reduce((a, r) => a + r.adults + r.children, 0);
+  const totalGuests = rooms.reduce((a, r) => a + r.adults + r.children, 0);
   const totalChildren = rooms.reduce((a, r) => a + r.children, 0);
-  const totalRooms    = rooms.length;
+  const totalRooms = rooms.length;
 
   const suggestions = destination.trim() ? apiSuggestions : defaultSuggs;
 
   const handleSearch = e => {
     e.preventDefault();
     setIsSearching(true);
-    let destId   = initialDestId;
+    let destId = initialDestId;
     let destType = initialDestType;
     let destName = destination || 'Hotels';
 
     if (selectedDest) {
-      destId   = selectedDest.id.toString();
+      destId = selectedDest.id.toString();
       destType = selectedDest.type;
       destName = selectedDest.name;
     } else if (apiSuggestions.length > 0) {
-      destId   = apiSuggestions[0].id.toString();
+      destId = apiSuggestions[0].id.toString();
       destType = apiSuggestions[0].type;
       destName = apiSuggestions[0].name;
     } else if (defaultSuggs.length > 0 && !destination.trim()) {
-      destId   = defaultSuggs[0].id.toString();
+      destId = defaultSuggs[0].id.toString();
       destType = defaultSuggs[0].type;
       destName = defaultSuggs[0].name;
     }
 
     const params = new URLSearchParams({
       destId, destType, destName,
-      checkIn:  checkIn  || tomorrow,
+      checkIn: checkIn || tomorrow,
       checkOut: checkOut || dayAfter3,
       paxRooms: JSON.stringify(rooms),
     });
@@ -120,7 +120,7 @@ export default function SearchBar({
         {/* ── Destination ─────────────────────────────────────── */}
         <div className="relative flex-1 min-w-0 group">
           <div className="flex items-center gap-2.5 px-4 py-3 h-full rounded-l-2xl hover:bg-slate-50 dark:hover:bg-brand-emerald-900/30 transition-colors duration-200 cursor-text"
-               onClick={() => { setShowSuggestions(true); containerRef.current?.querySelector('input[type=text]')?.focus(); }}>
+            onClick={() => { setShowSuggestions(true); containerRef.current?.querySelector('input[type=text]')?.focus(); }}>
             <MapPin className="w-4 h-4 text-brand-gold-500 flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="text-[9px] font-bold uppercase tracking-widest text-brand-gold-600 dark:text-brand-gold-500 leading-none mb-1">Destination</p>
@@ -282,13 +282,13 @@ export default function SearchBar({
                         </div>
                         <div className="flex items-center gap-3">
                           <button type="button" disabled={room.adults <= 1}
-                            onClick={() => setRooms(p => { const n=[...p]; n[rIdx]={...n[rIdx], adults: Math.max(1,n[rIdx].adults-1)}; return n; })}
+                            onClick={() => setRooms(p => { const n = [...p]; n[rIdx] = { ...n[rIdx], adults: Math.max(1, n[rIdx].adults - 1) }; return n; })}
                             className="w-8 h-8 rounded-full border border-slate-200 dark:border-brand-emerald-700 flex items-center justify-center font-bold text-lg disabled:opacity-30 cursor-pointer text-slate-600 dark:text-slate-300 hover:border-brand-emerald-400 hover:text-brand-emerald-600 dark:hover:border-brand-gold-500 dark:hover:text-brand-gold-400 transition">
                             −
                           </button>
                           <span className="w-4 text-center text-sm font-bold text-slate-900 dark:text-white">{room.adults}</span>
                           <button type="button" disabled={room.adults >= 10}
-                            onClick={() => setRooms(p => { const n=[...p]; n[rIdx]={...n[rIdx], adults: Math.min(10,n[rIdx].adults+1)}; return n; })}
+                            onClick={() => setRooms(p => { const n = [...p]; n[rIdx] = { ...n[rIdx], adults: Math.min(10, n[rIdx].adults + 1) }; return n; })}
                             className="w-8 h-8 rounded-full border border-slate-200 dark:border-brand-emerald-700 flex items-center justify-center font-bold text-lg cursor-pointer text-slate-600 dark:text-slate-300 hover:border-brand-emerald-400 hover:text-brand-emerald-600 dark:hover:border-brand-gold-500 dark:hover:text-brand-gold-400 transition">
                             +
                           </button>
@@ -303,13 +303,13 @@ export default function SearchBar({
                         </div>
                         <div className="flex items-center gap-3">
                           <button type="button" disabled={room.children <= 0}
-                            onClick={() => setRooms(p => { const n=[...p]; n[rIdx]={...n[rIdx], children: Math.max(0,n[rIdx].children-1), childrenAges: n[rIdx].childrenAges.slice(0,-1)}; return n; })}
+                            onClick={() => setRooms(p => { const n = [...p]; n[rIdx] = { ...n[rIdx], children: Math.max(0, n[rIdx].children - 1), childrenAges: n[rIdx].childrenAges.slice(0, -1) }; return n; })}
                             className="w-8 h-8 rounded-full border border-slate-200 dark:border-brand-emerald-700 flex items-center justify-center font-bold text-lg disabled:opacity-30 cursor-pointer text-slate-600 dark:text-slate-300 hover:border-brand-emerald-400 hover:text-brand-emerald-600 dark:hover:border-brand-gold-500 dark:hover:text-brand-gold-400 transition">
                             −
                           </button>
                           <span className="w-4 text-center text-sm font-bold text-slate-900 dark:text-white">{room.children}</span>
                           <button type="button" disabled={room.children >= 6}
-                            onClick={() => setRooms(p => { const n=[...p]; n[rIdx]={...n[rIdx], children: Math.min(6,n[rIdx].children+1), childrenAges: [...n[rIdx].childrenAges, 5]}; return n; })}
+                            onClick={() => setRooms(p => { const n = [...p]; n[rIdx] = { ...n[rIdx], children: Math.min(6, n[rIdx].children + 1), childrenAges: [...n[rIdx].childrenAges, 5] }; return n; })}
                             className="w-8 h-8 rounded-full border border-slate-200 dark:border-brand-emerald-700 flex items-center justify-center font-bold text-lg cursor-pointer text-slate-600 dark:text-slate-300 hover:border-brand-emerald-400 hover:text-brand-emerald-600 dark:hover:border-brand-gold-500 dark:hover:text-brand-gold-400 transition">
                             +
                           </button>
@@ -321,14 +321,14 @@ export default function SearchBar({
                         <div className="mt-3 grid grid-cols-2 gap-2">
                           {Array.from({ length: room.children }).map((_, cIdx) => (
                             <div key={cIdx} className="flex flex-col gap-1">
-                              <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Child {cIdx+1} age</label>
+                              <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Child {cIdx + 1} age</label>
                               <select
                                 value={room.childrenAges[cIdx] ?? 5}
-                                onChange={e => setRooms(p => { const n=[...p]; n[rIdx]={...n[rIdx], childrenAges:[...n[rIdx].childrenAges]}; n[rIdx].childrenAges[cIdx]=parseInt(e.target.value,10); return n; })}
+                                onChange={e => setRooms(p => { const n = [...p]; n[rIdx] = { ...n[rIdx], childrenAges: [...n[rIdx].childrenAges] }; n[rIdx].childrenAges[cIdx] = parseInt(e.target.value, 10); return n; })}
                                 className="w-full text-xs bg-slate-50 dark:bg-brand-emerald-950 border border-slate-200 dark:border-brand-emerald-800 rounded-lg px-2 py-1.5 focus:outline-none focus:border-brand-emerald-400 dark:focus:border-brand-gold-500 text-slate-800 dark:text-white"
                               >
-                                {Array.from({length:18},(_,i)=>(
-                                  <option key={i} value={i}>{i === 0 ? 'Under 1' : `${i} year${i>1?'s':''}`}</option>
+                                {Array.from({ length: 18 }, (_, i) => (
+                                  <option key={i} value={i}>{i === 0 ? 'Under 1' : `${i} year${i > 1 ? 's' : ''}`}</option>
                                 ))}
                               </select>
                             </div>
